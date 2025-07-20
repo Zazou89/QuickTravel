@@ -8,17 +8,19 @@ Tired of hunting through your spellbook for portals? Never know where the portal
 - LFG integration - Automatically attaches to Group Finder when browsing dungeons/raids (Experimental)
 - Customizable display - Reverse order, toggle current season, auto-close options
 - Keybind support - Assign your own hotkey
-- Performance optimized - No CPU impact, no dependencies
-...More coming soon ! 
+- Performance optimized - only 40 kb, cache system, no dependencies, No CPU impact
+- ...More coming soon (teleports from toys, items) !
 
 ## Preview
 Coming soon
 
 ## Hello, Bonjour, Hola
-The addon is available in English and French.
+The addon is available in English and French.  
 *Community translations welcome.*
 
 ## Quick Start
 - Type `/qt` or `/quickteleport`
 - Right-click to add favorites
 - Left-click to teleport!
+
+*Note: QuickTravel is designed exclusively for The War Within.*

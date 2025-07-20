@@ -2,7 +2,7 @@ local L = select(2, ...).L('enUS')
 
 L["QT_TITLE"] = "Quick Travel"
 
--- Extensions
+-- Expansions
 L["Cataclysm"] = "Cataclysm"
 L["Mists of Pandaria"] = "Mists of Pandaria"
 L["Warlords of Draenor"] = "Warlords of Draenor"
@@ -13,7 +13,7 @@ L["Dragonflight"] = "Dragonflight"
 L["War Within"] = "The War Within"
 L["Current Season"] = "Current Season"
 
--- Donjons
+-- Dungeons
 L["DUNGEON_TEMPLE_OF_THE_JADE_SERPENT"] = "Temple of the Jade Serpent"
 L["DUNGEON_SIEGE_OF_NIUZAO"] = "Siege of Niuzao Temple"
 L["DUNGEON_SCHOLOMANCE"] = "Scholomance"
@@ -93,6 +93,7 @@ L["LOADED"] = "loaded! Use /qt to open."
 L["RIGHT_CLICK_ADD_FAVORITE"] = "Right-click to add to favorites"
 L["RIGHT_CLICK_REMOVE_FAVORITE"] = "Right-click to remove from favorites"
 L["TOGGLE_QUICKTRAVEL"] = "Toggle QuickTravel"
+L["SPELL_NOT_LEARNED"] = "Spell not learned"
 
 -- Options
 L["SHOW_LOGIN_MESSAGE"] = "Show login message"
@@ -101,6 +102,8 @@ L["FAVORITES"] = "Favorites"
 L["SHOW_CURRENT_SEASON"] = "Show current season"
 L["REVERSE_EXPANSION_ORDER"] = "Reverse expansion order"
 L["ATTACH_TO_LFG"] = "Attach to dungeon/raid finder window \n(Experimental)"
+L["SHOW_UNLEARNED_SPELLS"] = "Show unlearned spells"
+L["SHOW_SPELL_TOOLTIPS"] = "Show spell tooltips"
 
 -- Messages
 L["MSG_LOGIN_MESSAGE_ENABLED"] = "Login message enabled"

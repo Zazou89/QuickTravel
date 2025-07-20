@@ -17,7 +17,9 @@ local DEFAULT_SETTINGS = {
     favorites = {},
     showCurrentSeason = true,
     reverseExpansionOrder = false,
-    attachToLFG = true
+    attachToLFG = true,
+    showUnlearnedSpells = false,
+    showSpellTooltips = true
 }
 
 -- Calculate intelligent offset based on loaded addons to position the frame correctly
@@ -48,7 +50,7 @@ function QuickTravel:CreateMainFrame()
 
     -- Create main frame with portrait template
     self.mainFrame = CreateFrame("Frame", "QuickTravelFrame", UIParent, "PortraitFrameTemplate")
-    self.mainFrame:SetSize(340, 600)
+    self.mainFrame:SetSize(320, 600)
     self.mainFrame:SetPoint("CENTER")
     self.mainFrame:SetMovable(true)
     self.mainFrame:EnableMouse(true)
@@ -69,7 +71,7 @@ function QuickTravel:CreateMainFrame()
 
     -- Create search box for filtering portals
     local searchBox = CreateFrame("EditBox", nil, self.mainFrame, "SearchBoxTemplate")
-    searchBox:SetSize(270, 30)
+    searchBox:SetSize(250, 30)
     searchBox:SetPoint("TOP", self.mainFrame, "TOP", 0, -53)
     searchBox:SetAutoFocus(false)
     searchBox:SetScript("OnTextChanged", function(editBox)
@@ -122,11 +124,26 @@ function QuickTravel:CreateScrollFrame()
     scrollFrame:SetPoint("BOTTOMRIGHT", self.mainFrame, "BOTTOMRIGHT", -32, 12)
 
     local contentFrame = CreateFrame("Frame", nil, scrollFrame)
-    contentFrame:SetSize(310, 1)
+    contentFrame:SetSize(330, 1)
     scrollFrame:SetScrollChild(contentFrame)
 
     self.mainFrame.scrollFrame = scrollFrame
     self.mainFrame.contentFrame = contentFrame
+end
+
+-- Create a visual separator line
+function QuickTravel:CreateSeparator(parent, previousElement, offsetY)
+    offsetY = offsetY or -15
+    
+    local separator = parent:CreateTexture(nil, "ARTWORK")
+    separator:SetHeight(8) -- Height of the separator line
+    separator:SetPoint("LEFT", parent, "LEFT", 20, 0)
+    separator:SetPoint("RIGHT", parent, "RIGHT", -20, 0)
+    separator:SetPoint("TOP", previousElement, "BOTTOM", 0, offsetY)
+    separator:SetTexture("Interface\\Common\\UI-TooltipDivider-Transparent")
+    separator:SetAlpha(0.8)
+    
+    return separator
 end
 
 -- Initialize saved variables with default values
@@ -151,7 +168,7 @@ function QuickTravel:CreateOptionsFrame()
     end
 
     self.optionsFrame = CreateFrame("Frame", "QuickTravelOptionsFrame", UIParent, "PortraitFrameTemplate")
-    self.optionsFrame:SetSize(370, 240)
+    self.optionsFrame:SetSize(370, 360)
 
     -- Position relative to main frame if available
     if self.mainFrame then
@@ -169,6 +186,7 @@ function QuickTravel:CreateOptionsFrame()
     titleText:SetText(OPTIONS)
     titleText:SetTextColor(1, 0.82, 0)
 
+    -- === SECTION 1: DISPLAY ===
     -- Show login message checkbox
     local hideLoginCheckbox = CreateFrame("CheckButton", nil, self.optionsFrame, "InterfaceOptionsCheckButtonTemplate")
     hideLoginCheckbox:SetPoint("TOPLEFT", self.optionsFrame, "TOPLEFT", 20, -60)
@@ -179,9 +197,43 @@ function QuickTravel:CreateOptionsFrame()
     showLoginText:SetText(L["SHOW_LOGIN_MESSAGE"])
     showLoginText:SetTextColor(1, 1, 1)
 
-    -- Auto close frame checkbox
+    -- Show current season checkbox
+    local showSeasonCheckbox = CreateFrame("CheckButton", nil, self.optionsFrame, "InterfaceOptionsCheckButtonTemplate")
+    showSeasonCheckbox:SetPoint("TOPLEFT", hideLoginCheckbox, "BOTTOMLEFT", 0, -10)
+    showSeasonCheckbox:SetSize(22, 22)
+
+    local showSeasonText = self.optionsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    showSeasonText:SetPoint("LEFT", showSeasonCheckbox, "RIGHT", 8, 0)
+    showSeasonText:SetText(L["SHOW_CURRENT_SEASON"])
+    showSeasonText:SetTextColor(1, 1, 1)
+
+    -- Show spell tooltips checkbox
+    local showTooltipsCheckbox = CreateFrame("CheckButton", nil, self.optionsFrame, "InterfaceOptionsCheckButtonTemplate")
+    showTooltipsCheckbox:SetPoint("TOPLEFT", showSeasonCheckbox, "BOTTOMLEFT", 0, -10)
+    showTooltipsCheckbox:SetSize(22, 22)
+
+    local showTooltipsText = self.optionsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    showTooltipsText:SetPoint("LEFT", showTooltipsCheckbox, "RIGHT", 8, 0)
+    showTooltipsText:SetText(L["SHOW_SPELL_TOOLTIPS"])
+    showTooltipsText:SetTextColor(1, 1, 1)
+
+    -- Show unlearned spells checkbox
+    local showUnlearnedCheckbox = CreateFrame("CheckButton", nil, self.optionsFrame, "InterfaceOptionsCheckButtonTemplate")
+    showUnlearnedCheckbox:SetPoint("TOPLEFT", showTooltipsCheckbox, "BOTTOMLEFT", 0, -10)
+    showUnlearnedCheckbox:SetSize(22, 22)
+
+    local showUnlearnedText = self.optionsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    showUnlearnedText:SetPoint("LEFT", showUnlearnedCheckbox, "RIGHT", 8, 0)
+    showUnlearnedText:SetText(L["SHOW_UNLEARNED_SPELLS"])
+    showUnlearnedText:SetTextColor(1, 1, 1)
+
+    -- SEPARATOR 1
+    local separator1 = self:CreateSeparator(self.optionsFrame, showUnlearnedCheckbox)
+
+    -- === SECTION 2: BEHAVIOR ===
+    -- Auto close checkbox
     local autoCloseCheckbox = CreateFrame("CheckButton", nil, self.optionsFrame, "InterfaceOptionsCheckButtonTemplate")
-    autoCloseCheckbox:SetPoint("TOPLEFT", hideLoginCheckbox, "BOTTOMLEFT", 0, -10)
+    autoCloseCheckbox:SetPoint("TOPLEFT", separator1, "BOTTOMLEFT", 0, -15)
     autoCloseCheckbox:SetSize(22, 22)
 
     local autoCloseText = self.optionsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
@@ -189,9 +241,23 @@ function QuickTravel:CreateOptionsFrame()
     autoCloseText:SetText(L["AUTO_CLOSE"])
     autoCloseText:SetTextColor(1, 1, 1)
 
+    -- Reverse expansion order checkbox
+    local reverseOrderCheckbox = CreateFrame("CheckButton", nil, self.optionsFrame, "InterfaceOptionsCheckButtonTemplate")
+    reverseOrderCheckbox:SetPoint("TOPLEFT", autoCloseCheckbox, "BOTTOMLEFT", 0, -10)
+    reverseOrderCheckbox:SetSize(22, 22)
+
+    local reverseOrderText = self.optionsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    reverseOrderText:SetPoint("LEFT", reverseOrderCheckbox, "RIGHT", 8, 0)
+    reverseOrderText:SetText(L["REVERSE_EXPANSION_ORDER"])
+    reverseOrderText:SetTextColor(1, 1, 1)
+
+    -- SEPARATOR 2
+    local separator2 = self:CreateSeparator(self.optionsFrame, reverseOrderCheckbox)
+
+    -- === SECTION 3: LFG ATTACHMENT ===
     -- Attach to LFG frame checkbox
     local attachLFGCheckbox = CreateFrame("CheckButton", nil, self.optionsFrame, "InterfaceOptionsCheckButtonTemplate")
-    attachLFGCheckbox:SetPoint("TOPLEFT", autoCloseCheckbox, "BOTTOMLEFT", 0, -10)
+    attachLFGCheckbox:SetPoint("TOPLEFT", separator2, "BOTTOMLEFT", 0, -15)
     attachLFGCheckbox:SetSize(22, 22)
 
     local attachLFGText = self.optionsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
@@ -200,32 +266,14 @@ function QuickTravel:CreateOptionsFrame()
     attachLFGText:SetTextColor(1, 1, 1)
     attachLFGText:SetJustifyH("LEFT")
 
-    -- Show current season checkbox
-    local showSeasonCheckbox = CreateFrame("CheckButton", nil, self.optionsFrame, "InterfaceOptionsCheckButtonTemplate")
-    showSeasonCheckbox:SetPoint("TOPLEFT", attachLFGCheckbox, "BOTTOMLEFT", 0, -10)
-    showSeasonCheckbox:SetSize(22, 22)
-
-    local showSeasonText = self.optionsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    showSeasonText:SetPoint("LEFT", showSeasonCheckbox, "RIGHT", 8, 0)
-    showSeasonText:SetText(L["SHOW_CURRENT_SEASON"])
-    showSeasonText:SetTextColor(1, 1, 1)
-
-    -- Reverse expansion order checkbox
-    local reverseOrderCheckbox = CreateFrame("CheckButton", nil, self.optionsFrame, "InterfaceOptionsCheckButtonTemplate")
-    reverseOrderCheckbox:SetPoint("TOPLEFT", showSeasonCheckbox, "BOTTOMLEFT", 0, -10)
-    reverseOrderCheckbox:SetSize(22, 22)
-
-    local reverseOrderText = self.optionsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    reverseOrderText:SetPoint("LEFT", reverseOrderCheckbox, "RIGHT", 8, 0)
-    reverseOrderText:SetText(L["REVERSE_EXPANSION_ORDER"])
-    reverseOrderText:SetTextColor(1, 1, 1)
-
     -- Store references to checkboxes
     self.optionsFrame.hideLoginCheckbox = hideLoginCheckbox
     self.optionsFrame.autoCloseCheckbox = autoCloseCheckbox
     self.optionsFrame.showSeasonCheckbox = showSeasonCheckbox
     self.optionsFrame.reverseOrderCheckbox = reverseOrderCheckbox
     self.optionsFrame.attachLFGCheckbox = attachLFGCheckbox
+    self.optionsFrame.showUnlearnedCheckbox = showUnlearnedCheckbox
+    self.optionsFrame.showTooltipsCheckbox = showTooltipsCheckbox
 
     self:LoadOptionsValues()
 
@@ -253,6 +301,16 @@ function QuickTravel:CreateOptionsFrame()
         self.db.attachToLFG = checkbox:GetChecked()
     end)
 
+    showUnlearnedCheckbox:SetScript("OnClick", function(checkbox)
+        self.db.showUnlearnedSpells = checkbox:GetChecked()
+        constants.DataManager:InvalidateCache()
+        self:PopulatePortalList()
+    end)
+
+    showTooltipsCheckbox:SetScript("OnClick", function(checkbox)
+        self.db.showSpellTooltips = checkbox:GetChecked()
+    end)
+
     self.optionsFrame:Hide()
     return self.optionsFrame
 end
@@ -268,6 +326,8 @@ function QuickTravel:LoadOptionsValues()
     self.optionsFrame.showSeasonCheckbox:SetChecked(self.db.showCurrentSeason)
     self.optionsFrame.reverseOrderCheckbox:SetChecked(self.db.reverseExpansionOrder)
     self.optionsFrame.attachLFGCheckbox:SetChecked(self.db.attachToLFG)
+    self.optionsFrame.showUnlearnedCheckbox:SetChecked(self.db.showUnlearnedSpells)
+    self.optionsFrame.showTooltipsCheckbox:SetChecked(self.db.showSpellTooltips)
 end
 
 -- Show the options frame
@@ -338,7 +398,7 @@ local function OnLFGListFrameShow()
                 local smartOffset = GetSmartOffset()
                 QuickTravel.mainFrame:ClearAllPoints()
                 QuickTravel.mainFrame:SetPoint("TOPLEFT", PVEFrame, "TOPRIGHT", smartOffset, 0)
-                QuickTravel.mainFrame:SetSize(340, 428)
+                QuickTravel.mainFrame:SetSize(320, 428)
                 QuickTravel:ShowFrame()
             end
         end)
@@ -349,7 +409,7 @@ end
 local function OnLFGListFrameHide()
     if QuickTravel.mainFrame and QuickTravel.mainFrame:IsShown() and QuickTravel.db.attachToLFG then
         QuickTravel:HideFrame()
-        QuickTravel.mainFrame:SetSize(340, 600)
+        QuickTravel.mainFrame:SetSize(320, 600)
         QuickTravel.mainFrame:ClearAllPoints()
         QuickTravel.mainFrame:SetPoint("CENTER")
     end
@@ -373,13 +433,13 @@ local function InitializeLFGHook()
                         local smartOffset = GetSmartOffset()
                         QuickTravel.mainFrame:ClearAllPoints()
                         QuickTravel.mainFrame:SetPoint("TOPLEFT", PVEFrame, "TOPRIGHT", smartOffset, 0)
-                        QuickTravel.mainFrame:SetSize(340, 428)
+                        QuickTravel.mainFrame:SetSize(320, 428)
                         QuickTravel:ShowFrame()
                     end
                 else
                     if QuickTravel.mainFrame and QuickTravel.mainFrame:IsShown() and QuickTravel.db.attachToLFG then
                         QuickTravel:HideFrame()
-                        QuickTravel.mainFrame:SetSize(340, 600)
+                        QuickTravel.mainFrame:SetSize(320, 600)
                         QuickTravel.mainFrame:ClearAllPoints()
                         QuickTravel.mainFrame:SetPoint("CENTER")
                     end
@@ -398,7 +458,7 @@ function QuickTravel:PopulatePortalList(filterText)
     local contentFrame = self.mainFrame.contentFrame
     if not contentFrame then
         contentFrame = CreateFrame("Frame", nil, self.mainFrame.scrollFrame)
-        contentFrame:SetSize(350, 1)
+        contentFrame:SetSize(330, 1)
         self.mainFrame.scrollFrame:SetScrollChild(contentFrame)
         self.mainFrame.contentFrame = contentFrame
     else
@@ -602,14 +662,39 @@ function QuickTravel:GetFavoritePortals()
     return favoritePortals
 end
 
+-- Update cooldowns for all visible portal buttons
+function QuickTravel:UpdateCooldowns()
+    if not self.mainFrame or not self.mainFrame.contentFrame then
+        return
+    end
+    
+    local children = { self.mainFrame.contentFrame:GetChildren() }
+    for _, child in ipairs(children) do
+        if child.cooldown and child.spellID then
+            local cooldownInfo = C_Spell.GetSpellCooldown(child.spellID)
+            if cooldownInfo and cooldownInfo.startTime > 0 and cooldownInfo.duration > 0 then
+                child.cooldown:SetCooldown(cooldownInfo.startTime, cooldownInfo.duration)
+            end
+        end
+    end
+end
+
 -- Create a clickable portal button with icon, text, and tooltip
 function QuickTravel:CreatePortalButton(contentFrame, portal, yOffset)
     local portalButton = CreateFrame("Button", nil, contentFrame, "SecureActionButtonTemplate")
     portalButton:SetSize(310, 30)
     portalButton:SetPoint("TOPLEFT", contentFrame, "TOPLEFT", 0, yOffset)
-    portalButton:SetAttribute("type", "spell")
-    portalButton:SetAttribute("spell", portal.spellID)
-    portalButton:RegisterForClicks("LeftButtonUp", "LeftButtonDown", "RightButtonUp")
+    
+    -- Only set spell attribute and register clicks if the spell is known
+    if portal.isKnown then
+        portalButton:SetAttribute("type", "spell")
+        portalButton:SetAttribute("spell", portal.spellID)
+        portalButton:RegisterForClicks("LeftButtonUp", "LeftButtonDown", "RightButtonUp")
+    else
+        -- Disable interaction for unknown spells
+        portalButton:SetAttribute("type", nil)
+        portalButton:EnableMouse(true) -- Keep mouse events for tooltip only
+    end
 
     -- Background and highlight textures
     local bg = portalButton:CreateTexture(nil, "BACKGROUND")
@@ -619,50 +704,105 @@ function QuickTravel:CreatePortalButton(contentFrame, portal, yOffset)
 
     local highlight = portalButton:CreateTexture(nil, "HIGHLIGHT")
     highlight:SetAllPoints()
-    highlight:SetColorTexture(1, 1, 1, 0.1)
-    portalButton:SetHighlightTexture(highlight)
+    if portal.isKnown then
+        highlight:SetColorTexture(1, 1, 1, 0.1)
+        portalButton:SetHighlightTexture(highlight)
+    end
 
     -- Portal icon
     local icon = portalButton:CreateTexture(nil, "ARTWORK")
     icon:SetSize(26, 26)
     icon:SetPoint("LEFT", portalButton, "LEFT", 15, 0)
     icon:SetTexture(portal.texture)
+    
+    if not portal.isKnown then
+        icon:SetDesaturated(true)
+        icon:SetAlpha(0.4)
+    end
+
+    -- Cooldown frame for known spells
+    if portal.isKnown then
+        local cooldown = CreateFrame("Cooldown", nil, portalButton, "CooldownFrameTemplate")
+        cooldown:SetAllPoints(icon)
+        cooldown:SetSwipeColor(0, 0, 0, 0.8)
+        
+        -- Check and display initial cooldown
+        local cooldownInfo = C_Spell.GetSpellCooldown(portal.spellID)
+        if cooldownInfo and cooldownInfo.startTime > 0 and cooldownInfo.duration > 0 then
+            cooldown:SetCooldown(cooldownInfo.startTime, cooldownInfo.duration)
+        end
+        
+        portalButton.cooldown = cooldown
+        portalButton.spellID = portal.spellID -- Store for updates
+    end
 
     -- Portal name text
     local portalText = portalButton:CreateFontString(nil, "OVERLAY", "GameFontNormal")
     portalText:SetPoint("LEFT", icon, "RIGHT", 8, 0)
     portalText:SetText(portal.displayName)
-    portalText:SetTextColor(1, 1, 1)
+    
+    if portal.isKnown then
+        portalText:SetTextColor(1, 1, 1)
+    else
+        portalText:SetTextColor(0.4, 0.4, 0.4)
+    end
 
     -- Tooltip on hover
     portalButton:SetScript("OnEnter", function(self)
-        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-        GameTooltip:SetSpellByID(portal.spellID)
-        GameTooltip:AddLine(" ")
-        GameTooltip:AddLine("|cff00ff00" .. L["CLICK_TO_TELEPORT"] .. "|r")
 
-        if QuickTravel:IsFavorite(portal.instanceKey) then
-            GameTooltip:AddLine("|cffff9999" .. L["RIGHT_CLICK_REMOVE_FAVORITE"] .. "|r")
-        else
-            GameTooltip:AddLine("|cff99ff99" .. L["RIGHT_CLICK_ADD_FAVORITE"] .. "|r")
+        -- Only show tooltips if the setting is enabled
+        if not QuickTravel.db.showSpellTooltips then
+            return
         end
 
+        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+        
+        if portal.isKnown then
+            GameTooltip:SetSpellByID(portal.spellID)
+            GameTooltip:AddLine(" ")
+            GameTooltip:AddLine("|cff00ff00" .. L["CLICK_TO_TELEPORT"] .. "|r")
+            
+            if QuickTravel:IsFavorite(portal.instanceKey) then
+                GameTooltip:AddLine("|cffff9999" .. L["RIGHT_CLICK_REMOVE_FAVORITE"] .. "|r")
+            else
+                GameTooltip:AddLine("|cff99ff99" .. L["RIGHT_CLICK_ADD_FAVORITE"] .. "|r")
+            end
+        else
+            -- Text is grayed out for unlearned spells
+            GameTooltip:SetText(portal.displayName, 0.5, 0.5, 0.5)
+            GameTooltip:AddLine("|cffff6666" .. L["SPELL_NOT_LEARNED"] .. "|r")
+        end
+        
         GameTooltip:Show()
     end)
 
     portalButton:SetScript("OnLeave", GameTooltip_Hide)
 
-    -- Handle clicks (left = teleport, right = toggle favorite)
-    portalButton:SetScript("PostClick", function(self, button)
-        if button == "RightButton" then
-            QuickTravel:ToggleFavorite(portal.instanceKey)
-        elseif button == "LeftButton" and QuickTravel.db.autoClose then
-            C_Timer.After(0.5, function()
-                QuickTravel:HideFrame()
-                QuickTravel:HideOptionsFrame()
-            end)
-        end
-    end)
+    -- Handle clicks only for known spells
+    if portal.isKnown then
+        portalButton:SetScript("PostClick", function(self, button)
+            if button == "RightButton" then
+                QuickTravel:ToggleFavorite(portal.instanceKey)
+            elseif button == "LeftButton" then
+                -- Update cooldown after spell cast
+                C_Timer.After(0.1, function()
+                    if self.cooldown and self.spellID then
+                        local cooldownInfo = C_Spell.GetSpellCooldown(self.spellID)
+                        if cooldownInfo and cooldownInfo.startTime > 0 and cooldownInfo.duration > 0 then
+                            self.cooldown:SetCooldown(cooldownInfo.startTime, cooldownInfo.duration)
+                        end
+                    end
+                end)
+                
+                if QuickTravel.db.autoClose then
+                    C_Timer.After(0.5, function()
+                        QuickTravel:HideFrame()
+                        QuickTravel:HideOptionsFrame()
+                    end)
+                end
+            end
+        end)
+    end
 
     return yOffset - 30
 end
@@ -675,6 +815,9 @@ function QuickTravel:ShowFrame()
 
     self.mainFrame:Show()
     isFrameShown = true
+    
+    -- Update cooldowns when showing
+    self:UpdateCooldowns()
 end
 
 -- Hide the main frame

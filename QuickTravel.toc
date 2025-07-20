@@ -2,7 +2,7 @@
 ## Title: QuickTravel
 ## Notes: Mythic+ & Raid Portal Hub
 ## Author: Zazou
-## Version: 1.0
+## Version: @project-version@
 ## SavedVariables: QuickTravelDB
 ## AddonCompartmentFunc: QuickTravel_OnAddonCompartmentClick
 ## IconTexture: Interface\Icons\inv_spell_arcane_portaldornogal

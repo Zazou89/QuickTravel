@@ -67,8 +67,8 @@ local instanceDatabase = {
     ["waycrest_manor"] = {spellID = 424167, nameKey = "DUNGEON_WAYCREST_MANOR"},
     ["underrot"] = {spellID = 410074, nameKey = "DUNGEON_THE_UNDERROT"},
     ["mechagon"] = {spellID = 373274, nameKey = "DUNGEON_MECHAGON"},
-    ["siege_boralus"] = {spellID = 0, nameKey = "DUNGEON_SIEGE_OF_BORALUS"}, -- Faction specific spell ID
-    ["motherlode"] = {spellID = 0, nameKey = "DUNGEON_THE_MOTHERLOAD"}, -- Faction specific spell ID
+    ["siege_boralus"] = { alliance = 445418, horde = 464256, nameKey = "DUNGEON_SIEGE_OF_BORALUS"}, -- Factiopn-specific spells
+    ["motherlode"] = { alliance = 467553, horde = 467555, nameKey = "DUNGEON_THE_MOTHERLOAD"}, -- Factiopn-specific spells
     
     -- Shadowlands Dungeons and Raids
     ["necrotic_wake"] = {spellID = 354462, nameKey = "DUNGEON_THE_NECROTIC_WAKE"},
@@ -125,11 +125,37 @@ local DataManager = {
         cacheTimeout = 120 -- Cache timeout in seconds
     },
     
-    -- Retrieve instance information by key
+    -- Retrieve instance information by key with faction support
     -- @param instanceKey: string - The unique key for the instance
     -- @return table|nil - Instance data or nil if not found
     GetInstanceInfo = function(self, instanceKey)
-        return instanceDatabase[instanceKey]
+        local instanceData = instanceDatabase[instanceKey]
+        if not instanceData then
+            return nil
+        end
+        
+        -- Handle faction-specific spells
+        if instanceData.alliance or instanceData.horde then
+            local playerFaction = UnitFactionGroup("player")
+            local spellID
+            
+            if playerFaction == "Alliance" and instanceData.alliance then
+                spellID = instanceData.alliance
+            elseif playerFaction == "Horde" and instanceData.horde then
+                spellID = instanceData.horde
+            else
+                -- Fallback if faction is unknown or not applicable
+                spellID = instanceData.alliance or instanceData.horde
+            end
+            
+            return {
+                spellID = spellID,
+                nameKey = instanceData.nameKey
+            }
+        end
+        
+        -- Return instance data
+        return instanceData
     end,
     
     -- Scan for available portals with intelligent caching
@@ -140,11 +166,12 @@ local DataManager = {
         
         -- Return cached data if valid and not forcing refresh
         if not forceRefresh and self._cache.availablePortals and 
-           (now - self._cache.lastScan < self._cache.cacheTimeout) then
+        (now - self._cache.lastScan < self._cache.cacheTimeout) then
             return self._cache.availablePortals
         end
         
         local portals = {}
+        local showUnlearned = addon.QuickTravel.db and addon.QuickTravel.db.showUnlearnedSpells or false
         
         -- Scan through all expansions and their instances
         for _, expansion in ipairs(orderedExpansions) do
@@ -153,15 +180,21 @@ local DataManager = {
                 for _, instanceKey in ipairs(instanceKeys) do
                     local instanceInfo = self:GetInstanceInfo(instanceKey)
                     
-                    -- Only include instances with valid spell IDs that the player knows
-                    if instanceInfo and instanceInfo.spellID > 0 and IsSpellKnown(instanceInfo.spellID) then
-                        table.insert(portals, {
-                            instanceKey = instanceKey,
-                            spellID = instanceInfo.spellID,
-                            displayName = L[instanceInfo.nameKey],
-                            expansion = expansion,
-                            texture = C_Spell.GetSpellTexture(instanceInfo.spellID) or 134400 -- Default icon fallback
-                        })
+                    -- Include instances with valid spell IDs
+                    if instanceInfo and instanceInfo.spellID and instanceInfo.spellID > 0 then
+                        local isKnown = IsSpellKnown(instanceInfo.spellID)
+                        
+                        -- Include if spell is known, or if showing unlearned spells
+                        if isKnown or showUnlearned then
+                            table.insert(portals, {
+                                instanceKey = instanceKey,
+                                spellID = instanceInfo.spellID,
+                                displayName = L[instanceInfo.nameKey],
+                                expansion = expansion,
+                                texture = C_Spell.GetSpellTexture(instanceInfo.spellID) or 134400,
+                                isKnown = isKnown
+                            })
+                        end
                     end
                 end
             end
