@@ -1,0 +1,14 @@
+## Interface: 110005
+## Title: QuickTravel
+## Notes: Mythic+ & Raid Portal Hub
+## Author: Zazou
+## Version: 1.0
+## SavedVariables: QuickTravelDB
+## AddonCompartmentFunc: QuickTravel_OnAddonCompartmentClick
+## IconTexture: Interface\Icons\inv_spell_arcane_portaldornogal
+
+Locales/locale.lua
+Locales/enUS.lua
+Locales/frFR.lua
+Database/Data.lua
+QuickTravel.lua
