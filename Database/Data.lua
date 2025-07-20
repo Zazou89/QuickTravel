@@ -15,6 +15,11 @@ local orderedExpansions = {
     L["War Within"]
 }
 
+-- Preparation for the next season
+-- This array will be used for the Patch 11.2
+-- [L["Current Season"]] = {"ara_kara", "the_dawnbreaker", "operation_floodgate", "priory_sacred_flame", "halls_atonement", "tazavesh", "eco_dome_al_dani", "manaforge_omega"},
+
+
 -- Mapping of expansion names to their instance keys
 -- Each expansion contains an array of instance keys that belong to it
 local mapExpansionToKeys = {
@@ -113,7 +118,9 @@ local instanceDatabase = {
     ["cinderbrew_brewery"] = {spellID = 445440, nameKey = "DUNGEON_CINDERBREW_BREWERY"},
     ["priory_sacred_flame"] = {spellID = 445444, nameKey = "DUNGEON_PRIORY_OF_THE_SACRED_FLAME"},
     ["operation_floodgate"] = {spellID = 1216786, nameKey = "DUNGEON_OPERATION_FLOODGATE"},
+    --["eco_dome_al_dani"] = {spellID = 1237215, nameKey = "DUNGEON_ECO_DOME_AL_DANI"},    
     ["liberation_undermine"] = {spellID = 1226482, nameKey = "RAID_LIBERATION_OF_UNDERMINE"}
+    --["manaforge_omega"] = {spellID = 1239155, nameKey = "RAID_MANAFORGE_OMEGA"}
 }
 
 -- Modern data manager with intelligent caching system
