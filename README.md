@@ -12,7 +12,7 @@ Tired of hunting through your spellbook for portals? Never know where the portal
 - ...More coming soon (teleports from toys, items) !
 
 ## Preview
-Coming soon
+![Preview](https://i.imgur.com/cp1aElg.jpeg)
 
 ## Hello, Bonjour, Hola
 The addon is available in English and French.  

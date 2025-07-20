@@ -50,7 +50,7 @@ function QuickTravel:CreateMainFrame()
 
     -- Create main frame with portrait template
     self.mainFrame = CreateFrame("Frame", "QuickTravelFrame", UIParent, "PortraitFrameTemplate")
-    self.mainFrame:SetSize(320, 600)
+    self.mainFrame:SetSize(320, 500)
     self.mainFrame:SetPoint("CENTER")
     self.mainFrame:SetMovable(true)
     self.mainFrame:EnableMouse(true)
@@ -168,7 +168,7 @@ function QuickTravel:CreateOptionsFrame()
     end
 
     self.optionsFrame = CreateFrame("Frame", "QuickTravelOptionsFrame", UIParent, "PortraitFrameTemplate")
-    self.optionsFrame:SetSize(370, 360)
+    self.optionsFrame:SetSize(280, 360)
 
     -- Position relative to main frame if available
     if self.mainFrame then
@@ -409,7 +409,7 @@ end
 local function OnLFGListFrameHide()
     if QuickTravel.mainFrame and QuickTravel.mainFrame:IsShown() and QuickTravel.db.attachToLFG then
         QuickTravel:HideFrame()
-        QuickTravel.mainFrame:SetSize(320, 600)
+        QuickTravel.mainFrame:SetSize(320, 500)
         QuickTravel.mainFrame:ClearAllPoints()
         QuickTravel.mainFrame:SetPoint("CENTER")
     end
@@ -439,7 +439,7 @@ local function InitializeLFGHook()
                 else
                     if QuickTravel.mainFrame and QuickTravel.mainFrame:IsShown() and QuickTravel.db.attachToLFG then
                         QuickTravel:HideFrame()
-                        QuickTravel.mainFrame:SetSize(320, 600)
+                        QuickTravel.mainFrame:SetSize(320, 500)
                         QuickTravel.mainFrame:ClearAllPoints()
                         QuickTravel.mainFrame:SetPoint("CENTER")
                     end
