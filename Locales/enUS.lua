@@ -103,7 +103,7 @@ L["AUTO_CLOSE"] = "Auto-close addon while casting teleport"
 L["FAVORITES"] = "Favorites"
 L["SHOW_CURRENT_SEASON"] = "Show current season"
 L["REVERSE_EXPANSION_ORDER"] = "Reverse expansion order"
-L["ATTACH_TO_LFG"] = "Attach to dungeon/raid finder window \n(Experimental)"
+L["ATTACH_TO_LFG"] = "Attach to the Group Finder window \n(Experimental)"
 L["SHOW_UNLEARNED_SPELLS"] = "Show unlearned spells"
 L["SHOW_SPELL_TOOLTIPS"] = "Show spell tooltips"
 
