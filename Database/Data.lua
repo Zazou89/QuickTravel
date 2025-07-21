@@ -37,6 +37,11 @@ local mapExpansionToKeys = {
 -- Unified instance database mapping instance keys to their spell data
 -- Each entry contains the spell ID for teleportation and localization key for the name
 local instanceDatabase = {
+    -- Cataclysm Dungeons
+    ["vortex_pinnacle"] = {spellID = 410080, nameKey = "DUNGEON_VORTEX_PINNACLE"},
+    ["throne_tides"] = {spellID = 424142, nameKey = "DUNGEON_THRONE_OF_THE_TIDES"},
+    ["grim_batol"] = {spellID = 445424, nameKey = "DUNGEON_GRIM_BATOL"},
+
     -- Mists of Pandaria Dungeons
     ["temple_jade_serpent"] = {spellID = 131204, nameKey = "DUNGEON_TEMPLE_OF_THE_JADE_SERPENT"},
     ["siege_niuzao"] = {spellID = 131228, nameKey = "DUNGEON_SIEGE_OF_NIUZAO"},
@@ -102,11 +107,6 @@ local instanceDatabase = {
     ["vault_incarnates"] = {spellID = 432254, nameKey = "RAID_VAULT_OF_THE_INCARNATES"},
     ["aberrus"] = {spellID = 432257, nameKey = "RAID_ABBERUS_THE_SHADOWED_CRUCIBLE"},
     ["amirdrassil"] = {spellID = 432258, nameKey = "RAID_AMIRDRASSIL_THE_DREAMS_HOPE"},
-    
-    -- Cataclysm Dungeons
-    ["vortex_pinnacle"] = {spellID = 410080, nameKey = "DUNGEON_VORTEX_PINNACLE"},
-    ["throne_tides"] = {spellID = 424142, nameKey = "DUNGEON_THRONE_OF_THE_TIDES"},
-    ["grim_batol"] = {spellID = 445424, nameKey = "DUNGEON_GRIM_BATOL"},
     
     -- War Within Dungeons and Raids
     ["city_threads"] = {spellID = 445416, nameKey = "DUNGEON_CITY_OF_THREADS"},

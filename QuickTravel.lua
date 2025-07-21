@@ -17,30 +17,10 @@ local DEFAULT_SETTINGS = {
     favorites = {},
     showCurrentSeason = true,
     reverseExpansionOrder = false,
-    attachToLFG = true,
+    showLFGTab = true,
     showUnlearnedSpells = false,
     showSpellTooltips = true
 }
-
--- Calculate intelligent offset based on loaded addons to position the frame correctly
-local function GetSmartOffset()
-    local baseOffset = 10
-    local pgfLoaded = C_AddOns.IsAddOnLoaded("PremadeGroupsFilter")
-    local rioLoaded = C_AddOns.IsAddOnLoaded("RaiderIO")
-    
-    if pgfLoaded and rioLoaded then
-        local offset = baseOffset + 650
-        return offset
-    elseif pgfLoaded then
-        local offset = baseOffset + 420
-        return offset
-    elseif rioLoaded then
-        local offset = baseOffset + 230
-        return offset
-    else
-        return baseOffset
-    end
-end
 
 -- Create the main frame UI
 function QuickTravel:CreateMainFrame()
@@ -255,23 +235,22 @@ function QuickTravel:CreateOptionsFrame()
     local separator2 = self:CreateSeparator(self.optionsFrame, reverseOrderCheckbox)
 
     -- === SECTION 3: LFG ATTACHMENT ===
-    -- Attach to LFG frame checkbox
-    local attachLFGCheckbox = CreateFrame("CheckButton", nil, self.optionsFrame, "InterfaceOptionsCheckButtonTemplate")
-    attachLFGCheckbox:SetPoint("TOPLEFT", separator2, "BOTTOMLEFT", 0, -15)
-    attachLFGCheckbox:SetSize(22, 22)
+    -- Show LFG tab checkbox
+    local showLFGTabCheckbox = CreateFrame("CheckButton", nil, self.optionsFrame, "InterfaceOptionsCheckButtonTemplate")
+    showLFGTabCheckbox:SetPoint("TOPLEFT", separator2, "BOTTOMLEFT", 0, -15)
+    showLFGTabCheckbox:SetSize(22, 22)
 
-    local attachLFGText = self.optionsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    attachLFGText:SetPoint("LEFT", attachLFGCheckbox, "RIGHT", 8, 0)
-    attachLFGText:SetText(L["ATTACH_TO_LFG"])
-    attachLFGText:SetTextColor(1, 1, 1)
-    attachLFGText:SetJustifyH("LEFT")
+    local showLFGTabText = self.optionsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    showLFGTabText:SetPoint("LEFT", showLFGTabCheckbox, "RIGHT", 8, 0)
+    showLFGTabText:SetText(L["SHOW_LFG_TAB"])
+    showLFGTabText:SetTextColor(1, 1, 1)
 
     -- Store references to checkboxes
     self.optionsFrame.hideLoginCheckbox = hideLoginCheckbox
     self.optionsFrame.autoCloseCheckbox = autoCloseCheckbox
     self.optionsFrame.showSeasonCheckbox = showSeasonCheckbox
     self.optionsFrame.reverseOrderCheckbox = reverseOrderCheckbox
-    self.optionsFrame.attachLFGCheckbox = attachLFGCheckbox
+    self.optionsFrame.showLFGTabCheckbox = showLFGTabCheckbox
     self.optionsFrame.showUnlearnedCheckbox = showUnlearnedCheckbox
     self.optionsFrame.showTooltipsCheckbox = showTooltipsCheckbox
 
@@ -297,8 +276,20 @@ function QuickTravel:CreateOptionsFrame()
         self:PopulatePortalList()
     end)
 
-    attachLFGCheckbox:SetScript("OnClick", function(checkbox)
-        self.db.attachToLFG = checkbox:GetChecked()
+    showLFGTabCheckbox:SetScript("OnClick", function(checkbox)
+        self.db.showLFGTab = checkbox:GetChecked()
+        
+        if self.db.showLFGTab then
+            -- Create or update the LFG button
+            self:CreateLFGButton()
+        else
+            -- Delete if disabled
+            if self.lfgButton then
+                self.lfgButton:Hide()
+                self.lfgButton:SetParent(nil)
+                self.lfgButton = nil
+            end
+        end
     end)
 
     showUnlearnedCheckbox:SetScript("OnClick", function(checkbox)
@@ -325,7 +316,7 @@ function QuickTravel:LoadOptionsValues()
     self.optionsFrame.autoCloseCheckbox:SetChecked(self.db.autoClose)
     self.optionsFrame.showSeasonCheckbox:SetChecked(self.db.showCurrentSeason)
     self.optionsFrame.reverseOrderCheckbox:SetChecked(self.db.reverseExpansionOrder)
-    self.optionsFrame.attachLFGCheckbox:SetChecked(self.db.attachToLFG)
+    self.optionsFrame.showLFGTabCheckbox:SetChecked(self.db.showLFGTab)
     self.optionsFrame.showUnlearnedCheckbox:SetChecked(self.db.showUnlearnedSpells)
     self.optionsFrame.showTooltipsCheckbox:SetChecked(self.db.showSpellTooltips)
 end
@@ -356,6 +347,29 @@ function QuickTravel:ToggleOptionsFrame()
     end
 end
 
+-- Toggle the main QuickTravel frame visibility
+function QuickTravel:CreateLFGButton()
+    if self.lfgButton or not PVEFrame then
+        return
+    end
+
+    local button = CreateFrame("Button", "QuickTravelLFGTab", PVEFrame, "PanelTabButtonTemplate")
+    button:SetPoint("LEFT", PVEFrame.tab4, "RIGHT", 5, 0)
+    button:SetText(L["LFG_TAB_PORTALS"])
+    button:SetSize(80, 32)
+    
+    -- Set button properties
+    PanelTemplates_TabResize(button, 0)
+    PanelTemplates_DeselectTab(button)
+    
+    -- Set button script to toggle QuickTravel frame
+    button:SetScript("OnClick", function(self)
+        QuickTravel:ToggleFrame()
+    end)
+    
+    self.lfgButton = button
+end
+
 -- Get expansion order based on user preference (normal or reversed)
 function QuickTravel:GetExpansionOrder(originalOrder)
     if not self.db.reverseExpansionOrder then
@@ -384,68 +398,14 @@ function QuickTravel:GetExpansionOrder(originalOrder)
     return reorderedList
 end
 
--- Handle LFG frame show event for auto-attachment
-local function OnLFGListFrameShow()
-    if not QuickTravel.db.attachToLFG or not QuickTravel.mainFrame then
-        return
-    end
-
-    if PVEFrame:IsShown() and LFGListFrame:IsShown() and LFGListFrame.CategorySelection then
-        C_Timer.After(0.1, function()
-            local selectedCategory = LFGListFrame.CategorySelection.selectedCategory
-            -- Categories 2 and 3 are Dungeons and Raids
-            if selectedCategory == 2 or selectedCategory == 3 then
-                local smartOffset = GetSmartOffset()
-                QuickTravel.mainFrame:ClearAllPoints()
-                QuickTravel.mainFrame:SetPoint("TOPLEFT", PVEFrame, "TOPRIGHT", smartOffset, 0)
-                QuickTravel.mainFrame:SetSize(320, 428)
-                QuickTravel:ShowFrame()
+-- Initialize LFG tab integration
+local function InitializeLFGHook()
+    if PVEFrame then
+        PVEFrame:HookScript("OnShow", function()
+            if QuickTravel.db.showLFGTab then
+                QuickTravel:CreateLFGButton()
             end
         end)
-    end
-end
-
--- Handle LFG frame hide event for auto-detachment
-local function OnLFGListFrameHide()
-    if QuickTravel.mainFrame and QuickTravel.mainFrame:IsShown() and QuickTravel.db.attachToLFG then
-        QuickTravel:HideFrame()
-        QuickTravel.mainFrame:SetSize(320, 500)
-        QuickTravel.mainFrame:ClearAllPoints()
-        QuickTravel.mainFrame:SetPoint("CENTER")
-    end
-end
-
--- Initialize LFG frame hooks for auto-attachment feature
-local function InitializeLFGHook()
-    if LFGListFrame and PVEFrame then
-        LFGListFrame:HookScript("OnShow", OnLFGListFrameShow)
-        PVEFrame:HookScript("OnHide", OnLFGListFrameHide)
-
-        if LFGListFrame.CategorySelection then
-            hooksecurefunc("LFGListCategorySelection_SelectCategory", function()
-                if not QuickTravel.db.attachToLFG then
-                    return
-                end
-
-                local selectedCategory = LFGListFrame.CategorySelection.selectedCategory
-                if selectedCategory == 2 or selectedCategory == 3 then
-                    if PVEFrame:IsShown() and LFGListFrame:IsShown() then
-                        local smartOffset = GetSmartOffset()
-                        QuickTravel.mainFrame:ClearAllPoints()
-                        QuickTravel.mainFrame:SetPoint("TOPLEFT", PVEFrame, "TOPRIGHT", smartOffset, 0)
-                        QuickTravel.mainFrame:SetSize(320, 428)
-                        QuickTravel:ShowFrame()
-                    end
-                else
-                    if QuickTravel.mainFrame and QuickTravel.mainFrame:IsShown() and QuickTravel.db.attachToLFG then
-                        QuickTravel:HideFrame()
-                        QuickTravel.mainFrame:SetSize(320, 500)
-                        QuickTravel.mainFrame:ClearAllPoints()
-                        QuickTravel.mainFrame:SetPoint("CENTER")
-                    end
-                end
-            end)
-        end
     end
 end
 

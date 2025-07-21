@@ -97,13 +97,14 @@ L["RIGHT_CLICK_ADD_FAVORITE"] = "Clic droit pour ajouter aux favoris"
 L["RIGHT_CLICK_REMOVE_FAVORITE"] = "Clic droit pour retirer des favoris"
 L["TOGGLE_QUICKTRAVEL"] = "Ouvrir/Fermer QuickTravel"
 L["SPELL_NOT_LEARNED"] = "Sort non appris"
+L["LFG_TAB_PORTALS"] = "Portails"
 
 -- Options
 L["SHOW_LOGIN_MESSAGE"] = "Afficher le message de connexion"
 L["AUTO_CLOSE"] = "Fermeture auto. de l'adddon lors du TP"
 L["SHOW_CURRENT_SEASON"] = "Afficher la saison actuelle"
 L["REVERSE_EXPANSION_ORDER"] = "Inverser l'ordre des extensions"
-L["ATTACH_TO_LFG"] = "Attacher à la fenêtre de recherche de groupe \n(Expérimental)"
+L["SHOW_LFG_TAB"] = "Afficher l'onglet dans la Recherche de groupe"
 L["SHOW_UNLEARNED_SPELLS"] = "Afficher les sorts non appris"
 L["SHOW_SPELL_TOOLTIPS"] = "Afficher les infobulles des sorts"
 

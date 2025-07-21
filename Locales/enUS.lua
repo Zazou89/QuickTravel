@@ -96,14 +96,15 @@ L["RIGHT_CLICK_ADD_FAVORITE"] = "Right-click to add to favorites"
 L["RIGHT_CLICK_REMOVE_FAVORITE"] = "Right-click to remove from favorites"
 L["TOGGLE_QUICKTRAVEL"] = "Toggle QuickTravel"
 L["SPELL_NOT_LEARNED"] = "Spell not learned"
+L["LFG_TAB_PORTALS"] = "Portals"
 
 -- Options
 L["SHOW_LOGIN_MESSAGE"] = "Show login message"
-L["AUTO_CLOSE"] = "Auto-close addon while casting teleport"
+L["AUTO_CLOSE"] = "Auto-close addon while casting"
 L["FAVORITES"] = "Favorites"
 L["SHOW_CURRENT_SEASON"] = "Show current season"
 L["REVERSE_EXPANSION_ORDER"] = "Reverse expansion order"
-L["ATTACH_TO_LFG"] = "Attach to the Group Finder window \n(Experimental)"
+L["SHOW_LFG_TAB"] = "Show tab in Group Finder"
 L["SHOW_UNLEARNED_SPELLS"] = "Show unlearned spells"
 L["SHOW_SPELL_TOOLTIPS"] = "Show spell tooltips"
 
