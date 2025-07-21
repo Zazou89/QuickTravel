@@ -115,7 +115,7 @@ local instanceDatabase = {
     ["dawnbreaker"] = {spellID = 445414, nameKey = "DUNGEON_DAWNBREAKER"},
     ["rookery"] = {spellID = 445443, nameKey = "DUNGEON_THE_ROOKERY"},
     ["darkflame_cleft"] = {spellID = 445441, nameKey = "DUNGEON_DARKFLAME_CLEFT"},
-    ["cinderbrew_brewery"] = {spellID = 445440, nameKey = "DUNGEON_CINDERBREW_BREWERY"},
+    ["cinderbrew_meadery"] = {spellID = 445440, nameKey = "DUNGEON_CINDERBREW_MEADERY"},
     ["priory_sacred_flame"] = {spellID = 445444, nameKey = "DUNGEON_PRIORY_OF_THE_SACRED_FLAME"},
     ["operation_floodgate"] = {spellID = 1216786, nameKey = "DUNGEON_OPERATION_FLOODGATE"},
     --["eco_dome_al_dani"] = {spellID = 1237215, nameKey = "DUNGEON_ECO_DOME_AL_DANI"},    
