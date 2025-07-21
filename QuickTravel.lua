@@ -10,18 +10,6 @@ function QuickTravel_OnAddonCompartmentClick(addonName, buttonName)
     QuickTravel:ToggleFrame()
 end
 
--- Default settings configuration
-local DEFAULT_SETTINGS = {
-    showLoginMessage = true,
-    autoClose = true,
-    favorites = {},
-    showCurrentSeason = true,
-    reverseExpansionOrder = false,
-    showLFGTab = true,
-    showUnlearnedSpells = false,
-    showSpellTooltips = true
-}
-
 -- Create the main frame UI
 function QuickTravel:CreateMainFrame()
     if self.mainFrame then
@@ -78,13 +66,13 @@ function QuickTravel:CreateMainFrame()
     highlight:SetAlpha(1)
 
     optionsButton:SetScript("OnClick", function()
-        QuickTravel:ToggleOptionsFrame()
+        addon.Options:ToggleOptionsFrame(self.mainFrame)
     end)
 
     -- Hide options frame when main frame is hidden
     self.mainFrame:SetScript("OnHide", function()
         if isFrameShown then
-            self:HideOptionsFrame()
+            addon.Options:HideOptionsFrame()
             isFrameShown = false
         end
     end)
@@ -111,242 +99,6 @@ function QuickTravel:CreateScrollFrame()
     self.mainFrame.contentFrame = contentFrame
 end
 
--- Create a visual separator line
-function QuickTravel:CreateSeparator(parent, previousElement, offsetY)
-    offsetY = offsetY or -15
-    
-    local separator = parent:CreateTexture(nil, "ARTWORK")
-    separator:SetHeight(8) -- Height of the separator line
-    separator:SetPoint("LEFT", parent, "LEFT", 20, 0)
-    separator:SetPoint("RIGHT", parent, "RIGHT", -20, 0)
-    separator:SetPoint("TOP", previousElement, "BOTTOM", 0, offsetY)
-    separator:SetTexture("Interface\\Common\\UI-TooltipDivider-Transparent")
-    separator:SetAlpha(0.8)
-    
-    return separator
-end
-
--- Initialize saved variables with default values
-function QuickTravel:InitializeSettings()
-    if not QuickTravelDB then
-        QuickTravelDB = {}
-    end
-
-    for key, defaultValue in pairs(DEFAULT_SETTINGS) do
-        if QuickTravelDB[key] == nil then
-            QuickTravelDB[key] = defaultValue
-        end
-    end
-
-    self.db = QuickTravelDB
-end
-
--- Create the options configuration frame
-function QuickTravel:CreateOptionsFrame()
-    if self.optionsFrame then
-        return self.optionsFrame
-    end
-
-    self.optionsFrame = CreateFrame("Frame", "QuickTravelOptionsFrame", UIParent, "PortraitFrameTemplate")
-    self.optionsFrame:SetSize(280, 360)
-
-    -- Position relative to main frame if available
-    if self.mainFrame then
-        self.optionsFrame:SetPoint("TOPLEFT", self.mainFrame, "TOPRIGHT", 10, 0)
-    else
-        self.optionsFrame:SetPoint("CENTER")
-    end
-
-    self.optionsFrame:EnableMouse(true)
-    SetPortraitToTexture(self.optionsFrame.PortraitContainer.portrait, "Interface\\Icons\\inv_10_engineering_manufacturedparts_gear_firey")
-
-    -- Options frame title
-    local titleText = self.optionsFrame.TitleContainer:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    titleText:SetPoint("CENTER", self.optionsFrame.TitleContainer, "CENTER", -15, 0)
-    titleText:SetText(OPTIONS)
-    titleText:SetTextColor(1, 0.82, 0)
-
-    -- === SECTION 1: DISPLAY ===
-    -- Show login message checkbox
-    local hideLoginCheckbox = CreateFrame("CheckButton", nil, self.optionsFrame, "InterfaceOptionsCheckButtonTemplate")
-    hideLoginCheckbox:SetPoint("TOPLEFT", self.optionsFrame, "TOPLEFT", 20, -60)
-    hideLoginCheckbox:SetSize(22, 22)
-
-    local showLoginText = self.optionsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    showLoginText:SetPoint("LEFT", hideLoginCheckbox, "RIGHT", 8, 0)
-    showLoginText:SetText(L["SHOW_LOGIN_MESSAGE"])
-    showLoginText:SetTextColor(1, 1, 1)
-
-    -- Show current season checkbox
-    local showSeasonCheckbox = CreateFrame("CheckButton", nil, self.optionsFrame, "InterfaceOptionsCheckButtonTemplate")
-    showSeasonCheckbox:SetPoint("TOPLEFT", hideLoginCheckbox, "BOTTOMLEFT", 0, -10)
-    showSeasonCheckbox:SetSize(22, 22)
-
-    local showSeasonText = self.optionsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    showSeasonText:SetPoint("LEFT", showSeasonCheckbox, "RIGHT", 8, 0)
-    showSeasonText:SetText(L["SHOW_CURRENT_SEASON"])
-    showSeasonText:SetTextColor(1, 1, 1)
-
-    -- Show spell tooltips checkbox
-    local showTooltipsCheckbox = CreateFrame("CheckButton", nil, self.optionsFrame, "InterfaceOptionsCheckButtonTemplate")
-    showTooltipsCheckbox:SetPoint("TOPLEFT", showSeasonCheckbox, "BOTTOMLEFT", 0, -10)
-    showTooltipsCheckbox:SetSize(22, 22)
-
-    local showTooltipsText = self.optionsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    showTooltipsText:SetPoint("LEFT", showTooltipsCheckbox, "RIGHT", 8, 0)
-    showTooltipsText:SetText(L["SHOW_SPELL_TOOLTIPS"])
-    showTooltipsText:SetTextColor(1, 1, 1)
-
-    -- Show unlearned spells checkbox
-    local showUnlearnedCheckbox = CreateFrame("CheckButton", nil, self.optionsFrame, "InterfaceOptionsCheckButtonTemplate")
-    showUnlearnedCheckbox:SetPoint("TOPLEFT", showTooltipsCheckbox, "BOTTOMLEFT", 0, -10)
-    showUnlearnedCheckbox:SetSize(22, 22)
-
-    local showUnlearnedText = self.optionsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    showUnlearnedText:SetPoint("LEFT", showUnlearnedCheckbox, "RIGHT", 8, 0)
-    showUnlearnedText:SetText(L["SHOW_UNLEARNED_SPELLS"])
-    showUnlearnedText:SetTextColor(1, 1, 1)
-
-    -- SEPARATOR 1
-    local separator1 = self:CreateSeparator(self.optionsFrame, showUnlearnedCheckbox)
-
-    -- === SECTION 2: BEHAVIOR ===
-    -- Auto close checkbox
-    local autoCloseCheckbox = CreateFrame("CheckButton", nil, self.optionsFrame, "InterfaceOptionsCheckButtonTemplate")
-    autoCloseCheckbox:SetPoint("TOPLEFT", separator1, "BOTTOMLEFT", 0, -15)
-    autoCloseCheckbox:SetSize(22, 22)
-
-    local autoCloseText = self.optionsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    autoCloseText:SetPoint("LEFT", autoCloseCheckbox, "RIGHT", 8, 0)
-    autoCloseText:SetText(L["AUTO_CLOSE"])
-    autoCloseText:SetTextColor(1, 1, 1)
-
-    -- Reverse expansion order checkbox
-    local reverseOrderCheckbox = CreateFrame("CheckButton", nil, self.optionsFrame, "InterfaceOptionsCheckButtonTemplate")
-    reverseOrderCheckbox:SetPoint("TOPLEFT", autoCloseCheckbox, "BOTTOMLEFT", 0, -10)
-    reverseOrderCheckbox:SetSize(22, 22)
-
-    local reverseOrderText = self.optionsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    reverseOrderText:SetPoint("LEFT", reverseOrderCheckbox, "RIGHT", 8, 0)
-    reverseOrderText:SetText(L["REVERSE_EXPANSION_ORDER"])
-    reverseOrderText:SetTextColor(1, 1, 1)
-
-    -- SEPARATOR 2
-    local separator2 = self:CreateSeparator(self.optionsFrame, reverseOrderCheckbox)
-
-    -- === SECTION 3: LFG ATTACHMENT ===
-    -- Show LFG tab checkbox
-    local showLFGTabCheckbox = CreateFrame("CheckButton", nil, self.optionsFrame, "InterfaceOptionsCheckButtonTemplate")
-    showLFGTabCheckbox:SetPoint("TOPLEFT", separator2, "BOTTOMLEFT", 0, -15)
-    showLFGTabCheckbox:SetSize(22, 22)
-
-    local showLFGTabText = self.optionsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    showLFGTabText:SetPoint("LEFT", showLFGTabCheckbox, "RIGHT", 8, 0)
-    showLFGTabText:SetText(L["SHOW_LFG_TAB"])
-    showLFGTabText:SetTextColor(1, 1, 1)
-
-    -- Store references to checkboxes
-    self.optionsFrame.hideLoginCheckbox = hideLoginCheckbox
-    self.optionsFrame.autoCloseCheckbox = autoCloseCheckbox
-    self.optionsFrame.showSeasonCheckbox = showSeasonCheckbox
-    self.optionsFrame.reverseOrderCheckbox = reverseOrderCheckbox
-    self.optionsFrame.showLFGTabCheckbox = showLFGTabCheckbox
-    self.optionsFrame.showUnlearnedCheckbox = showUnlearnedCheckbox
-    self.optionsFrame.showTooltipsCheckbox = showTooltipsCheckbox
-
-    self:LoadOptionsValues()
-
-    -- Checkbox event handlers
-    hideLoginCheckbox:SetScript("OnClick", function(checkbox)
-        self.db.showLoginMessage = checkbox:GetChecked()
-        print("|cff00ff00QuickTravel|r: " .. (self.db.showLoginMessage and L["MSG_LOGIN_MESSAGE_ENABLED"] or L["MSG_LOGIN_MESSAGE_DISABLED"]))
-    end)
-
-    autoCloseCheckbox:SetScript("OnClick", function(checkbox)
-        self.db.autoClose = checkbox:GetChecked()
-    end)
-
-    showSeasonCheckbox:SetScript("OnClick", function(checkbox)
-        self.db.showCurrentSeason = checkbox:GetChecked()
-        self:PopulatePortalList()
-    end)
-
-    reverseOrderCheckbox:SetScript("OnClick", function(checkbox)
-        self.db.reverseExpansionOrder = checkbox:GetChecked()
-        self:PopulatePortalList()
-    end)
-
-    showLFGTabCheckbox:SetScript("OnClick", function(checkbox)
-        self.db.showLFGTab = checkbox:GetChecked()
-        
-        if self.db.showLFGTab then
-            -- Create or update the LFG button
-            self:CreateLFGButton()
-        else
-            -- Delete if disabled
-            if self.lfgButton then
-                self.lfgButton:Hide()
-                self.lfgButton:SetParent(nil)
-                self.lfgButton = nil
-            end
-        end
-    end)
-
-    showUnlearnedCheckbox:SetScript("OnClick", function(checkbox)
-        self.db.showUnlearnedSpells = checkbox:GetChecked()
-        constants.DataManager:InvalidateCache()
-        self:PopulatePortalList()
-    end)
-
-    showTooltipsCheckbox:SetScript("OnClick", function(checkbox)
-        self.db.showSpellTooltips = checkbox:GetChecked()
-    end)
-
-    self.optionsFrame:Hide()
-    return self.optionsFrame
-end
-
--- Load saved values into options checkboxes
-function QuickTravel:LoadOptionsValues()
-    if not self.optionsFrame then
-        return
-    end
-
-    self.optionsFrame.hideLoginCheckbox:SetChecked(self.db.showLoginMessage)
-    self.optionsFrame.autoCloseCheckbox:SetChecked(self.db.autoClose)
-    self.optionsFrame.showSeasonCheckbox:SetChecked(self.db.showCurrentSeason)
-    self.optionsFrame.reverseOrderCheckbox:SetChecked(self.db.reverseExpansionOrder)
-    self.optionsFrame.showLFGTabCheckbox:SetChecked(self.db.showLFGTab)
-    self.optionsFrame.showUnlearnedCheckbox:SetChecked(self.db.showUnlearnedSpells)
-    self.optionsFrame.showTooltipsCheckbox:SetChecked(self.db.showSpellTooltips)
-end
-
--- Show the options frame
-function QuickTravel:ShowOptionsFrame()
-    if not self.optionsFrame then
-        self:CreateOptionsFrame()
-    end
-
-    self:LoadOptionsValues()
-    self.optionsFrame:Show()
-end
-
--- Hide the options frame
-function QuickTravel:HideOptionsFrame()
-    if self.optionsFrame then
-        self.optionsFrame:Hide()
-    end
-end
-
--- Toggle options frame visibility
-function QuickTravel:ToggleOptionsFrame()
-    if self.optionsFrame and self.optionsFrame:IsShown() then
-        self:HideOptionsFrame()
-    else
-        self:ShowOptionsFrame()
-    end
-end
-
 -- Toggle the main QuickTravel frame visibility
 function QuickTravel:CreateLFGButton()
     if self.lfgButton or not PVEFrame then
@@ -354,7 +106,7 @@ function QuickTravel:CreateLFGButton()
     end
 
     local button = CreateFrame("Button", "QuickTravelLFGTab", PVEFrame, "PanelTabButtonTemplate")
-    button:SetPoint("LEFT", PVEFrame.tab4, "RIGHT", 5, 0)
+    button:SetPoint("LEFT", PVEFrame.tab4, "RIGHT", 3, 0)
     button:SetText(L["LFG_TAB_PORTALS"])
     button:SetSize(80, 32)
     
@@ -372,14 +124,14 @@ end
 
 -- Get expansion order based on user preference (normal or reversed)
 function QuickTravel:GetExpansionOrder(originalOrder)
-    if not self.db.reverseExpansionOrder then
+    if not addon.Options.db.reverseExpansionOrder then
         return originalOrder
     end
 
     local reorderedList = {}
 
     -- Keep current season at the top if enabled
-    if self.db.showCurrentSeason then
+    if addon.Options.db.showCurrentSeason then
         table.insert(reorderedList, L["Current Season"])
     end
 
@@ -402,7 +154,7 @@ end
 local function InitializeLFGHook()
     if PVEFrame then
         PVEFrame:HookScript("OnShow", function()
-            if QuickTravel.db.showLFGTab then
+            if addon.Options.db.showLFGTab then
                 QuickTravel:CreateLFGButton()
             end
         end)
@@ -447,13 +199,13 @@ function QuickTravel:PopulatePortalList(filterText)
 
     -- Filter function to check if portal matches search criteria
     local function portalMatchesFilter(portal, filter)
-        local hasFilter = filter and filter ~= "" and filter ~= (L["SEARCH"] or "Rechercher...")
+        local hasFilter = filter and filter ~= "" and filter ~= L["SEARCH"]
         -- Hide current season portals when filtered to avoid duplicates
         if hasFilter and portal.expansion == currentSeasonKey then
             return false
         end
 
-        if not filter or filter == "" or filter == (L["SEARCH"] or "Rechercher...") then
+        if not filter or filter == "" or filter == L["SEARCH"] then
             return true
         end
 
@@ -497,7 +249,7 @@ function QuickTravel:PopulatePortalList(filterText)
 
     -- Show portals organized by expansion
     for _, expansion in ipairs(finalExpansionOrder) do
-        if not (expansion == L["Current Season"] and not self.db.showCurrentSeason) then
+        if not (expansion == L["Current Season"] and not addon.Options.db.showCurrentSeason) then
             local filteredPortals = {}
 
             for _, portal in ipairs(organizedPortals[expansion] or {}) do
@@ -525,7 +277,7 @@ function QuickTravel:PopulatePortalList(filterText)
     end
 
     -- Show appropriate message when no results found
-    if filterText and filterText ~= "" and filterText ~= (L["SEARCH"] or "Rechercher...") and totalFilteredPortals == 0 then
+    if filterText and filterText ~= "" and filterText ~= L["SEARCH"] and totalFilteredPortals == 0 then
         local noResultsText = contentFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
         noResultsText:SetPoint("CENTER", 0, 0)
         noResultsText:SetText(L["NO_SEARCH_RESULTS"])
@@ -552,11 +304,11 @@ end
 
 -- Check if an instance is marked as favorite
 function QuickTravel:IsFavorite(instanceKey)
-    if not self.db or not self.db.favorites then
+    if not addon.Options.db or not addon.Options.db.favorites then
         return false
     end
 
-    for _, favinstanceKey in ipairs(self.db.favorites) do
+    for _, favinstanceKey in ipairs(addon.Options.db.favorites) do
         if favinstanceKey == instanceKey then
             return true
         end
@@ -567,25 +319,25 @@ end
 
 -- Add an instance to favorites list
 function QuickTravel:AddToFavorites(instanceKey)
-    if not self.db.favorites then
-        self.db.favorites = {}
+    if not addon.Options.db.favorites then
+        addon.Options.db.favorites = {}
     end
 
     if not self:IsFavorite(instanceKey) then
-        table.insert(self.db.favorites, instanceKey)
+        table.insert(addon.Options.db.favorites, instanceKey)
         self:PopulatePortalList()
     end
 end
 
 -- Remove an instance from favorites list
 function QuickTravel:RemoveFromFavorites(instanceKey)
-    if not self.db.favorites then
+    if not addon.Options.db.favorites then
         return
     end
 
-    for i, favinstanceKey in ipairs(self.db.favorites) do
+    for i, favinstanceKey in ipairs(addon.Options.db.favorites) do
         if favinstanceKey == instanceKey then
-            table.remove(self.db.favorites, i)
+            table.remove(addon.Options.db.favorites, i)
             self:PopulatePortalList()
             break
         end
@@ -603,14 +355,14 @@ end
 
 -- Get list of favorite portals with full portal data
 function QuickTravel:GetFavoritePortals()
-    if not self.db.favorites or #self.db.favorites == 0 then
+    if not addon.Options.db.favorites or #addon.Options.db.favorites == 0 then
         return {}
     end
 
     local allPortals = constants.DataManager:GetAvailablePortals()
     local favoritePortals = {}
 
-    for _, favinstanceKey in ipairs(self.db.favorites) do
+    for _, favinstanceKey in ipairs(addon.Options.db.favorites) do
         for _, portal in ipairs(allPortals) do
             if portal.instanceKey == favinstanceKey then
                 table.insert(favoritePortals, portal)
@@ -711,7 +463,7 @@ function QuickTravel:CreatePortalButton(contentFrame, portal, yOffset)
     portalButton:SetScript("OnEnter", function(self)
 
         -- Only show tooltips if the setting is enabled
-        if not QuickTravel.db.showSpellTooltips then
+        if not addon.Options.db.showSpellTooltips then
             return
         end
 
@@ -754,10 +506,10 @@ function QuickTravel:CreatePortalButton(contentFrame, portal, yOffset)
                     end
                 end)
                 
-                if QuickTravel.db.autoClose then
+                if addon.Options.db.autoClose then
                     C_Timer.After(0.5, function()
                         QuickTravel:HideFrame()
-                        QuickTravel:HideOptionsFrame()
+                        addon.Options:HideOptionsFrame()
                     end)
                 end
             end
@@ -786,7 +538,7 @@ function QuickTravel:HideFrame()
         self.mainFrame:Hide()
     end
 
-    self:HideOptionsFrame()
+    addon.Options:HideOptionsFrame()
     isFrameShown = false
 end
 
@@ -824,10 +576,10 @@ frame:RegisterEvent("LEARNED_SPELL_IN_TAB")
 
 frame:SetScript("OnEvent", function(self, event, addonName, spellID)
     if event == "ADDON_LOADED" and addonName == ADDON_NAME then
-        QuickTravel:InitializeSettings()
+        QuickTravel.db = addon.Options:InitializeSettings()
         C_Timer.After(1, InitializeLFGHook)
 
-        if QuickTravel.db.showLoginMessage then
+        if addon.Options.db.showLoginMessage then
             print("|cff00ff00QuickTravel|r " .. L["LOADED"])
         end
     elseif event == "PLAYER_ENTERING_WORLD" then

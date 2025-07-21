@@ -5,7 +5,7 @@ Tired of hunting through your spellbook for portals? Never know where the portal
 - Organized by expansion - All portals grouped and sorted for easy browsing
 - Favorites system - Right-click any portal to add/remove from favorites
 - Smart search - Filter portals by name or expansion
-- LFG integration - Automatically attaches to Group Finder when browsing dungeons/raids (Experimental)
+- LFG integration - Adds a portal tab directly in the Group Finder
 - Customizable display - Reverse order, toggle current season, auto-close options
 - Keybind support - Assign your own hotkey
 - Performance optimized - only 40 kb, cache system, no dependencies, No CPU impact

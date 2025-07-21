@@ -11,4 +11,5 @@ Locales/locale.lua
 Locales/enUS.lua
 Locales/frFR.lua
 Database/Data.lua
+Options.lua
 QuickTravel.lua
