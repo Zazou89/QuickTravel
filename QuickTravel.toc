@@ -4,6 +4,7 @@
 ## Author: Zazou
 ## Version: @project-version@
 ## SavedVariables: QuickTravelDB
+## X-Curse-Project-ID: 1311367
 ## AddonCompartmentFunc: QuickTravel_OnAddonCompartmentClick
 ## IconTexture: Interface\Icons\inv_spell_arcane_portaldornogal
 
