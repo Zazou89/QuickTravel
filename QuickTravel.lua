@@ -565,7 +565,7 @@ function QuickTravel_ToggleBinding()
 end
 
 -- Keybinding localization
-BINDING_HEADER_QUICKTRAVEL = "QuickTravel"
+BINDING_HEADER_QUICKTRAVEL = L["QT_TITLE"]
 BINDING_NAME_QUICKTRAVEL_TOGGLE = L["TOGGLE_QUICKTRAVEL"]
 
 -- Event handler frame for addon lifecycle
