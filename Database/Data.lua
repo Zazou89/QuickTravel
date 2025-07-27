@@ -5,6 +5,7 @@ local L = addon.L
 -- This array defines the order in which expansions appear in the UI
 local orderedExpansions = {
     L["Current Season"],
+    L["Hearthstones"],
     L["Cataclysm"],
     L["Mists of Pandaria"],
     L["Warlords of Draenor"],
@@ -13,6 +14,14 @@ local orderedExpansions = {
     L["Shadowlands"],
     L["Dragonflight"],
     L["War Within"]
+}
+
+-- Hearthstone variants list
+local hearthstoneVariants = {
+    166747, 165802, 165670, 165669, 166746, 163045, 162973, 142542,
+    64488, 54452, 93672, 168907, 172179, 182773, 180290, 184353,
+    183716, 188952, 190237, 193588, 190196, 200630, 206195, 209035,
+    208704, 212337, 228940, 236687, 235016
 }
 
 -- Preparation for the next season
@@ -24,6 +33,7 @@ local orderedExpansions = {
 -- Each expansion contains an array of instance keys that belong to it
 local mapExpansionToKeys = {
     [L["Current Season"]] = {"mechagon", "theatre_pain", "rookery", "darkflame_cleft", "cinderbrew_brewery", "priory_sacred_flame", "siege_boralus", "motherlode", "liberation_undermine"},
+    [L["Hearthstones"]] = {"hearthstone_dalaran", "hearthstone_garrison", "hearthstone_variant"},
     [L["Cataclysm"]] = {"vortex_pinnacle", "throne_tides", "grim_batol"},
     [L["Mists of Pandaria"]] = {"temple_jade_serpent", "siege_niuzao", "scholomance", "scarlet_monastery", "scarlet_halls", "gate_setting_sun", "mogushan_palace", "shado_pan_monastery", "stormstout_brewery"},
     [L["Warlords of Draenor"]] = {"shadowmoon_burial", "everbloom", "bloodmaul_slag", "auchindoun", "skyreach", "upper_blackrock", "grimrail_depot", "iron_docks"},
@@ -37,6 +47,11 @@ local mapExpansionToKeys = {
 -- Unified instance database mapping instance keys to their spell data
 -- Each entry contains the spell ID for teleportation and localization key for the name
 local instanceDatabase = {
+    -- Hearthstones (toys)
+    ["hearthstone_dalaran"] = {toyID = 140192},
+    ["hearthstone_garrison"] = {toyID = 110560},
+    ["hearthstone_variant"] = {variants = hearthstoneVariants, fallback = 6948},
+
     -- Cataclysm Dungeons
     ["vortex_pinnacle"] = {spellID = 410080, nameKey = "DUNGEON_VORTEX_PINNACLE"},
     ["throne_tides"] = {spellID = 424142, nameKey = "DUNGEON_THRONE_OF_THE_TIDES"},
@@ -140,6 +155,19 @@ local DataManager = {
         if not instanceData then
             return nil
         end
+
+        if instanceData.toyID then
+            return {
+                toyID = instanceData.toyID,
+                nameKey = instanceData.toyID
+            }
+        elseif instanceData.variants then
+            return {
+                variants = instanceData.variants,
+                fallback = instanceData.fallback,
+                nameKey = "hearthstone_variant"
+            }
+        end  
         
         -- Handle faction-specific spells
         if instanceData.alliance or instanceData.horde then
@@ -179,33 +207,83 @@ local DataManager = {
         
         local portals = {}
         local showUnlearned = addon.QuickTravel.db and addon.QuickTravel.db.showUnlearnedSpells or false
+        local showHearthstones = addon.QuickTravel.db and addon.QuickTravel.db.showHearthstones or false
         
         -- Scan through all expansions and their instances
         for _, expansion in ipairs(orderedExpansions) do
+            -- Skip Hearthstones if option is disabled
+            if expansion == L["Hearthstones"] and not showHearthstones then
+                -- Skip this expansion
+            else            
             local instanceKeys = mapExpansionToKeys[expansion]
             if instanceKeys then
                 for _, instanceKey in ipairs(instanceKeys) do
                     local instanceInfo = self:GetInstanceInfo(instanceKey)
                     
                     -- Include instances with valid spell IDs
-                    if instanceInfo and instanceInfo.spellID and instanceInfo.spellID > 0 then
-                        local isKnown = IsSpellKnown(instanceInfo.spellID)
+                    if instanceInfo then
+                        local isKnown = false
+                        local displayTexture = 134400
+                        local displayName = ""
                         
-                        -- Include if spell is known, or if showing unlearned spells
-                        if isKnown or showUnlearned then
+                        -- Handle toys
+                        if instanceInfo.toyID then
+                            isKnown = PlayerHasToy(instanceInfo.toyID)
+                            displayTexture = C_Item.GetItemIconByID(instanceInfo.toyID) or 134400
+                            displayName = C_Item.GetItemNameByID(instanceInfo.toyID) or ("Toy " .. instanceInfo.toyID)
+                        elseif instanceInfo.variants then
+                            local useRandom = addon.QuickTravel.db and addon.QuickTravel.db.useRandomHearthstoneVariant
+                            local selectedVariant = addon.QuickTravel.db and addon.QuickTravel.db.selectedHearthstoneVariant
+                            
+                            -- Check if any variant is owned
+                            local hasVariants = false
+                            for _, variantID in ipairs(instanceInfo.variants) do
+                                if PlayerHasToy(variantID) then
+                                    hasVariants = true
+                                    break
+                                end
+                            end
+                            
+                            isKnown = hasVariants or GetItemCount(instanceInfo.fallback) > 0
+                            
+                            if useRandom then
+                                displayName = L["HEARTHSTONE_RANDOM_VARIANT"]
+                                displayTexture = C_Item.GetItemIconByID(instanceInfo.fallback) or 134400
+                            elseif selectedVariant and PlayerHasToy(selectedVariant) then
+                                displayName = C_Item.GetItemNameByID(selectedVariant) or L["HEARTHSTONE_RANDOM_VARIANT"]
+                                displayTexture = C_Item.GetItemIconByID(selectedVariant) or C_Item.GetItemIconByID(instanceInfo.fallback) or 134400
+                            else
+                                displayName = C_Item.GetItemNameByID(instanceInfo.fallback) or "Hearthstone"
+                                displayTexture = C_Item.GetItemIconByID(instanceInfo.fallback) or 134400
+                            end
+                        -- Handle spells
+                        elseif instanceInfo.spellID and instanceInfo.spellID > 0 then
+                            isKnown = IsSpellKnown(instanceInfo.spellID)
+                            displayTexture = C_Spell.GetSpellTexture(instanceInfo.spellID) or 134400
+                            displayName = L[instanceInfo.nameKey]
+                        end
+                        
+                        -- Include if item is known, or if showing unlearned items
+                        if (isKnown or showUnlearned) and (instanceInfo.toyID or instanceInfo.spellID or instanceInfo.variants) then
                             table.insert(portals, {
                                 instanceKey = instanceKey,
                                 spellID = instanceInfo.spellID,
-                                displayName = L[instanceInfo.nameKey],
+                                toyID = instanceInfo.toyID,
+                                variants = instanceInfo.variants,
+                                fallback = instanceInfo.fallback,
+                                displayName = displayName,
                                 expansion = expansion,
-                                texture = C_Spell.GetSpellTexture(instanceInfo.spellID) or 134400,
-                                isKnown = isKnown
+                                texture = displayTexture,
+                                isKnown = isKnown,
+                                isToy = instanceInfo.toyID ~= nil,
+                                isVariant = instanceInfo.variants ~= nil
                             })
                         end
                     end
                 end
             end
         end
+    end
         
         -- Update cache
         self._cache.availablePortals = portals
@@ -245,6 +323,7 @@ local constants = {
     orderedExpansions = orderedExpansions,
     mapExpansionToKeys = mapExpansionToKeys,
     instanceDatabase = instanceDatabase,
+    hearthstoneVariants = hearthstoneVariants,
     DataManager = DataManager
 }
 

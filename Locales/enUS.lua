@@ -13,6 +13,8 @@ L["Shadowlands"] = "Shadowlands"
 L["Dragonflight"] = "Dragonflight"
 L["War Within"] = "The War Within"
 L["Current Season"] = "Current Season"
+L["Hearthstones"] = "Hearthstones"
+L["HEARTHSTONE_RANDOM_VARIANT"] = "Hearthstone (random variant)"
 
 -- === Dungeons and Raids by Expansion ===
 -- Cataclysm Dungeons
@@ -104,6 +106,7 @@ L["RAID_MANAFORGE_OMEGA"] = "Manaforge Omega" --16178
 -- General UI and tooltip texts
 L["SEARCH"] = "Search..."
 L["CLICK_TO_TELEPORT"] = "Click to teleport"
+L["CLICK_TO_USE"] = "Click to use"
 L["NO_PORTALS_FOUND"] = "No portals found."
 L["NO_SEARCH_RESULTS"] = "No results for this search."
 L["LOADED"] = "loaded! Use /qt to open."
@@ -111,7 +114,9 @@ L["RIGHT_CLICK_ADD_FAVORITE"] = "Right-click to add to favorites"
 L["RIGHT_CLICK_REMOVE_FAVORITE"] = "Right-click to remove from favorites"
 L["TOGGLE_QUICKTRAVEL"] = "Toggle QuickTravel"
 L["SPELL_NOT_LEARNED"] = "Spell not learned"
+L["TOY_NOT_OWNED"] = "Toy not owned"
 L["LFG_TAB_PORTALS"] = "Portals"
+L["RANDOM_VARIANT_TOOLTIP"] = "A random hearthstone variant will be used"
 
 -- === Options ===
 -- Addon settings and options labels
@@ -119,6 +124,11 @@ L["SHOW_LOGIN_MESSAGE"] = "Show login message"
 L["AUTO_CLOSE"] = "Auto-close addon while casting"
 L["FAVORITES"] = "Favorites"
 L["SHOW_CURRENT_SEASON"] = "Show current season"
+L["SHOW_HEARTHSTONES"] = "Show hearthstones"
+L["OPTIONS_TAB"] = "Options"
+L["CATEGORIES_TAB"] = "Categories"
+L["USE_RANDOM_HEARTHSTONE_VARIANT"] = "Use random hearthstone variant"
+L["NO_HEARTHSTONE_VARIANTS"] = "No variants owned"
 L["REVERSE_EXPANSION_ORDER"] = "Reverse expansion order"
 L["SHOW_LFG_TAB"] = "Show tab in Group Finder"
 L["SHOW_UNLEARNED_SPELLS"] = "Show unlearned spells"

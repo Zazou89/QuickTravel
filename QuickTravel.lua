@@ -382,10 +382,24 @@ function QuickTravel:UpdateCooldowns()
     
     local children = { self.mainFrame.contentFrame:GetChildren() }
     for _, child in ipairs(children) do
-        if child.cooldown and child.spellID then
-            local cooldownInfo = C_Spell.GetSpellCooldown(child.spellID)
-            if cooldownInfo and cooldownInfo.startTime > 0 and cooldownInfo.duration > 0 then
-                child.cooldown:SetCooldown(cooldownInfo.startTime, cooldownInfo.duration)
+        if child.cooldown then
+            if child.isToy and child.toyID then
+                local startTime, duration = GetItemCooldown(child.toyID)
+                if startTime > 0 and duration > 0 then
+                    child.cooldown:SetCooldown(startTime, duration)
+                end
+            elseif child.isVariant then
+                local portal = {variants = self.variants, fallback = self.fallback, isVariant = true}
+                local effectiveID = QuickTravel:GetEffectiveHearthstoneID(portal)
+                local startTime, duration = GetItemCooldown(effectiveID)
+                if startTime > 0 and duration > 0 then
+                    child.cooldown:SetCooldown(startTime, duration)
+                end
+            elseif child.spellID then
+                local cooldownInfo = C_Spell.GetSpellCooldown(child.spellID)
+                if cooldownInfo and cooldownInfo.startTime > 0 and cooldownInfo.duration > 0 then
+                    child.cooldown:SetCooldown(cooldownInfo.startTime, cooldownInfo.duration)
+                end
             end
         end
     end
@@ -399,8 +413,23 @@ function QuickTravel:CreatePortalButton(contentFrame, portal, yOffset)
     
     -- Only set spell attribute and register clicks if the spell is known
     if portal.isKnown then
-        portalButton:SetAttribute("type", "spell")
-        portalButton:SetAttribute("spell", portal.spellID)
+        if portal.isToy then
+            portalButton:SetAttribute("type", "toy")
+            portalButton:SetAttribute("toy", portal.toyID)
+        elseif portal.isVariant then
+            -- Set initial attribute, will be updated dynamically
+            local effectiveID = self:GetEffectiveHearthstoneID(portal)
+            if effectiveID == portal.fallback then
+                portalButton:SetAttribute("type", "item")
+                portalButton:SetAttribute("item", effectiveID)
+            else
+                portalButton:SetAttribute("type", "toy")
+                portalButton:SetAttribute("toy", effectiveID)
+            end
+        else
+            portalButton:SetAttribute("type", "spell")
+            portalButton:SetAttribute("spell", portal.spellID)
+        end
         portalButton:RegisterForClicks("LeftButtonUp", "LeftButtonDown", "RightButtonUp")
     else
         -- Disable interaction for unknown spells
@@ -439,13 +468,31 @@ function QuickTravel:CreatePortalButton(contentFrame, portal, yOffset)
         cooldown:SetSwipeColor(0, 0, 0, 0.8)
         
         -- Check and display initial cooldown
-        local cooldownInfo = C_Spell.GetSpellCooldown(portal.spellID)
-        if cooldownInfo and cooldownInfo.startTime > 0 and cooldownInfo.duration > 0 then
-            cooldown:SetCooldown(cooldownInfo.startTime, cooldownInfo.duration)
+        if portal.isToy then
+            local startTime, duration = GetItemCooldown(portal.toyID)
+            if startTime > 0 and duration > 0 then
+                cooldown:SetCooldown(startTime, duration)
+            end
+        elseif portal.isVariant then
+            local effectiveID = QuickTravel:GetEffectiveHearthstoneID(portal)
+            local startTime, duration = GetItemCooldown(effectiveID)
+            if startTime > 0 and duration > 0 then
+                cooldown:SetCooldown(startTime, duration)
+            end
+        else
+            local cooldownInfo = C_Spell.GetSpellCooldown(portal.spellID)
+            if cooldownInfo and cooldownInfo.startTime > 0 and cooldownInfo.duration > 0 then
+                cooldown:SetCooldown(cooldownInfo.startTime, cooldownInfo.duration)
+            end
         end
         
         portalButton.cooldown = cooldown
         portalButton.spellID = portal.spellID -- Store for updates
+        portalButton.toyID = portal.toyID
+        portalButton.isToy = portal.isToy
+        portalButton.isVariant = portal.isVariant
+        portalButton.variants = portal.variants
+        portalButton.fallback = portal.fallback
     end
 
     -- Portal name text
@@ -470,10 +517,22 @@ function QuickTravel:CreatePortalButton(contentFrame, portal, yOffset)
         GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
         
         if portal.isKnown then
-            GameTooltip:SetSpellByID(portal.spellID)
-            GameTooltip:AddLine(" ")
-            GameTooltip:AddLine("|cff00ff00" .. L["CLICK_TO_TELEPORT"] .. "|r")
-            
+            if portal.isToy then
+                GameTooltip:SetToyByItemID(portal.toyID)
+                GameTooltip:AddLine(" ")
+                GameTooltip:AddLine("|cff00ff00" .. L["CLICK_TO_USE"] .. "|r")
+            elseif portal.isVariant then
+                -- Show generic tooltip for random variants to keep the surprise
+                GameTooltip:SetText(portal.displayName, 1, 1, 1)
+                GameTooltip:AddLine("|cff00ff00" .. L["CLICK_TO_USE"] .. "|r")
+                if QuickTravel.db and QuickTravel.db.useRandomHearthstoneVariant then
+                    GameTooltip:AddLine("|cffcccccc" .. L["RANDOM_VARIANT_TOOLTIP"] .. "|r")
+                end
+            else
+                GameTooltip:SetSpellByID(portal.spellID)
+                GameTooltip:AddLine(" ")
+                GameTooltip:AddLine("|cff00ff00" .. L["CLICK_TO_TELEPORT"] .. "|r")
+            end
             if QuickTravel:IsFavorite(portal.instanceKey) then
                 GameTooltip:AddLine("|cffff9999" .. L["RIGHT_CLICK_REMOVE_FAVORITE"] .. "|r")
             else
@@ -481,8 +540,12 @@ function QuickTravel:CreatePortalButton(contentFrame, portal, yOffset)
             end
         else
             -- Text is grayed out for unlearned spells
-            GameTooltip:SetText(portal.displayName, 0.5, 0.5, 0.5)
-            GameTooltip:AddLine("|cffff6666" .. L["SPELL_NOT_LEARNED"] .. "|r")
+            GameTooltip:SetText(portal.displayName, 0.5, 0.5, 0.5)           
+            if portal.isToy or portal.isVariant then
+                GameTooltip:AddLine("|cffff6666" .. L["TOY_NOT_OWNED"] .. "|r")
+            else
+                GameTooltip:AddLine("|cffff6666" .. L["SPELL_NOT_LEARNED"] .. "|r")
+            end
         end
         
         GameTooltip:Show()
@@ -496,12 +559,40 @@ function QuickTravel:CreatePortalButton(contentFrame, portal, yOffset)
             if button == "RightButton" then
                 QuickTravel:ToggleFavorite(portal.instanceKey)
             elseif button == "LeftButton" then
-                -- Update cooldown after spell cast
+                -- Update attribute for next click if it's a variant
+                if portal.isVariant then
+                    local effectiveID = QuickTravel:GetEffectiveHearthstoneID(portal)
+                    if effectiveID == portal.fallback then
+                        self:SetAttribute("type", "item")
+                        self:SetAttribute("item", effectiveID)
+                        self:SetAttribute("toy", nil)
+                    else
+                        self:SetAttribute("type", "toy")
+                        self:SetAttribute("toy", effectiveID)
+                        self:SetAttribute("item", nil)
+                    end
+                end
+                
+                -- Update cooldown after action
                 C_Timer.After(0.1, function()
-                    if self.cooldown and self.spellID then
-                        local cooldownInfo = C_Spell.GetSpellCooldown(self.spellID)
-                        if cooldownInfo and cooldownInfo.startTime > 0 and cooldownInfo.duration > 0 then
-                            self.cooldown:SetCooldown(cooldownInfo.startTime, cooldownInfo.duration)
+                    if self.cooldown then
+                        if self.isToy and self.toyID then
+                            local startTime, duration = GetItemCooldown(self.toyID)
+                            if startTime > 0 and duration > 0 then
+                                self.cooldown:SetCooldown(startTime, duration)
+                            end
+                        elseif self.isVariant then
+                            local portal = {variants = self.variants, fallback = self.fallback, isVariant = true}
+                            local effectiveID = QuickTravel:GetEffectiveHearthstoneID(portal)
+                            local startTime, duration = GetItemCooldown(effectiveID)
+                            if startTime > 0 and duration > 0 then
+                                self.cooldown:SetCooldown(startTime, duration)
+                            end
+                        elseif self.spellID then
+                            local cooldownInfo = C_Spell.GetSpellCooldown(self.spellID)
+                            if cooldownInfo and cooldownInfo.startTime > 0 and cooldownInfo.duration > 0 then
+                                self.cooldown:SetCooldown(cooldownInfo.startTime, cooldownInfo.duration)
+                            end
                         end
                     end
                 end)
@@ -589,6 +680,35 @@ frame:SetScript("OnEvent", function(self, event, addonName, spellID)
         QuickTravel:RefreshPortals()
     end
 end)
+
+-- Get effective hearthstone ID for variants
+function QuickTravel:GetEffectiveHearthstoneID(portal)
+    if not portal.isVariant or not portal.variants then
+        return portal.toyID or portal.spellID or 6948
+    end
+    
+    local useRandom = self.db and self.db.useRandomHearthstoneVariant
+    local selectedVariant = self.db and self.db.selectedHearthstoneVariant
+    
+    if useRandom then
+        -- Get random owned variant
+        local ownedVariants = {}
+        for _, variantID in ipairs(portal.variants) do
+            if PlayerHasToy(variantID) then
+                table.insert(ownedVariants, variantID)
+            end
+        end
+        
+        if #ownedVariants > 0 then
+            return ownedVariants[math.random(1, #ownedVariants)]
+        end
+    elseif selectedVariant and PlayerHasToy(selectedVariant) then
+        return selectedVariant
+    end
+    
+    -- Fallback to basic hearthstone
+    return portal.fallback
+end
 
 -- Global reference for external access
 _G["QuickTravel"] = QuickTravel

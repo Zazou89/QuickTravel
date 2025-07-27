@@ -11,6 +11,9 @@ local DEFAULT_SETTINGS = {
     autoClose = true,
     favorites = {},
     showCurrentSeason = true,
+    showHearthstones = false,
+    useRandomHearthstoneVariant = true,
+    selectedHearthstoneVariant = nil,
     reverseExpansionOrder = false,
     showLFGTab = true,
     showUnlearnedSpells = false,
@@ -48,6 +51,47 @@ function Options:CreateSeparator(parent, previousElement, offsetY)
     return separator
 end
 
+-- Hearthstone variants cache
+local variantCache = {
+    ownedVariants = nil,
+    lastScan = 0,
+    cacheTimeout = 60 -- 1 minute
+}
+
+-- Get owned hearthstone variants with caching
+local function GetOwnedHearthstoneVariants()
+    local now = GetTime()
+    if variantCache.ownedVariants and (now - variantCache.lastScan < variantCache.cacheTimeout) then
+        return variantCache.ownedVariants
+    end
+    
+    local owned = {}
+    local constants = addon.constants
+    if constants and constants.hearthstoneVariants then
+        for _, variantID in ipairs(constants.hearthstoneVariants) do
+            if PlayerHasToy(variantID) then
+                local name = C_Item.GetItemNameByID(variantID)
+                if name then
+                    table.insert(owned, {id = variantID, name = name})
+                end
+            end
+        end
+        
+        -- Sort alphabetically
+        table.sort(owned, function(a, b) return a.name < b.name end)
+    end
+    
+    variantCache.ownedVariants = owned
+    variantCache.lastScan = now
+    return owned
+end
+
+-- Invalidate variant cache
+local function InvalidateVariantCache()
+    variantCache.ownedVariants = nil
+    variantCache.lastScan = 0
+end
+
 -- Create the options configuration frame
 function Options:CreateOptionsFrame(mainFrame)
     if self.optionsFrame then
@@ -55,7 +99,7 @@ function Options:CreateOptionsFrame(mainFrame)
     end
 
     self.optionsFrame = CreateFrame("Frame", "QuickTravelOptionsFrame", UIParent, "PortraitFrameTemplate")
-    self.optionsFrame:SetSize(280, 360)
+    self.optionsFrame:SetSize(290, 480)
 
     -- Position relative to main frame if available
     if mainFrame then
@@ -117,10 +161,39 @@ function Options:CreateOptionsFrame(mainFrame)
     -- SEPARATOR 1
     local separator1 = self:CreateSeparator(self.optionsFrame, showUnlearnedCheckbox)
 
-    -- === SECTION 2: BEHAVIOR ===
+    -- === SECTION 2: HEARTHSTONES ===
+    -- Show hearthstones checkbox
+    local showHearthstonesCheckbox = CreateFrame("CheckButton", nil, self.optionsFrame, "InterfaceOptionsCheckButtonTemplate")
+    showHearthstonesCheckbox:SetPoint("TOPLEFT", separator1, "BOTTOMLEFT", 0, -15)
+    showHearthstonesCheckbox:SetSize(22, 22)
+
+    local showHearthstonesText = self.optionsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    showHearthstonesText:SetPoint("LEFT", showHearthstonesCheckbox, "RIGHT", 8, 0)
+    showHearthstonesText:SetText(L["SHOW_HEARTHSTONES"])
+    showHearthstonesText:SetTextColor(1, 1, 1)
+
+    -- Random hearthstone variant checkbox
+    local randomHearthstoneCheckbox = CreateFrame("CheckButton", nil, self.optionsFrame, "InterfaceOptionsCheckButtonTemplate")
+    randomHearthstoneCheckbox:SetPoint("TOPLEFT", showHearthstonesCheckbox, "BOTTOMLEFT", 0, -10)
+    randomHearthstoneCheckbox:SetSize(22, 22)
+
+    local randomHearthstoneText = self.optionsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    randomHearthstoneText:SetPoint("LEFT", randomHearthstoneCheckbox, "RIGHT", 8, 0)
+    randomHearthstoneText:SetText(L["USE_RANDOM_HEARTHSTONE_VARIANT"])
+    randomHearthstoneText:SetTextColor(1, 1, 1)
+
+    -- Hearthstone variant dropdown
+    local hearthstoneDropdown = CreateFrame("Frame", "QuickTravelHearthstoneDropdown", self.optionsFrame, "UIDropDownMenuTemplate")
+    hearthstoneDropdown:SetPoint("TOPLEFT", randomHearthstoneCheckbox, "BOTTOMLEFT", 5, -10)
+    hearthstoneDropdown:SetSize(200, 32)
+
+    -- SEPARATOR 2
+    local separator2 = self:CreateSeparator(self.optionsFrame, hearthstoneDropdown)
+
+    -- === SECTION 3: BEHAVIOR ===
     -- Auto close checkbox
     local autoCloseCheckbox = CreateFrame("CheckButton", nil, self.optionsFrame, "InterfaceOptionsCheckButtonTemplate")
-    autoCloseCheckbox:SetPoint("TOPLEFT", separator1, "BOTTOMLEFT", 0, -15)
+    autoCloseCheckbox:SetPoint("TOPLEFT", separator2, "BOTTOMLEFT", 0, -15)
     autoCloseCheckbox:SetSize(22, 22)
 
     local autoCloseText = self.optionsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
@@ -138,13 +211,13 @@ function Options:CreateOptionsFrame(mainFrame)
     reverseOrderText:SetText(L["REVERSE_EXPANSION_ORDER"])
     reverseOrderText:SetTextColor(1, 1, 1)
 
-    -- SEPARATOR 2
-    local separator2 = self:CreateSeparator(self.optionsFrame, reverseOrderCheckbox)
+    -- SEPARATOR 3
+    local separator3 = self:CreateSeparator(self.optionsFrame, reverseOrderCheckbox)
 
-    -- === SECTION 3: LFG ATTACHMENT ===
+    -- === SECTION 4: LFG ATTACHMENT ===
     -- Show LFG tab checkbox
     local showLFGTabCheckbox = CreateFrame("CheckButton", nil, self.optionsFrame, "InterfaceOptionsCheckButtonTemplate")
-    showLFGTabCheckbox:SetPoint("TOPLEFT", separator2, "BOTTOMLEFT", 0, -15)
+    showLFGTabCheckbox:SetPoint("TOPLEFT", separator3, "BOTTOMLEFT", 0, -15)
     showLFGTabCheckbox:SetSize(22, 22)
 
     local showLFGTabText = self.optionsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
@@ -156,10 +229,15 @@ function Options:CreateOptionsFrame(mainFrame)
     self.optionsFrame.hideLoginCheckbox = hideLoginCheckbox
     self.optionsFrame.autoCloseCheckbox = autoCloseCheckbox
     self.optionsFrame.showSeasonCheckbox = showSeasonCheckbox
+    self.optionsFrame.showHearthstonesCheckbox = showHearthstonesCheckbox
+    self.optionsFrame.randomHearthstoneCheckbox = randomHearthstoneCheckbox
+    self.optionsFrame.hearthstoneDropdown = hearthstoneDropdown
+    self.optionsFrame.reverseOrderCheckbox = reverseOrderCheckbox   
     self.optionsFrame.reverseOrderCheckbox = reverseOrderCheckbox
     self.optionsFrame.showLFGTabCheckbox = showLFGTabCheckbox
     self.optionsFrame.showUnlearnedCheckbox = showUnlearnedCheckbox
     self.optionsFrame.showTooltipsCheckbox = showTooltipsCheckbox
+    
 
     self:LoadOptionsValues()
     self:SetupEventHandlers()
@@ -189,6 +267,28 @@ function Options:SetupEventHandlers()
             QuickTravel:PopulatePortalList()
         end
     end)
+
+    self.optionsFrame.showHearthstonesCheckbox:SetScript("OnClick", function(checkbox)
+        self.db.showHearthstones = checkbox:GetChecked()
+        self:UpdateHearthstoneControls()
+        if constants then
+            constants.DataManager:InvalidateCache()
+        end
+        if QuickTravel then
+            QuickTravel:PopulatePortalList()
+        end
+    end)
+
+    self.optionsFrame.randomHearthstoneCheckbox:SetScript("OnClick", function(checkbox)
+        self.db.useRandomHearthstoneVariant = checkbox:GetChecked()
+        self:UpdateHearthstoneControls()
+        if constants then
+            constants.DataManager:InvalidateCache()
+        end
+        if QuickTravel then
+            QuickTravel:PopulatePortalList()
+        end
+    end) 
 
     self.optionsFrame.reverseOrderCheckbox:SetScript("OnClick", function(checkbox)
         self.db.reverseExpansionOrder = checkbox:GetChecked()
@@ -239,6 +339,10 @@ function Options:LoadOptionsValues()
     self.optionsFrame.hideLoginCheckbox:SetChecked(self.db.showLoginMessage)
     self.optionsFrame.autoCloseCheckbox:SetChecked(self.db.autoClose)
     self.optionsFrame.showSeasonCheckbox:SetChecked(self.db.showCurrentSeason)
+    self.optionsFrame.showHearthstonesCheckbox:SetChecked(self.db.showHearthstones)
+    self.optionsFrame.randomHearthstoneCheckbox:SetChecked(self.db.useRandomHearthstoneVariant)
+    self:SetupHearthstoneDropdown()
+    self:UpdateHearthstoneControls()
     self.optionsFrame.reverseOrderCheckbox:SetChecked(self.db.reverseExpansionOrder)
     self.optionsFrame.showLFGTabCheckbox:SetChecked(self.db.showLFGTab)
     self.optionsFrame.showUnlearnedCheckbox:SetChecked(self.db.showUnlearnedSpells)
@@ -268,6 +372,80 @@ function Options:ToggleOptionsFrame(mainFrame)
         self:HideOptionsFrame()
     else
         self:ShowOptionsFrame(mainFrame)
+    end
+end
+
+-- Setup hearthstone dropdown
+function Options:SetupHearthstoneDropdown()
+    local dropdown = self.optionsFrame.hearthstoneDropdown
+    if not dropdown then return end
+    
+    local ownedVariants = GetOwnedHearthstoneVariants()
+    
+    -- Set default selection if none exists
+    if #ownedVariants > 0 and not self.db.selectedHearthstoneVariant then
+        self.db.selectedHearthstoneVariant = ownedVariants[1].id
+    end
+    
+    UIDropDownMenu_SetWidth(dropdown, 180)
+    UIDropDownMenu_Initialize(dropdown, function(self, level)
+        local info = UIDropDownMenu_CreateInfo()
+        
+        if #ownedVariants == 0 then
+            info.text = L["NO_HEARTHSTONE_VARIANTS"]
+            info.disabled = true
+            info.notCheckable = true
+            UIDropDownMenu_AddButton(info)
+        else
+            for _, variant in ipairs(ownedVariants) do
+                info = UIDropDownMenu_CreateInfo()
+                info.text = variant.name
+                info.value = variant.id
+                info.checked = (variant.id == Options.db.selectedHearthstoneVariant)
+                info.func = function()
+                    Options.db.selectedHearthstoneVariant = variant.id
+                    UIDropDownMenu_SetSelectedValue(dropdown, variant.id)
+                    if addon.constants then
+                        addon.constants.DataManager:InvalidateCache()
+                    end
+                    if addon.QuickTravel then
+                        addon.QuickTravel:PopulatePortalList()
+                    end
+                end
+                UIDropDownMenu_AddButton(info)
+            end
+        end
+    end)
+    
+    -- Set current selection
+    if self.db.selectedHearthstoneVariant then
+        UIDropDownMenu_SetSelectedValue(dropdown, self.db.selectedHearthstoneVariant)
+    end
+end
+
+-- Update hearthstone controls state
+function Options:UpdateHearthstoneControls()
+    if not self.optionsFrame then return end
+    
+    local showHearthstones = self.db.showHearthstones
+    local ownedVariants = GetOwnedHearthstoneVariants()
+    local hasVariants = #ownedVariants > 0
+    
+    -- Enable/disable random checkbox based on master setting and variants
+    local randomEnabled = showHearthstones and hasVariants
+    self.optionsFrame.randomHearthstoneCheckbox:SetEnabled(randomEnabled)
+    
+    if not showHearthstones or not hasVariants then
+        self.optionsFrame.randomHearthstoneCheckbox:SetChecked(false)
+        self.db.useRandomHearthstoneVariant = false
+    end
+    
+    -- Enable/disable dropdown
+    local dropdownEnabled = showHearthstones and hasVariants and not self.db.useRandomHearthstoneVariant
+    if dropdownEnabled then
+        UIDropDownMenu_EnableDropDown(self.optionsFrame.hearthstoneDropdown)
+    else
+        UIDropDownMenu_DisableDropDown(self.optionsFrame.hearthstoneDropdown)
     end
 end
 
