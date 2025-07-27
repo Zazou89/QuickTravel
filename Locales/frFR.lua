@@ -14,7 +14,7 @@ L["Dragonflight"] = "Dragonflight"
 L["The War Within"] = "The War Within"
 L["Current Season"] = "Saison Actuelle"
 L["Hearthstones"] = "Pierres de foyer"
-L["HEARTHSTONE_RANDOM_VARIANT"] = "Pierre de foyer (variant aléatoire)"
+L["HEARTHSTONE_RANDOM_VARIANT"] = "Pierre de foyer (variante aléatoire)"
 
 -- === Dungeons and Raids by Expansion ===
 -- Cataclysm Dungeons
