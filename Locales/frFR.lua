@@ -102,6 +102,10 @@ L["DUNGEON_ECO_DOME_AL_DANI"] = "Écodôme Al’dani"
 L["RAID_LIBERATION_OF_UNDERMINE"] = "Libération de Terremine"
 L["RAID_MANAFORGE_OMEGA"] = "Manaforge Oméga"
 
+-- Hearthstones
+L["HEARTHSTONE_DALARAN"] = "Pierre de foyer de Dalaran"
+L["HEARTHSTONE_GARRISON"] = "Pierre de foyer de fief"
+
 -- === Interface Strings ===
 -- General UI and tooltip texts
 L["SEARCH"] = "Rechercher..."

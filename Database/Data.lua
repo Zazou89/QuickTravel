@@ -47,8 +47,8 @@ local mapCategoryKeysToInstances = {
 -- Each entry contains the spell ID for teleportation and localization key for the name
 local instanceDatabase = {
     -- Hearthstones (toys)
-    ["hearthstone_dalaran"] = {toyID = 140192},
-    ["hearthstone_garrison"] = {toyID = 110560},
+    ["hearthstone_dalaran"] = {toyID = 140192, nameKey = "HEARTHSTONE_DALARAN"},
+    ["hearthstone_garrison"] = {toyID = 110560, nameKey = "HEARTHSTONE_GARRISON"},
     ["hearthstone_variant"] = {variants = hearthstoneVariants, fallback = 6948},
 
     -- Cataclysm Dungeons
@@ -158,7 +158,7 @@ local DataManager = {
         if instanceData.toyID then
             return {
                 toyID = instanceData.toyID,
-                nameKey = instanceData.toyID
+                nameKey = instanceData.nameKey or instanceData.toyID
             }
         elseif instanceData.variants then
             return {
@@ -237,7 +237,12 @@ local DataManager = {
                         if instanceInfo.toyID then
                             isKnown = PlayerHasToy(instanceInfo.toyID)
                             displayTexture = C_Item.GetItemIconByID(instanceInfo.toyID) or 134400
-                            displayName = C_Item.GetItemNameByID(instanceInfo.toyID) or ("Toy " .. instanceInfo.toyID)
+                            
+                            if instanceInfo.nameKey and type(instanceInfo.nameKey) == "string" then
+                                displayName = L[instanceInfo.nameKey]
+                            else
+                                displayName = C_Item.GetItemNameByID(instanceInfo.toyID) or ("Toy " .. instanceInfo.toyID)
+                            end
                         elseif instanceInfo.variants then
                             local useRandom = addon.QuickTravel.db and addon.QuickTravel.db.useRandomHearthstoneVariant
                             local selectedVariant = addon.QuickTravel.db and addon.QuickTravel.db.selectedHearthstoneVariant
