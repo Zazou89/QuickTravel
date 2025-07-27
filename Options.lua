@@ -16,18 +16,18 @@ function Options:InitializeSettings()
     end
 
     -- Set default values for any missing settings
-    local DEFAULT_SETTINGS = {
-        configVersion = addon.ConfigManager.CURRENT_CONFIG_VERSION,
-        showLoginMessage = true,
-        autoClose = true,
-        favorites = {},
-        useRandomHearthstoneVariant = true,
-        selectedHearthstoneVariant = nil,
-        categoryOrder = addon.ConfigManager.DEFAULT_CATEGORY_ORDER,
-        showLFGTab = true,
-        showUnlearnedSpells = false,
-        showSpellTooltips = true
-    }
+local DEFAULT_SETTINGS = {
+    configVersion = addon.ConfigManager.CURRENT_CONFIG_VERSION,   -- (number) Config schema version for upgrades/reset
+    showLoginMessage = true,                                      -- (boolean) Show login message in chat when addon loads
+    autoClose = true,                                             -- (boolean) Auto-close addon UI after portal use
+    favorites = {},                                               -- (table, array of strings) List of favorite portal instanceKeys
+    useRandomHearthstoneVariant = true,                           -- (boolean) Use a random owned Hearthstone variant
+    selectedHearthstoneVariant = nil,                             -- (number or nil) Selected Hearthstone variant ItemID (if not random)
+    categoryOrder = addon.ConfigManager.DEFAULT_CATEGORY_ORDER,   -- (table, array) User's preferred order and enable state for portal categories
+    showLFGTab = true,                                            -- (boolean) Show the QuickTravel tab in the Group Finder (LFG)
+    showUnlearnedSpells = false,                                  -- (boolean) Show spells/portals the player has not learned yet
+    showSpellTooltips = true                                      -- (boolean) Show tooltips for spells/portals in the UI
+}
 
     for key, defaultValue in pairs(DEFAULT_SETTINGS) do
         if QuickTravelDB[key] == nil then
