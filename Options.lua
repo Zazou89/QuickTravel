@@ -5,24 +5,29 @@ local L = addon.L
 local Options = {}
 addon.Options = Options
 
--- Default settings configuration
-local DEFAULT_SETTINGS = {
-    showLoginMessage = true,
-    autoClose = true,
-    favorites = {},
-    useRandomHearthstoneVariant = true,
-    selectedHearthstoneVariant = nil,
-    categoryOrder = {},
-    showLFGTab = true,
-    showUnlearnedSpells = false,
-    showSpellTooltips = true
-}
-
 -- Initialize saved variables with default values
 function Options:InitializeSettings()
+    -- Check and reset config if needed (this sets QuickTravelDB)
+    local wasReset = addon.ConfigManager.CheckAndResetConfig()
+    
+    -- If no reset occurred, ensure QuickTravelDB exists
     if not QuickTravelDB then
         QuickTravelDB = {}
     end
+
+    -- Set default values for any missing settings
+    local DEFAULT_SETTINGS = {
+        configVersion = addon.ConfigManager.CURRENT_CONFIG_VERSION,
+        showLoginMessage = true,
+        autoClose = true,
+        favorites = {},
+        useRandomHearthstoneVariant = true,
+        selectedHearthstoneVariant = nil,
+        categoryOrder = addon.ConfigManager.DEFAULT_CATEGORY_ORDER,
+        showLFGTab = true,
+        showUnlearnedSpells = false,
+        showSpellTooltips = true
+    }
 
     for key, defaultValue in pairs(DEFAULT_SETTINGS) do
         if QuickTravelDB[key] == nil then
@@ -425,17 +430,17 @@ end
 function Options:UpdateHearthstoneControls()
     if not self.optionsFrame then return end
     
-    -- Check if Hearthstones category is enabled in Categories tab
+    -- Check if Hearthstones category is enabled using key
     local hearthstonesEnabled = false
     if self.db.categoryOrder then
         for _, category in ipairs(self.db.categoryOrder) do
-            if category.name == L["Hearthstones"] and category.enabled then
+            if category.key == addon.ConfigManager.CATEGORY_KEYS.HEARTHSTONES and category.enabled then
                 hearthstonesEnabled = true
                 break
             end
         end
     else
-        hearthstonesEnabled = true -- Default if no category order
+        hearthstonesEnabled = true
     end
     
     local ownedVariants = GetOwnedHearthstoneVariants()
@@ -448,11 +453,11 @@ function Options:UpdateHearthstoneControls()
     -- Update text color based on checkbox state
     if randomEnabled then
         if self.optionsFrame.randomHearthstoneText then
-            self.optionsFrame.randomHearthstoneText:SetTextColor(1, 1, 1)  -- Blanc
+            self.optionsFrame.randomHearthstoneText:SetTextColor(1, 1, 1)
         end
     else
         if self.optionsFrame.randomHearthstoneText then
-            self.optionsFrame.randomHearthstoneText:SetTextColor(0.5, 0.5, 0.5)  -- Gris
+            self.optionsFrame.randomHearthstoneText:SetTextColor(0.5, 0.5, 0.5)
         end
     end
     
@@ -490,37 +495,27 @@ function Options:SetupCategoriesList()
         return
     end
     
-    -- Clear existing content directement dans categoriesContent
+    -- Clear existing content
     local children = {self.optionsFrame.categoriesContent:GetChildren()}
     for _, child in ipairs(children) do
         child:Hide()
         child:SetParent(nil)
     end
     
-    -- Get categories from constants
-    local constants = addon.constants
-    if not constants or not constants.orderedExpansions then
-        return
+    -- Ensure category order exists
+    if not self.db.categoryOrder or #self.db.categoryOrder == 0 then
+        self.db.categoryOrder = addon.ConfigManager.DEFAULT_CATEGORY_ORDER
     end
     
-    -- Initialize category order if empty
-    if not self.db.categoryOrder or #self.db.categoryOrder == 0 then
-        self.db.categoryOrder = {}
-        for i, expansion in ipairs(constants.orderedExpansions) do
-            table.insert(self.db.categoryOrder, {
-                name = expansion,
-                enabled = true,
-                order = i
-            })
-        end
-    end
+    -- Get localized category order for display
+    local localizedCategories = addon.ConfigManager.GetLocalizedCategoryOrder(self.db.categoryOrder)
     
     -- Sort by order
-    table.sort(self.db.categoryOrder, function(a, b) return a.order < b.order end)
+    table.sort(localizedCategories, function(a, b) return a.order < b.order end)
     
     local yOffset = -30
     
-    for i, category in ipairs(self.db.categoryOrder) do
+    for i, category in ipairs(localizedCategories) do
         -- Category frame
         local categoryFrame = CreateFrame("Frame", nil, self.optionsFrame.categoriesContent)
         categoryFrame:SetSize(280, 30)
@@ -532,28 +527,34 @@ function Options:SetupCategoriesList()
         checkbox:SetSize(22, 22)
         checkbox:SetChecked(category.enabled)
         checkbox:SetScript("OnClick", function(cb)
-            category.enabled = cb:GetChecked()
+            -- Update in the actual db using the key
+            for _, dbCategory in ipairs(self.db.categoryOrder) do
+                if dbCategory.key == category.key then
+                    dbCategory.enabled = cb:GetChecked()
+                    break
+                end
+            end
             
             -- Update hearthstone controls if this is the Hearthstones category
-            if category.name == L["Hearthstones"] then
+            if category.key == addon.ConfigManager.CATEGORY_KEYS.HEARTHSTONES then
                 self:UpdateHearthstoneControls()
             end
             
-            if constants then
-                constants.DataManager:InvalidateCache()
+            if addon.constants then
+                addon.constants.DataManager:InvalidateCache()
             end
             if addon.QuickTravel then
                 addon.QuickTravel:PopulatePortalList()
             end
         end)
         
-        -- Category name
+        -- Category name (localized)
         local nameText = categoryFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
         nameText:SetPoint("LEFT", checkbox, "RIGHT", 8, 0)
         nameText:SetText(category.name)
         nameText:SetTextColor(1, 1, 1)
         
-        -- Up button avec vraie flèche
+        -- Up button
         local upButton = CreateFrame("Button", nil, categoryFrame)
         upButton:SetSize(24, 24)
         upButton:SetPoint("RIGHT", categoryFrame, "RIGHT", -50, 0)
@@ -564,7 +565,7 @@ function Options:SetupCategoriesList()
             self:MoveCategoryUp(i)
         end)
         
-        -- Down button avec vraie flèche
+        -- Down button
         local downButton = CreateFrame("Button", nil, categoryFrame)
         downButton:SetSize(24, 24)
         downButton:SetPoint("RIGHT", categoryFrame, "RIGHT", -25, 0)
@@ -579,7 +580,7 @@ function Options:SetupCategoriesList()
         if i == 1 then
             upButton:SetEnabled(false)
         end
-        if i == #self.db.categoryOrder then
+        if i == #localizedCategories then
             downButton:SetEnabled(false)
         end
         

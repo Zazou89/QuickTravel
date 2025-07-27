@@ -4,6 +4,7 @@ addon.QuickTravel = QuickTravel
 local L = addon.L
 local constants = addon.constants
 local isFrameShown = false
+local ConfigManager = addon.ConfigManager
 
 -- Compartment click handler for the addon icon
 function QuickTravel_OnAddonCompartmentClick(addonName, buttonName)
