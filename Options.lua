@@ -486,12 +486,12 @@ end
 
 -- Setup categories list with up/down buttons
 function Options:SetupCategoriesList()
-    if not self.optionsFrame or not self.optionsFrame.categoriesContentFrame then
+    if not self.optionsFrame or not self.optionsFrame.categoriesContent then
         return
     end
     
-    -- Clear existing content
-    local children = {self.optionsFrame.categoriesContentFrame:GetChildren()}
+    -- Clear existing content directement dans categoriesContent
+    local children = {self.optionsFrame.categoriesContent:GetChildren()}
     for _, child in ipairs(children) do
         child:Hide()
         child:SetParent(nil)
@@ -518,13 +518,13 @@ function Options:SetupCategoriesList()
     -- Sort by order
     table.sort(self.db.categoryOrder, function(a, b) return a.order < b.order end)
     
-    local yOffset = -10
+    local yOffset = -30
     
     for i, category in ipairs(self.db.categoryOrder) do
         -- Category frame
-        local categoryFrame = CreateFrame("Frame", nil, self.optionsFrame.categoriesContentFrame)
+        local categoryFrame = CreateFrame("Frame", nil, self.optionsFrame.categoriesContent)
         categoryFrame:SetSize(280, 30)
-        categoryFrame:SetPoint("TOPLEFT", self.optionsFrame.categoriesContentFrame, "TOPLEFT", 10, yOffset)
+        categoryFrame:SetPoint("TOPLEFT", self.optionsFrame.categoriesContent, "TOPLEFT", 10, yOffset)
         
         -- Checkbox
         local checkbox = CreateFrame("CheckButton", nil, categoryFrame, "InterfaceOptionsCheckButtonTemplate")
@@ -553,10 +553,10 @@ function Options:SetupCategoriesList()
         nameText:SetText(category.name)
         nameText:SetTextColor(1, 1, 1)
         
--- Up button avec vraie flèche
+        -- Up button avec vraie flèche
         local upButton = CreateFrame("Button", nil, categoryFrame)
         upButton:SetSize(24, 24)
-        upButton:SetPoint("RIGHT", categoryFrame, "RIGHT", -80, 0)
+        upButton:SetPoint("RIGHT", categoryFrame, "RIGHT", -50, 0)
         upButton:SetNormalTexture("Interface\\ChatFrame\\UI-ChatIcon-ScrollUp-Up")
         upButton:SetPushedTexture("Interface\\ChatFrame\\UI-ChatIcon-ScrollUp-Down")
         upButton:SetHighlightTexture("Interface\\Buttons\\UI-Common-MouseHilight")
@@ -567,7 +567,7 @@ function Options:SetupCategoriesList()
         -- Down button avec vraie flèche
         local downButton = CreateFrame("Button", nil, categoryFrame)
         downButton:SetSize(24, 24)
-        downButton:SetPoint("RIGHT", categoryFrame, "RIGHT", -60, 0)
+        downButton:SetPoint("RIGHT", categoryFrame, "RIGHT", -25, 0)
         downButton:SetNormalTexture("Interface\\ChatFrame\\UI-ChatIcon-ScrollDown-Up")
         downButton:SetPushedTexture("Interface\\ChatFrame\\UI-ChatIcon-ScrollDown-Down")
         downButton:SetHighlightTexture("Interface\\Buttons\\UI-Common-MouseHilight")
@@ -585,9 +585,6 @@ function Options:SetupCategoriesList()
         
         yOffset = yOffset - 30
     end
-    
-    -- Set content height
-    self.optionsFrame.categoriesContentFrame:SetHeight(math.abs(yOffset))
 end
 
 -- Move category up in the list
