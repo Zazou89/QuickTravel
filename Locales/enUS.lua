@@ -107,7 +107,7 @@ L["RAID_MANAFORGE_OMEGA"] = "Manaforge Omega" --16178
 L["SEARCH"] = "Search..."
 L["CLICK_TO_TELEPORT"] = "Click to teleport"
 L["CLICK_TO_USE"] = "Click to use"
-L["NO_PORTALS_FOUND"] = "No portals found."
+L["NO_CATEGORIES_SELECTED"] = "No categories selected"
 L["NO_SEARCH_RESULTS"] = "No results for this search."
 L["LOADED"] = "loaded! Use /qt to open."
 L["RIGHT_CLICK_ADD_FAVORITE"] = "Right-click to add to favorites"
@@ -133,6 +133,10 @@ L["REVERSE_EXPANSION_ORDER"] = "Reverse expansion order"
 L["SHOW_LFG_TAB"] = "Show tab in Group Finder"
 L["SHOW_UNLEARNED_SPELLS"] = "Show unlearned spells"
 L["SHOW_SPELL_TOOLTIPS"] = "Show spell tooltips"
+L["DISPLAY_HEADER"] = "Display"
+L["BEHAVIOR_HEADER"] = "Behavior"
+L["HEARTHSTONE_HEADER"] = "Hearthstone"
+L["CATEGORIES_ORDER_HEADER"] = "Categories Order"
 
 -- === Messages ===
 -- Notification and info messages

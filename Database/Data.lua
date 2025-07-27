@@ -33,7 +33,7 @@ local hearthstoneVariants = {
 -- Each expansion contains an array of instance keys that belong to it
 local mapExpansionToKeys = {
     [L["Current Season"]] = {"mechagon", "theatre_pain", "rookery", "darkflame_cleft", "cinderbrew_brewery", "priory_sacred_flame", "siege_boralus", "motherlode", "liberation_undermine"},
-    [L["Hearthstones"]] = {"hearthstone_dalaran", "hearthstone_garrison", "hearthstone_variant"},
+    [L["Hearthstones"]] = {"hearthstone_variant", "hearthstone_dalaran", "hearthstone_garrison"},
     [L["Cataclysm"]] = {"vortex_pinnacle", "throne_tides", "grim_batol"},
     [L["Mists of Pandaria"]] = {"temple_jade_serpent", "siege_niuzao", "scholomance", "scarlet_monastery", "scarlet_halls", "gate_setting_sun", "mogushan_palace", "shado_pan_monastery", "stormstout_brewery"},
     [L["Warlords of Draenor"]] = {"shadowmoon_burial", "everbloom", "bloodmaul_slag", "auchindoun", "skyreach", "upper_blackrock", "grimrail_depot", "iron_docks"},
@@ -196,118 +196,145 @@ local DataManager = {
     -- Scan for available portals with intelligent caching
     -- @param forceRefresh: boolean - Force cache invalidation and rescan
     -- @return table - Array of available portal data
-    GetAvailablePortals = function(self, forceRefresh)
-        local now = GetTime()
-        
-        -- Return cached data if valid and not forcing refresh
-        if not forceRefresh and self._cache.availablePortals and 
-        (now - self._cache.lastScan < self._cache.cacheTimeout) then
-            return self._cache.availablePortals
-        end
-        
-        local portals = {}
-        local showUnlearned = addon.QuickTravel.db and addon.QuickTravel.db.showUnlearnedSpells or false
-        local showHearthstones = addon.QuickTravel.db and addon.QuickTravel.db.showHearthstones or false
-        
-        -- Scan through all expansions and their instances
-        for _, expansion in ipairs(orderedExpansions) do
-            -- Skip Hearthstones if option is disabled
-            if expansion == L["Hearthstones"] and not showHearthstones then
-                -- Skip this expansion
-            else            
-            local instanceKeys = mapExpansionToKeys[expansion]
-            if instanceKeys then
-                for _, instanceKey in ipairs(instanceKeys) do
-                    local instanceInfo = self:GetInstanceInfo(instanceKey)
+-- REMPLACER TOUTE LA FONCTION GetAvailablePortals PAR :
+GetAvailablePortals = function(self, forceRefresh)
+    local now = GetTime()
+    
+    -- Return cached data if valid and not forcing refresh
+    if not forceRefresh and self._cache.availablePortals and 
+    (now - self._cache.lastScan < self._cache.cacheTimeout) then
+        return self._cache.availablePortals
+    end
+    
+    local portals = {}
+    local showUnlearned = addon.QuickTravel.db and addon.QuickTravel.db.showUnlearnedSpells or false
+    
+    -- Get custom expansion order (only enabled categories)
+    local customOrder = self:GetCustomExpansionOrder()
+
+    -- Scan through custom ordered expansions and their instances
+    for _, expansion in ipairs(customOrder) do
+        local instanceKeys = mapExpansionToKeys[expansion]
+        if instanceKeys then
+            for _, instanceKey in ipairs(instanceKeys) do
+                local instanceInfo = self:GetInstanceInfo(instanceKey)
+                
+                if instanceInfo then
+                    local isKnown = false
+                    local displayTexture = 134400
+                    local displayName = ""
                     
-                    -- Include instances with valid spell IDs
-                    if instanceInfo then
-                        local isKnown = false
-                        local displayTexture = 134400
-                        local displayName = ""
+                    -- Handle toys and variants
+                    if instanceInfo.toyID then
+                        isKnown = PlayerHasToy(instanceInfo.toyID)
+                        displayTexture = C_Item.GetItemIconByID(instanceInfo.toyID) or 134400
+                        displayName = C_Item.GetItemNameByID(instanceInfo.toyID) or ("Toy " .. instanceInfo.toyID)
+                    elseif instanceInfo.variants then
+                        local useRandom = addon.QuickTravel.db and addon.QuickTravel.db.useRandomHearthstoneVariant
+                        local selectedVariant = addon.QuickTravel.db and addon.QuickTravel.db.selectedHearthstoneVariant
                         
-                        -- Handle toys
-                        if instanceInfo.toyID then
-                            isKnown = PlayerHasToy(instanceInfo.toyID)
-                            displayTexture = C_Item.GetItemIconByID(instanceInfo.toyID) or 134400
-                            displayName = C_Item.GetItemNameByID(instanceInfo.toyID) or ("Toy " .. instanceInfo.toyID)
-                        elseif instanceInfo.variants then
-                            local useRandom = addon.QuickTravel.db and addon.QuickTravel.db.useRandomHearthstoneVariant
-                            local selectedVariant = addon.QuickTravel.db and addon.QuickTravel.db.selectedHearthstoneVariant
-                            
-                            -- Check if any variant is owned
-                            local hasVariants = false
-                            for _, variantID in ipairs(instanceInfo.variants) do
-                                if PlayerHasToy(variantID) then
-                                    hasVariants = true
-                                    break
-                                end
+                        -- Check if any variant is owned
+                        local hasVariants = false
+                        for _, variantID in ipairs(instanceInfo.variants) do
+                            if PlayerHasToy(variantID) then
+                                hasVariants = true
+                                break
                             end
-                            
-                            isKnown = hasVariants or GetItemCount(instanceInfo.fallback) > 0
-                            
-                            if useRandom then
-                                displayName = L["HEARTHSTONE_RANDOM_VARIANT"]
-                                displayTexture = C_Item.GetItemIconByID(instanceInfo.fallback) or 134400
-                            elseif selectedVariant and PlayerHasToy(selectedVariant) then
-                                displayName = C_Item.GetItemNameByID(selectedVariant) or L["HEARTHSTONE_RANDOM_VARIANT"]
-                                displayTexture = C_Item.GetItemIconByID(selectedVariant) or C_Item.GetItemIconByID(instanceInfo.fallback) or 134400
-                            else
-                                displayName = C_Item.GetItemNameByID(instanceInfo.fallback) or "Hearthstone"
-                                displayTexture = C_Item.GetItemIconByID(instanceInfo.fallback) or 134400
-                            end
-                        -- Handle spells
-                        elseif instanceInfo.spellID and instanceInfo.spellID > 0 then
-                            isKnown = IsSpellKnown(instanceInfo.spellID)
-                            displayTexture = C_Spell.GetSpellTexture(instanceInfo.spellID) or 134400
-                            displayName = L[instanceInfo.nameKey]
                         end
                         
-                        -- Include if item is known, or if showing unlearned items
-                        if (isKnown or showUnlearned) and (instanceInfo.toyID or instanceInfo.spellID or instanceInfo.variants) then
-                            table.insert(portals, {
-                                instanceKey = instanceKey,
-                                spellID = instanceInfo.spellID,
-                                toyID = instanceInfo.toyID,
-                                variants = instanceInfo.variants,
-                                fallback = instanceInfo.fallback,
-                                displayName = displayName,
-                                expansion = expansion,
-                                texture = displayTexture,
-                                isKnown = isKnown,
-                                isToy = instanceInfo.toyID ~= nil,
-                                isVariant = instanceInfo.variants ~= nil
-                            })
+                        isKnown = hasVariants or GetItemCount(instanceInfo.fallback) > 0
+                        
+                        if useRandom then
+                            displayName = L["HEARTHSTONE_RANDOM_VARIANT"]
+                            displayTexture = C_Item.GetItemIconByID(instanceInfo.fallback) or 134400
+                        elseif selectedVariant and PlayerHasToy(selectedVariant) then
+                            displayName = C_Item.GetItemNameByID(selectedVariant) or L["HEARTHSTONE_RANDOM_VARIANT"]
+                            displayTexture = C_Item.GetItemIconByID(selectedVariant) or C_Item.GetItemIconByID(instanceInfo.fallback) or 134400
+                        else
+                            displayName = C_Item.GetItemNameByID(instanceInfo.fallback) or "Hearthstone"
+                            displayTexture = C_Item.GetItemIconByID(instanceInfo.fallback) or 134400
                         end
+                    -- Handle spells
+                    elseif instanceInfo.spellID and instanceInfo.spellID > 0 then
+                        isKnown = IsSpellKnown(instanceInfo.spellID)
+                        displayTexture = C_Spell.GetSpellTexture(instanceInfo.spellID) or 134400
+                        displayName = L[instanceInfo.nameKey]
+                    end
+                    
+                    -- Include if item is known, or if showing unlearned items
+                    if (isKnown or showUnlearned) and (instanceInfo.toyID or instanceInfo.spellID or instanceInfo.variants) then
+                        table.insert(portals, {
+                            instanceKey = instanceKey,
+                            spellID = instanceInfo.spellID,
+                            toyID = instanceInfo.toyID,
+                            variants = instanceInfo.variants,
+                            fallback = instanceInfo.fallback,
+                            displayName = displayName,
+                            expansion = expansion,
+                            texture = displayTexture,
+                            isKnown = isKnown,
+                            isToy = instanceInfo.toyID ~= nil,
+                            isVariant = instanceInfo.variants ~= nil
+                        })
                     end
                 end
             end
         end
     end
-        
-        -- Update cache
-        self._cache.availablePortals = portals
-        self._cache.lastScan = now
-        return portals
-    end,
+    
+    -- Update cache
+    self._cache.availablePortals = portals
+    self._cache.lastScan = now
+    return portals
+end,
     
     -- Organize portals by expansion for UI display
     -- @param portals: table - Array of portal data
-    -- @return table, table - Organized portals by expansion and expansion order
+    -- @return table, table - Organized portals by expansion and custom order
     OrganizeByExpansion = function(self, portals)
         local organized = {}
+        local finalOrder = self:GetCustomExpansionOrder()
         
         -- Initialize empty tables for each expansion
-        for _, expansion in ipairs(orderedExpansions) do
+        for _, expansion in ipairs(finalOrder) do
             organized[expansion] = {}
         end
         
         -- Group portals by their expansion
         for _, portal in ipairs(portals) do
-            table.insert(organized[portal.expansion], portal)
+            if organized[portal.expansion] then
+                table.insert(organized[portal.expansion], portal)
+            end
         end
         
-        return organized, orderedExpansions
+        return organized, finalOrder
+    end,
+
+    -- Get custom expansion order from options
+    -- @return table - Ordered list of expansions based on user preferences
+    GetCustomExpansionOrder = function(self)
+        local customOrder = {}
+        
+        -- Get custom order from options if available
+        if addon.QuickTravel and addon.QuickTravel.db and addon.QuickTravel.db.categoryOrder then
+            for _, category in ipairs(addon.QuickTravel.db.categoryOrder) do
+                if category.enabled then
+                    table.insert(customOrder, category.name)
+                end
+            end
+            
+            -- If no categories enabled, return empty table
+            if #customOrder == 0 then
+                return {}
+            end
+        else
+            -- Fallback to default order
+            for _, expansion in ipairs(orderedExpansions) do
+                table.insert(customOrder, expansion)
+            end
+        end
+        
+        return customOrder
     end,
     
     -- Invalidate cache to force fresh data on next request

@@ -122,34 +122,6 @@ function QuickTravel:CreateLFGButton()
     self.lfgButton = button
 end
 
--- Get expansion order based on user preference (normal or reversed)
-function QuickTravel:GetExpansionOrder(originalOrder)
-    if not addon.Options.db.reverseExpansionOrder then
-        return originalOrder
-    end
-
-    local reorderedList = {}
-
-    -- Keep current season at the top if enabled
-    if addon.Options.db.showCurrentSeason then
-        table.insert(reorderedList, L["Current Season"])
-    end
-
-    -- Reverse all other expansions
-    local otherExpansions = {}
-    for _, expansion in ipairs(originalOrder) do
-        if expansion ~= L["Current Season"] then
-            table.insert(otherExpansions, 1, expansion)
-        end
-    end
-
-    for _, expansion in ipairs(otherExpansions) do
-        table.insert(reorderedList, expansion)
-    end
-
-    return reorderedList
-end
-
 -- Initialize LFG tab integration
 local function InitializeLFGHook()
     if PVEFrame then
@@ -193,7 +165,7 @@ function QuickTravel:PopulatePortalList(filterText)
     -- Get available portals and organize by expansion
     local foundPortals = constants.DataManager:GetAvailablePortals()
     local organizedPortals, expansionOrder = constants.DataManager:OrganizeByExpansion(foundPortals)
-    local finalExpansionOrder = self:GetExpansionOrder(expansionOrder)
+    local finalExpansionOrder = expansionOrder
     local yOffset = 0
     local currentSeasonKey = L["Current Season"]
 
@@ -249,7 +221,6 @@ function QuickTravel:PopulatePortalList(filterText)
 
     -- Show portals organized by expansion
     for _, expansion in ipairs(finalExpansionOrder) do
-        if not (expansion == L["Current Season"] and not addon.Options.db.showCurrentSeason) then
             local filteredPortals = {}
 
             for _, portal in ipairs(organizedPortals[expansion] or {}) do
@@ -273,22 +244,22 @@ function QuickTravel:PopulatePortalList(filterText)
 
                 yOffset = yOffset - 10
             end
-        end
     end
 
     -- Show appropriate message when no results found
-    if filterText and filterText ~= "" and filterText ~= L["SEARCH"] and totalFilteredPortals == 0 then
-        local noResultsText = contentFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-        noResultsText:SetPoint("CENTER", 0, 0)
-        noResultsText:SetText(L["NO_SEARCH_RESULTS"])
-        noResultsText:SetTextColor(0.7, 0.7, 0.7)
-        yOffset = -80
-    elseif not foundPortals or #foundPortals == 0 then
-        local noPortalsText = contentFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-        noPortalsText:SetPoint("CENTER", 0, 0)
-        noPortalsText:SetText(L["NO_PORTALS_FOUND"])
-        yOffset = -80
-    end
+if filterText and filterText ~= "" and filterText ~= L["SEARCH"] and totalFilteredPortals == 0 then
+    local noResultsText = contentFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    noResultsText:SetPoint("CENTER", 0, 0)
+    noResultsText:SetText(L["NO_SEARCH_RESULTS"])
+    noResultsText:SetTextColor(0.7, 0.7, 0.7)
+    yOffset = -80
+elseif (not foundPortals or #foundPortals == 0) and yOffset >= -10 then
+    local noPortalsText = contentFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    noPortalsText:SetPoint("CENTER", 0, 0)
+    noPortalsText:SetText(L["NO_CATEGORIES_SELECTED"])
+    noPortalsText:SetTextColor(0.7, 0.7, 0.7)
+    yOffset = -80
+end
 
     contentFrame:SetHeight(math.abs(yOffset))
 end
@@ -466,6 +437,15 @@ function QuickTravel:CreatePortalButton(contentFrame, portal, yOffset)
         local cooldown = CreateFrame("Cooldown", nil, portalButton, "CooldownFrameTemplate")
         cooldown:SetAllPoints(icon)
         cooldown:SetSwipeColor(0, 0, 0, 0.8)
+
+    C_Timer.After(0.1, function()
+        for i = 1, cooldown:GetNumRegions() do
+            local region = select(i, cooldown:GetRegions())
+            if region and region:GetObjectType() == "FontString" then
+                region:SetFont("Fonts\\FRIZQT__.TTF", 9, "OUTLINE")
+            end
+        end
+    end)
         
         -- Check and display initial cooldown
         if portal.isToy then

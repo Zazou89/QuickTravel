@@ -107,7 +107,7 @@ L["RAID_MANAFORGE_OMEGA"] = "Manaforge Oméga"
 L["SEARCH"] = "Rechercher..."
 L["CLICK_TO_TELEPORT"] = "Cliquez pour vous téléporter"
 L["CLICK_TO_USE"] = "Cliquez pour utiliser"
-L["NO_PORTALS_FOUND"] = "Aucun portail trouvé."
+L["NO_CATEGORIES_SELECTED"] = "Aucune catégorie sélectionnée"
 L["NO_SEARCH_RESULTS"] = "Aucun résultat pour cette recherche."
 L["LOADED"] = "chargé ! Utilisez /qt pour ouvrir."
 L["FAVORITES"] = "Favoris"
@@ -117,7 +117,7 @@ L["TOGGLE_QUICKTRAVEL"] = "Ouvrir/Fermer QuickTravel"
 L["SPELL_NOT_LEARNED"] = "Sort non appris"
 L["TOY_NOT_OWNED"] = "Jouet non possédé"
 L["LFG_TAB_PORTALS"] = "Portails"
-L["RANDOM_VARIANT_TOOLTIP"] = "Un variant de pierre de foyer aléatoire sera utilisé"
+L["RANDOM_VARIANT_TOOLTIP"] = "Utilise une variante aléatoire de la pierre de foyer"
 
 -- === Options ===
 -- Addon settings and options labels
@@ -133,6 +133,10 @@ L["REVERSE_EXPANSION_ORDER"] = "Inverser l'ordre des extensions"
 L["SHOW_LFG_TAB"] = "Afficher l'onglet dans la rech. de groupe"
 L["SHOW_UNLEARNED_SPELLS"] = "Afficher les sorts non appris"
 L["SHOW_SPELL_TOOLTIPS"] = "Afficher les infobulles des sorts"
+L["DISPLAY_HEADER"] = "Affichage"
+L["BEHAVIOR_HEADER"] = "Comportement"
+L["HEARTHSTONE_HEADER"] = "Pierre de foyer"
+L["CATEGORIES_ORDER_HEADER"] = "Ordre des catégories"
 
 -- === Messages ===
 -- Notification and info messages
