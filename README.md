@@ -8,10 +8,10 @@ Tired of hunting through your spellbook and toy collection for teleportation opt
 - Favorites system - Right-click any portal to add/remove from favorites
 - Smart search - Filter portals by name or expansion
 - LFG integration - Adds a portal tab directly in the Group Finder
-- Customizable display - Current season display, custom expansion toggle and ordering, auto-close options
-- Toy support - Includes hearthstone toys with random variant selection option
+- Customizable interface - Current season display, custom expansion toggle and ordering, auto-close options
+- Hearthstone toys - Includes hearthstone toys with random variant selection option
 - Keybind support - Assign your own hotkey
-- Performance optimized - only 40 kb, cache system, no dependencies, No CPU impact
+- Lightweight & fast - only 40 kb, cache system, no dependencies, No CPU impact
 
 ## Preview
 ![Preview](https://i.imgur.com/kmWICVw.jpeg)
