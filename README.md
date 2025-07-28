@@ -1,5 +1,5 @@
 ## QuickTravel
-Tired of hunting through your spellbook for portals? Never know where the portal to that one dungeon is hiding? QuickTravel brings all your teleportation spells together, no more searching, just port and go!
+Tired of hunting through your spellbook and toy collection for teleportation options? QuickTravel organizes all your portals, Hearthstone variants, and teleportation toys in one place. Search, favorite, and travel with ease, no more hunting, just go!
 
 - **🆕 NEW** - Hearthstone toy integration, customizable category ordering and visibility controls
 
