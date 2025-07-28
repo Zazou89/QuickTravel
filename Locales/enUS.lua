@@ -1,9 +1,14 @@
+-- English (US) localization for QuickTravel addon
+-- Primary language file containing all translatable strings
+-- Serves as the base reference for other language translations
+
 local L = select(2, ...).L('enUS')
 
+-- === CORE ADDON IDENTITY ===
 L["QT_TITLE"] = "Quick Travel"
 
--- === Expansions List ===
--- List of WoW expansions
+-- === EXPANSION CATEGORIES ===
+-- World of Warcraft expansion names for UI organization
 L["Cataclysm"] = "Cataclysm"
 L["Mists of Pandaria"] = "Mists of Pandaria"
 L["Warlords of Draenor"] = "Warlords of Draenor"
@@ -16,7 +21,9 @@ L["Current Season"] = "Current Season"
 L["Hearthstones"] = "Hearthstones"
 L["HEARTHSTONE_RANDOM_VARIANT"] = "Hearthstone (random variant)"
 
--- === Dungeons and Raids by Expansion ===
+-- === DUNGEON AND RAID LOCATIONS BY EXPANSION ===
+-- Organized chronologically by expansion for easy maintenance
+
 -- Cataclysm Dungeons
 L["DUNGEON_VORTEX_PINNACLE"] = "The Vortex Pinnacle" --5035
 L["DUNGEON_THRONE_OF_THE_TIDES"] = "Throne of the Tides" --5004
@@ -88,7 +95,7 @@ L["RAID_VAULT_OF_THE_INCARNATES"] = "Vault of the Incarnates" --14030
 L["RAID_ABBERUS_THE_SHADOWED_CRUCIBLE"] = "Aberrus, the Shadowed Crucible" --14663
 L["RAID_AMIRDRASSIL_THE_DREAMS_HOPE"] = "Amirdrassil, the Dream's Hope" --14643
 
--- War Within Dungeons and Raids
+-- The War Within Dungeons and Raids
 L["DUNGEON_CITY_OF_THREADS"] = "City of Threads" --14753
 L["DUNGEON_ARA_KARA_CITY_OF_ECHOS"] = "Ara-Kara, City of Echoes" --15093
 L["DUNGEON_STONEVAULT"] = "The Stonevault" --14883
@@ -102,12 +109,14 @@ L["DUNGEON_ECO_DOME_AL_DANI"] = "Eco-Dome Al'dani" --16104
 L["RAID_LIBERATION_OF_UNDERMINE"] = "Liberation of Undermine" --15522
 L["RAID_MANAFORGE_OMEGA"] = "Manaforge Omega" --16178
 
--- Hearthstones
+-- Special Hearthstone Items
 L["HEARTHSTONE_DALARAN"] = "Dalaran Hearthstone"
 L["HEARTHSTONE_GARRISON"] = "Garrison Hearthstone"
 
--- === Interface Strings ===
--- General UI and tooltip texts
+-- === USER INTERFACE STRINGS ===
+-- Core interface elements and user interaction text
+
+-- General UI Elements
 L["SEARCH"] = "Search..."
 L["CLICK_TO_TELEPORT"] = "Click to teleport"
 L["CLICK_TO_USE"] = "Click to use"
@@ -122,27 +131,39 @@ L["TOY_NOT_OWNED"] = "Toy not owned"
 L["LFG_TAB_PORTALS"] = "Portals"
 L["RANDOM_VARIANT_TOOLTIP"] = "A random hearthstone variant will be used"
 
--- === Options ===
--- Addon settings and options labels
+-- Favorites System
+L["FAVORITES"] = "Favorites"
+
+-- === CONFIGURATION OPTIONS ===
+-- Settings and preferences interface labels
+
+-- Display Options
 L["SHOW_LOGIN_MESSAGE"] = "Show login message"
 L["AUTO_CLOSE"] = "Auto-close addon while casting"
-L["FAVORITES"] = "Favorites"
 L["SHOW_CURRENT_SEASON"] = "Show current season"
 L["SHOW_HEARTHSTONES"] = "Show hearthstones"
-L["OPTIONS_TAB"] = "Options"
-L["CATEGORIES_TAB"] = "Categories"
-L["USE_RANDOM_HEARTHSTONE_VARIANT"] = "Use random hearthstone variant"
-L["NO_HEARTHSTONE_VARIANTS"] = "No variants owned"
-L["REVERSE_EXPANSION_ORDER"] = "Reverse expansion order"
-L["SHOW_LFG_TAB"] = "Show tab in Group Finder"
 L["SHOW_UNLEARNED_SPELLS"] = "Show unlearned spells"
 L["SHOW_SPELL_TOOLTIPS"] = "Show spell tooltips"
+L["SHOW_LFG_TAB"] = "Show tab in Group Finder"
+
+-- Interface Tabs
+L["OPTIONS_TAB"] = "Options"
+L["CATEGORIES_TAB"] = "Categories"
+
+-- Hearthstone Configuration
+L["USE_RANDOM_HEARTHSTONE_VARIANT"] = "Use random hearthstone variant"
+L["NO_HEARTHSTONE_VARIANTS"] = "No variants owned"
+
+-- Category Management
+L["REVERSE_EXPANSION_ORDER"] = "Reverse expansion order"
+L["CATEGORIES_ORDER_HEADER"] = "Categories Order"
+
+-- Options Section Headers
 L["DISPLAY_HEADER"] = "Display"
 L["BEHAVIOR_HEADER"] = "Behavior"
 L["HEARTHSTONE_HEADER"] = "Hearthstone"
-L["CATEGORIES_ORDER_HEADER"] = "Categories Order"
 
--- === Messages ===
--- Notification and info messages
+-- === USER FEEDBACK MESSAGES ===
+-- System notifications and status updates
 L["MSG_LOGIN_MESSAGE_ENABLED"] = "Login message enabled"
 L["MSG_LOGIN_MESSAGE_DISABLED"] = "Login message disabled"

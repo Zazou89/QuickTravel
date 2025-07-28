@@ -1,10 +1,10 @@
 local _, addon = ...
 local L = addon.L
 
--- Version number to track when reset is needed
+-- Config version for automatic resets when structure changes
 local CURRENT_CONFIG_VERSION = 2
 
--- Fixed category keys (language-independent)
+-- Stable category keys for internal references
 local CATEGORY_KEYS = {
     CURRENT_SEASON = "current_season",
     HEARTHSTONES = "hearthstones", 
@@ -18,7 +18,7 @@ local CATEGORY_KEYS = {
     THE_WAR_WITHIN = "the_war_within"
 }
 
--- Default category order with fixed keys
+-- Default category order and enabled states
 local DEFAULT_CATEGORY_ORDER = {
     {key = CATEGORY_KEYS.CURRENT_SEASON, enabled = true, order = 1},
     {key = CATEGORY_KEYS.HEARTHSTONES, enabled = true, order = 2},
@@ -32,7 +32,7 @@ local DEFAULT_CATEGORY_ORDER = {
     {key = CATEGORY_KEYS.THE_WAR_WITHIN, enabled = true, order = 10}
 }
 
--- Mapping from fixed keys to localized names
+-- Convert category keys to localized display names
 local function GetLocalizedName(categoryKey)
     local keyToLocalized = {
         [CATEGORY_KEYS.CURRENT_SEASON] = L["Current Season"],
@@ -49,16 +49,16 @@ local function GetLocalizedName(categoryKey)
     return keyToLocalized[categoryKey] or categoryKey
 end
 
--- Check if reset is needed and perform it
+-- Check for config version changes and perform reset if needed
 local function CheckAndResetConfig()
     local needsReset = false
     
-    -- Check if config version is outdated or missing
+    -- Check version or detect legacy localized system
     if not QuickTravelDB or not QuickTravelDB.configVersion or QuickTravelDB.configVersion < CURRENT_CONFIG_VERSION then
         needsReset = true
     end
     
-    -- Check if old localized system is being used
+    -- Migration from old name-based to key-based system
     if QuickTravelDB and QuickTravelDB.categoryOrder and QuickTravelDB.categoryOrder[1] then
         if QuickTravelDB.categoryOrder[1].name and not QuickTravelDB.categoryOrder[1].key then
             needsReset = true
@@ -66,10 +66,9 @@ local function CheckAndResetConfig()
     end
     
     if needsReset then
-        -- Show reset message
         print("|cffff6600QuickTravel|r: Configuration reset due to system update. Reconfigure with /qt if needed.")
         
-        -- Reset the entire config
+        -- Reset to defaults
         QuickTravelDB = {
             configVersion = CURRENT_CONFIG_VERSION,
             showLoginMessage = true,
@@ -83,13 +82,13 @@ local function CheckAndResetConfig()
             showSpellTooltips = true
         }
         
-        return true -- Reset occurred
+        return true
     end
     
-    return false -- No reset needed
+    return false
 end
 
--- Get category order with localized names for display
+-- Add localized names to category order for UI display
 local function GetLocalizedCategoryOrder(categoryOrder)
     local localizedOrder = {}
     for _, category in ipairs(categoryOrder) do
@@ -103,7 +102,7 @@ local function GetLocalizedCategoryOrder(categoryOrder)
     return localizedOrder
 end
 
--- Export functions and constants
+-- Export configuration management functions
 addon.ConfigManager = {
     CATEGORY_KEYS = CATEGORY_KEYS,
     DEFAULT_CATEGORY_ORDER = DEFAULT_CATEGORY_ORDER,

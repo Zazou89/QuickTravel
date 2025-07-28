@@ -6,18 +6,18 @@ local constants = addon.constants
 local isFrameShown = false
 local ConfigManager = addon.ConfigManager
 
--- Compartment click handler for the addon icon
+-- Addon compartment click handler for minimap/interface icons
 function QuickTravel_OnAddonCompartmentClick(addonName, buttonName)
     QuickTravel:ToggleFrame()
 end
 
--- Create the main frame UI
+-- Create the main QuickTravel UI frame with portal list
 function QuickTravel:CreateMainFrame()
     if self.mainFrame then
         return self.mainFrame
     end
 
-    -- Create main frame with portrait template
+    -- Main frame using Blizzard's portrait template for consistency
     self.mainFrame = CreateFrame("Frame", "QuickTravelFrame", UIParent, "PortraitFrameTemplate")
     self.mainFrame:SetSize(320, 500)
     self.mainFrame:SetPoint("CENTER")
@@ -27,18 +27,18 @@ function QuickTravel:CreateMainFrame()
     self.mainFrame:SetScript("OnDragStart", self.mainFrame.StartMoving)
     self.mainFrame:SetScript("OnDragStop", self.mainFrame.StopMovingOrSizing)
     
-    -- Set portrait icon
+    -- Set portal icon as frame portrait
     SetPortraitToTexture(self.mainFrame.PortraitContainer.portrait, "Interface\\Icons\\inv_spell_arcane_portaldornogal")
     self.mainFrame.PortraitContainer.portrait:SetTexCoord(0.12, 0.96, 0.12, 0.92)
 
-    -- Create title text
+    -- Frame title text
     local titleText = self.mainFrame.TitleContainer:CreateFontString(nil, "OVERLAY", "GameFontNormal")
     titleText:SetPoint("CENTER", self.mainFrame.TitleContainer, "CENTER", -10, 0)
     titleText:SetText(L["QT_TITLE"])
     titleText:SetTextColor(1, 0.82, 0)
     self.mainFrame.titleText = titleText
 
-    -- Create search box for filtering portals
+    -- Search box for filtering portals by name or expansion
     local searchBox = CreateFrame("EditBox", nil, self.mainFrame, "SearchBoxTemplate")
     searchBox:SetSize(250, 30)
     searchBox:SetPoint("TOP", self.mainFrame, "TOP", 0, -53)
@@ -49,11 +49,12 @@ function QuickTravel:CreateMainFrame()
     end)
     self.mainFrame.searchBox = searchBox
 
-    -- Create options button with gear icon
+    -- Options button with gear icon
     local optionsButton = CreateFrame("Button", nil, self.mainFrame)
     optionsButton:SetSize(24, 24)
     optionsButton:SetPoint("LEFT", searchBox, "RIGHT", 4, 0)
 
+    -- Gear icon with hover effect
     local optionsIcon = optionsButton:CreateTexture(nil, "ARTWORK")
     optionsIcon:SetAllPoints()
     optionsIcon:SetTexture("Interface\\WorldMap\\Gear_64Grey")
@@ -70,7 +71,7 @@ function QuickTravel:CreateMainFrame()
         addon.Options:ToggleOptionsFrame(self.mainFrame)
     end)
 
-    -- Hide options frame when main frame is hidden
+    -- Auto-hide options when main frame closes
     self.mainFrame:SetScript("OnHide", function()
         if isFrameShown then
             addon.Options:HideOptionsFrame()
@@ -86,7 +87,7 @@ function QuickTravel:CreateMainFrame()
     return self.mainFrame
 end
 
--- Create scrollable content frame for portal list
+-- Create scrollable content area for the portal list
 function QuickTravel:CreateScrollFrame()
     local scrollFrame = CreateFrame("ScrollFrame", nil, self.mainFrame, "UIPanelScrollFrameTemplate")
     scrollFrame:SetPoint("TOPLEFT", self.mainFrame, "TOPLEFT", 12, -85)
@@ -100,7 +101,7 @@ function QuickTravel:CreateScrollFrame()
     self.mainFrame.contentFrame = contentFrame
 end
 
--- Toggle the main QuickTravel frame visibility
+-- Create QuickTravel tab button in the LFG frame
 function QuickTravel:CreateLFGButton()
     if self.lfgButton or not PVEFrame then
         return
@@ -111,11 +112,11 @@ function QuickTravel:CreateLFGButton()
     button:SetText(L["LFG_TAB_PORTALS"])
     button:SetSize(80, 32)
     
-    -- Set button properties
+    -- Configure tab appearance and behavior
     PanelTemplates_TabResize(button, 0)
     PanelTemplates_DeselectTab(button)
     
-    -- Set button script to toggle QuickTravel frame
+    -- Tab click opens QuickTravel frame
     button:SetScript("OnClick", function(self)
         QuickTravel:ToggleFrame()
     end)
@@ -123,7 +124,7 @@ function QuickTravel:CreateLFGButton()
     self.lfgButton = button
 end
 
--- Initialize LFG tab integration
+-- Hook into PVE frame to add LFG tab when appropriate
 local function InitializeLFGHook()
     if PVEFrame then
         PVEFrame:HookScript("OnShow", function()
@@ -134,7 +135,7 @@ local function InitializeLFGHook()
     end
 end
 
--- Populate the portal list with available portals, organized by expansion
+-- Populate the main portal list organized by expansion categories
 function QuickTravel:PopulatePortalList(filterText)
     if not self.mainFrame or not self.mainFrame.scrollFrame then
         return
@@ -147,7 +148,7 @@ function QuickTravel:PopulatePortalList(filterText)
         self.mainFrame.scrollFrame:SetScrollChild(contentFrame)
         self.mainFrame.contentFrame = contentFrame
     else
-        -- Clear existing content
+        -- Clear existing portal buttons and text
         local children = { contentFrame:GetChildren() }
         for _, child in ipairs(children) do
             child:Hide()
@@ -170,7 +171,7 @@ function QuickTravel:PopulatePortalList(filterText)
     local yOffset = 0
     local currentSeasonKey = L["Current Season"]
 
-    -- Filter function to check if portal matches search criteria
+    -- Filter portals based on search text
     local function portalMatchesFilter(portal, filter)
         local hasFilter = filter and filter ~= "" and filter ~= L["SEARCH"]
         -- Hide current season portals when filtered to avoid duplicates
@@ -194,7 +195,7 @@ function QuickTravel:PopulatePortalList(filterText)
         return false
     end
 
-    -- Show favorites section first
+    -- Display favorites section first if any favorites match filter
     local favoritePortals = self:GetFavoritePortals()
     local filteredFavorites = {}
 
@@ -220,52 +221,52 @@ function QuickTravel:PopulatePortalList(filterText)
 
     local totalFilteredPortals = 0
 
-    -- Show portals organized by expansion
+    -- Display portals organized by expansion
     for _, expansion in ipairs(finalExpansionOrder) do
-            local filteredPortals = {}
+        local filteredPortals = {}
 
-            for _, portal in ipairs(organizedPortals[expansion] or {}) do
-                if portalMatchesFilter(portal, filterText) then
-                    table.insert(filteredPortals, portal)
-                end
+        for _, portal in ipairs(organizedPortals[expansion] or {}) do
+            if portalMatchesFilter(portal, filterText) then
+                table.insert(filteredPortals, portal)
+            end
+        end
+
+        totalFilteredPortals = totalFilteredPortals + #filteredPortals
+
+        if #filteredPortals > 0 then
+            local expansionHeader = contentFrame:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
+            expansionHeader:SetPoint("TOPLEFT", contentFrame, "TOPLEFT", 10, yOffset - 10)
+            expansionHeader:SetText(expansion)
+            expansionHeader:SetTextColor(1, 0.82, 0)
+            yOffset = yOffset - 35
+
+            for _, portal in ipairs(filteredPortals) do
+                yOffset = self:CreatePortalButton(contentFrame, portal, yOffset)
             end
 
-            totalFilteredPortals = totalFilteredPortals + #filteredPortals
-
-            if #filteredPortals > 0 then
-                local expansionHeader = contentFrame:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
-                expansionHeader:SetPoint("TOPLEFT", contentFrame, "TOPLEFT", 10, yOffset - 10)
-                expansionHeader:SetText(expansion)
-                expansionHeader:SetTextColor(1, 0.82, 0)
-                yOffset = yOffset - 35
-
-                for _, portal in ipairs(filteredPortals) do
-                    yOffset = self:CreatePortalButton(contentFrame, portal, yOffset)
-                end
-
-                yOffset = yOffset - 10
-            end
+            yOffset = yOffset - 10
+        end
     end
 
-    -- Show appropriate message when no results found
-if filterText and filterText ~= "" and filterText ~= L["SEARCH"] and totalFilteredPortals == 0 then
-    local noResultsText = contentFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    noResultsText:SetPoint("CENTER", 0, 0)
-    noResultsText:SetText(L["NO_SEARCH_RESULTS"])
-    noResultsText:SetTextColor(0.7, 0.7, 0.7)
-    yOffset = -80
-elseif (not foundPortals or #foundPortals == 0) and yOffset >= -10 then
-    local noPortalsText = contentFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    noPortalsText:SetPoint("CENTER", 0, 0)
-    noPortalsText:SetText(L["NO_CATEGORIES_SELECTED"])
-    noPortalsText:SetTextColor(0.7, 0.7, 0.7)
-    yOffset = -80
-end
+    -- Display appropriate message when no results found
+    if filterText and filterText ~= "" and filterText ~= L["SEARCH"] and totalFilteredPortals == 0 then
+        local noResultsText = contentFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+        noResultsText:SetPoint("CENTER", 0, 0)
+        noResultsText:SetText(L["NO_SEARCH_RESULTS"])
+        noResultsText:SetTextColor(0.7, 0.7, 0.7)
+        yOffset = -80
+    elseif (not foundPortals or #foundPortals == 0) and yOffset >= -10 then
+        local noPortalsText = contentFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+        noPortalsText:SetPoint("CENTER", 0, 0)
+        noPortalsText:SetText(L["NO_CATEGORIES_SELECTED"])
+        noPortalsText:SetTextColor(0.7, 0.7, 0.7)
+        yOffset = -80
+    end
 
     contentFrame:SetHeight(math.abs(yOffset))
 end
 
--- Refresh portal list by invalidating cache and repopulating
+-- Force refresh of portal list by clearing cache and repopulating
 function QuickTravel:RefreshPortals()
     constants.DataManager:InvalidateCache()
 
@@ -274,7 +275,7 @@ function QuickTravel:RefreshPortals()
     end
 end
 
--- Check if an instance is marked as favorite
+-- Check if a portal is marked as favorite
 function QuickTravel:IsFavorite(instanceKey)
     if not addon.Options.db or not addon.Options.db.favorites then
         return false
@@ -289,7 +290,7 @@ function QuickTravel:IsFavorite(instanceKey)
     return false
 end
 
--- Add an instance to favorites list
+-- Add portal to favorites list
 function QuickTravel:AddToFavorites(instanceKey)
     if not addon.Options.db.favorites then
         addon.Options.db.favorites = {}
@@ -301,7 +302,7 @@ function QuickTravel:AddToFavorites(instanceKey)
     end
 end
 
--- Remove an instance from favorites list
+-- Remove portal from favorites list
 function QuickTravel:RemoveFromFavorites(instanceKey)
     if not addon.Options.db.favorites then
         return
@@ -316,7 +317,7 @@ function QuickTravel:RemoveFromFavorites(instanceKey)
     end
 end
 
--- Toggle favorite status of an instance
+-- Toggle favorite status of a portal
 function QuickTravel:ToggleFavorite(instanceKey)
     if self:IsFavorite(instanceKey) then
         self:RemoveFromFavorites(instanceKey)
@@ -325,7 +326,7 @@ function QuickTravel:ToggleFavorite(instanceKey)
     end
 end
 
--- Get list of favorite portals with full portal data
+-- Get complete portal data for all favorited portals
 function QuickTravel:GetFavoritePortals()
     if not addon.Options.db.favorites or #addon.Options.db.favorites == 0 then
         return {}
@@ -346,7 +347,7 @@ function QuickTravel:GetFavoritePortals()
     return favoritePortals
 end
 
--- Update cooldowns for all visible portal buttons
+-- Update cooldown displays for all visible portal buttons
 function QuickTravel:UpdateCooldowns()
     if not self.mainFrame or not self.mainFrame.contentFrame then
         return
@@ -377,19 +378,19 @@ function QuickTravel:UpdateCooldowns()
     end
 end
 
--- Create a clickable portal button with icon, text, and tooltip
+-- Create individual portal button with icon, name, tooltip, and click functionality
 function QuickTravel:CreatePortalButton(contentFrame, portal, yOffset)
     local portalButton = CreateFrame("Button", nil, contentFrame, "SecureActionButtonTemplate")
     portalButton:SetSize(310, 30)
     portalButton:SetPoint("TOPLEFT", contentFrame, "TOPLEFT", 0, yOffset)
     
-    -- Only set spell attribute and register clicks if the spell is known
+    -- Configure secure action attributes for known spells/toys only
     if portal.isKnown then
         if portal.isToy then
             portalButton:SetAttribute("type", "toy")
             portalButton:SetAttribute("toy", portal.toyID)
         elseif portal.isVariant then
-            -- Set initial attribute, will be updated dynamically
+            -- Set initial attribute for Hearthstone variants
             local effectiveID = self:GetEffectiveHearthstoneID(portal)
             if effectiveID == portal.fallback then
                 portalButton:SetAttribute("type", "item")
@@ -404,17 +405,18 @@ function QuickTravel:CreatePortalButton(contentFrame, portal, yOffset)
         end
         portalButton:RegisterForClicks("LeftButtonUp", "LeftButtonDown", "RightButtonUp")
     else
-        -- Disable interaction for unknown spells
+        -- Disable secure actions for unknown spells but keep mouse events for tooltips
         portalButton:SetAttribute("type", nil)
-        portalButton:EnableMouse(true) -- Keep mouse events for tooltip only
+        portalButton:EnableMouse(true)
     end
 
-    -- Background and highlight textures
+    -- Background texture (transparent by default)
     local bg = portalButton:CreateTexture(nil, "BACKGROUND")
     bg:SetAllPoints()
     bg:SetColorTexture(0, 0, 0, 0)
     portalButton:SetNormalTexture(bg)
 
+    -- Hover highlight effect for known portals
     local highlight = portalButton:CreateTexture(nil, "HIGHLIGHT")
     highlight:SetAllPoints()
     if portal.isKnown then
@@ -428,27 +430,29 @@ function QuickTravel:CreatePortalButton(contentFrame, portal, yOffset)
     icon:SetPoint("LEFT", portalButton, "LEFT", 15, 0)
     icon:SetTexture(portal.texture)
     
+    -- Desaturate icon for unknown portals
     if not portal.isKnown then
         icon:SetDesaturated(true)
         icon:SetAlpha(0.4)
     end
 
-    -- Cooldown frame for known spells
+    -- Cooldown display frame for known portals
     if portal.isKnown then
         local cooldown = CreateFrame("Cooldown", nil, portalButton, "CooldownFrameTemplate")
         cooldown:SetAllPoints(icon)
         cooldown:SetSwipeColor(0, 0, 0, 0.8)
 
-    C_Timer.After(0.1, function()
-        for i = 1, cooldown:GetNumRegions() do
-            local region = select(i, cooldown:GetRegions())
-            if region and region:GetObjectType() == "FontString" then
-                region:SetFont("Fonts\\FRIZQT__.TTF", 9, "OUTLINE")
+        -- Style cooldown text after frame creation
+        C_Timer.After(0.1, function()
+            for i = 1, cooldown:GetNumRegions() do
+                local region = select(i, cooldown:GetRegions())
+                if region and region:GetObjectType() == "FontString" then
+                    region:SetFont("Fonts\\FRIZQT__.TTF", 9, "OUTLINE")
+                end
             end
-        end
-    end)
+        end)
         
-        -- Check and display initial cooldown
+        -- Set initial cooldown state
         if portal.isToy then
             local startTime, duration = GetItemCooldown(portal.toyID)
             if startTime > 0 and duration > 0 then
@@ -467,8 +471,9 @@ function QuickTravel:CreatePortalButton(contentFrame, portal, yOffset)
             end
         end
         
+        -- Store references for cooldown updates
         portalButton.cooldown = cooldown
-        portalButton.spellID = portal.spellID -- Store for updates
+        portalButton.spellID = portal.spellID
         portalButton.toyID = portal.toyID
         portalButton.isToy = portal.isToy
         portalButton.isVariant = portal.isVariant
@@ -481,16 +486,16 @@ function QuickTravel:CreatePortalButton(contentFrame, portal, yOffset)
     portalText:SetPoint("LEFT", icon, "RIGHT", 8, 0)
     portalText:SetText(portal.displayName)
     
+    -- Color text based on availability
     if portal.isKnown then
         portalText:SetTextColor(1, 1, 1)
     else
         portalText:SetTextColor(0.4, 0.4, 0.4)
     end
 
-    -- Tooltip on hover
+    -- Tooltip display on hover
     portalButton:SetScript("OnEnter", function(self)
-
-        -- Only show tooltips if the setting is enabled
+        -- Only show tooltips if enabled in settings
         if not addon.Options.db.showSpellTooltips then
             return
         end
@@ -503,7 +508,7 @@ function QuickTravel:CreatePortalButton(contentFrame, portal, yOffset)
                 GameTooltip:AddLine(" ")
                 GameTooltip:AddLine("|cff00ff00" .. L["CLICK_TO_USE"] .. "|r")
             elseif portal.isVariant then
-                -- Show generic tooltip for random variants to keep the surprise
+                -- Generic tooltip for random variants to preserve surprise
                 GameTooltip:SetText(portal.displayName, 1, 1, 1)
                 GameTooltip:AddLine("|cff00ff00" .. L["CLICK_TO_USE"] .. "|r")
                 if QuickTravel.db and QuickTravel.db.useRandomHearthstoneVariant then
@@ -514,13 +519,15 @@ function QuickTravel:CreatePortalButton(contentFrame, portal, yOffset)
                 GameTooltip:AddLine(" ")
                 GameTooltip:AddLine("|cff00ff00" .. L["CLICK_TO_TELEPORT"] .. "|r")
             end
+            
+            -- Favorite status instructions
             if QuickTravel:IsFavorite(portal.instanceKey) then
                 GameTooltip:AddLine("|cffff9999" .. L["RIGHT_CLICK_REMOVE_FAVORITE"] .. "|r")
             else
                 GameTooltip:AddLine("|cff99ff99" .. L["RIGHT_CLICK_ADD_FAVORITE"] .. "|r")
             end
         else
-            -- Text is grayed out for unlearned spells
+            -- Tooltip for unavailable portals
             GameTooltip:SetText(portal.displayName, 0.5, 0.5, 0.5)           
             if portal.isToy or portal.isVariant then
                 GameTooltip:AddLine("|cffff6666" .. L["TOY_NOT_OWNED"] .. "|r")
@@ -534,13 +541,14 @@ function QuickTravel:CreatePortalButton(contentFrame, portal, yOffset)
 
     portalButton:SetScript("OnLeave", GameTooltip_Hide)
 
-    -- Handle clicks only for known spells
+    -- Handle button clicks for known portals
     if portal.isKnown then
         portalButton:SetScript("PostClick", function(self, button)
             if button == "RightButton" then
+                -- Right-click toggles favorite status
                 QuickTravel:ToggleFavorite(portal.instanceKey)
             elseif button == "LeftButton" then
-                -- Update attribute for next click if it's a variant
+                -- Update variant attribute for next click if needed
                 if portal.isVariant then
                     local effectiveID = QuickTravel:GetEffectiveHearthstoneID(portal)
                     if effectiveID == portal.fallback then
@@ -554,7 +562,7 @@ function QuickTravel:CreatePortalButton(contentFrame, portal, yOffset)
                     end
                 end
                 
-                -- Update cooldown after action
+                -- Update cooldown display after action
                 C_Timer.After(0.1, function()
                     if self.cooldown then
                         if self.isToy and self.toyID then
@@ -578,6 +586,7 @@ function QuickTravel:CreatePortalButton(contentFrame, portal, yOffset)
                     end
                 end)
                 
+                -- Auto-close if enabled in settings
                 if addon.Options.db.autoClose then
                     C_Timer.After(0.5, function()
                         QuickTravel:HideFrame()
@@ -591,7 +600,7 @@ function QuickTravel:CreatePortalButton(contentFrame, portal, yOffset)
     return yOffset - 30
 end
 
--- Show the main frame
+-- Display the main QuickTravel frame
 function QuickTravel:ShowFrame()
     if not self.mainFrame then
         self:CreateMainFrame()
@@ -600,11 +609,11 @@ function QuickTravel:ShowFrame()
     self.mainFrame:Show()
     isFrameShown = true
     
-    -- Update cooldowns when showing
+    -- Refresh cooldowns when frame becomes visible
     self:UpdateCooldowns()
 end
 
--- Hide the main frame
+-- Hide the main QuickTravel frame
 function QuickTravel:HideFrame()
     if self.mainFrame then
         self.mainFrame:Hide()
@@ -623,7 +632,7 @@ function QuickTravel:ToggleFrame()
     end
 end
 
--- Slash command registration
+-- Register slash commands for opening QuickTravel
 SLASH_QUICKTRAVEL1 = "/quicktravel"
 SLASH_QUICKTRAVEL2 = "/qt"
 
@@ -631,16 +640,16 @@ SlashCmdList["QUICKTRAVEL"] = function()
     QuickTravel:ToggleFrame()
 end
 
--- Keybinding function
+-- Keybinding function for opening QuickTravel
 function QuickTravel_ToggleBinding()
     QuickTravel:ToggleFrame()
 end
 
--- Keybinding localization
+-- Keybinding localization strings
 BINDING_HEADER_QUICKTRAVEL = L["QT_TITLE"]
 BINDING_NAME_QUICKTRAVEL_TOGGLE = L["TOGGLE_QUICKTRAVEL"]
 
--- Event handler frame for addon lifecycle
+-- Event handling frame for addon lifecycle and game events
 local frame = CreateFrame("Frame")
 frame:RegisterEvent("ADDON_LOADED")
 frame:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -648,6 +657,7 @@ frame:RegisterEvent("LEARNED_SPELL_IN_TAB")
 
 frame:SetScript("OnEvent", function(self, event, addonName, spellID)
     if event == "ADDON_LOADED" and addonName == ADDON_NAME then
+        -- Initialize settings and show login message if enabled
         QuickTravel.db = addon.Options:InitializeSettings()
         C_Timer.After(1, InitializeLFGHook)
 
@@ -655,14 +665,15 @@ frame:SetScript("OnEvent", function(self, event, addonName, spellID)
             print("|cff00ff00QuickTravel|r " .. L["LOADED"])
         end
     elseif event == "PLAYER_ENTERING_WORLD" then
+        -- Ensure main frame is created when entering world
         QuickTravel:CreateMainFrame()
     elseif event == "LEARNED_SPELL_IN_TAB" then
-        -- Refresh portal list when new spells are learned
+        -- Refresh portal list when player learns new teleportation spells
         QuickTravel:RefreshPortals()
     end
 end)
 
--- Get effective hearthstone ID for variants
+-- Determine which Hearthstone variant to use based on settings
 function QuickTravel:GetEffectiveHearthstoneID(portal)
     if not portal.isVariant or not portal.variants then
         return portal.toyID or portal.spellID or 6948
@@ -672,7 +683,7 @@ function QuickTravel:GetEffectiveHearthstoneID(portal)
     local selectedVariant = self.db and self.db.selectedHearthstoneVariant
     
     if useRandom then
-        -- Get random owned variant
+        -- Select random owned variant
         local ownedVariants = {}
         for _, variantID in ipairs(portal.variants) do
             if PlayerHasToy(variantID) then
@@ -684,12 +695,13 @@ function QuickTravel:GetEffectiveHearthstoneID(portal)
             return ownedVariants[math.random(1, #ownedVariants)]
         end
     elseif selectedVariant and PlayerHasToy(selectedVariant) then
+        -- Use specifically selected variant
         return selectedVariant
     end
     
-    -- Fallback to basic hearthstone
+    -- Fallback to basic Hearthstone item
     return portal.fallback
 end
 
--- Global reference for external access
+-- Global reference for external addon access
 _G["QuickTravel"] = QuickTravel

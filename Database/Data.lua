@@ -1,8 +1,7 @@
 local _, addon = ...
 local L = addon.L
 
--- Expansion display order configuration
--- This array defines the order in which expansions appear in the UI
+-- Display order for expansions in the UI - controls the sequence in which categories appear
 local orderedExpansions = {
     L["Current Season"],
     L["Hearthstones"],
@@ -16,7 +15,7 @@ local orderedExpansions = {
     L["The War Within"]
 }
 
--- Hearthstone variants list
+-- Complete list of all available Hearthstone variant toy IDs
 local hearthstoneVariants = {
     166747, 165802, 165670, 165669, 166746, 163045, 162973, 142542,
     64488, 54452, 93672, 168907, 172179, 182773, 180290, 184353,
@@ -24,12 +23,10 @@ local hearthstoneVariants = {
     208704, 212337, 228940, 236687, 235016
 }
 
--- Preparation for the next season
--- This array will be used for the Patch 11.2
+-- Future season preparation for Patch 11.2 - currently commented out
 -- ["current_season"] = {"ara_kara", "the_dawnbreaker", "operation_floodgate", "priory_sacred_flame", "halls_atonement", "tazavesh", "eco_dome_al_dani", "manaforge_omega"},
 
-
--- Mapping of category keys to their instance keys
+-- Category-to-instance mapping: defines which dungeons/raids belong to each expansion category
 local mapCategoryKeysToInstances = {
     ["current_season"] = {"mechagon", "theatre_pain", "rookery", "darkflame_cleft", "cinderbrew_brewery", "priory_sacred_flame", "siege_boralus", "motherlode", "liberation_undermine"},
     ["hearthstones"] = {"hearthstone_variant", "hearthstone_dalaran", "hearthstone_garrison"},
@@ -43,10 +40,9 @@ local mapCategoryKeysToInstances = {
     ["the_war_within"] = {"city_threads", "ara_kara", "stonevault", "dawnbreaker", "rookery", "darkflame_cleft", "cinderbrew_brewery", "priory_sacred_flame", "operation_floodgate", "liberation_undermine"}
 }
 
--- Unified instance database mapping instance keys to their spell data
--- Each entry contains the spell ID for teleportation and localization key for the name
+-- Master database: maps instance keys to their teleportation data (spell IDs, toy IDs, localization keys)
 local instanceDatabase = {
-    -- Hearthstones (toys)
+    -- Hearthstone items and variants
     ["hearthstone_dalaran"] = {toyID = 140192, nameKey = "HEARTHSTONE_DALARAN"},
     ["hearthstone_garrison"] = {toyID = 110560, nameKey = "HEARTHSTONE_GARRISON"},
     ["hearthstone_variant"] = {variants = hearthstoneVariants, fallback = 6948},
@@ -85,7 +81,7 @@ local instanceDatabase = {
     ["court_stars"] = {spellID = 393766, nameKey = "DUNGEON_COURT_OF_STARS"},
     ["karazhan"] = {spellID = 373262, nameKey = "DUNGEON_KARAZHAN"},
     
-    -- Battle for Azeroth Dungeons
+    -- Battle for Azeroth Dungeons with faction-specific handling
     ["ataldazar"] = {spellID = 424187, nameKey = "DUNGEON_ATALDAZAR"},
     ["freehold"] = {spellID = 410071, nameKey = "DUNGEON_FREEHOLD"},
     ["waycrest_manor"] = {spellID = 424167, nameKey = "DUNGEON_WAYCREST_MANOR"},
@@ -122,7 +118,7 @@ local instanceDatabase = {
     ["aberrus"] = {spellID = 432257, nameKey = "RAID_ABBERUS_THE_SHADOWED_CRUCIBLE"},
     ["amirdrassil"] = {spellID = 432258, nameKey = "RAID_AMIRDRASSIL_THE_DREAMS_HOPE"},
     
-    -- War Within Dungeons and Raids
+    -- The War Within Dungeons and Raids
     ["city_threads"] = {spellID = 445416, nameKey = "DUNGEON_CITY_OF_THREADS"},
     ["ara_kara"] = {spellID = 445417, nameKey = "DUNGEON_ARA_KARA_CITY_OF_ECHOS"},
     ["stonevault"] = {spellID = 445269, nameKey = "DUNGEON_STONEVAULT"},
@@ -132,34 +128,34 @@ local instanceDatabase = {
     ["cinderbrew_meadery"] = {spellID = 445440, nameKey = "DUNGEON_CINDERBREW_MEADERY"},
     ["priory_sacred_flame"] = {spellID = 445444, nameKey = "DUNGEON_PRIORY_OF_THE_SACRED_FLAME"},
     ["operation_floodgate"] = {spellID = 1216786, nameKey = "DUNGEON_OPERATION_FLOODGATE"},
-    --["eco_dome_al_dani"] = {spellID = 1237215, nameKey = "DUNGEON_ECO_DOME_AL_DANI"},    
+    -- ["eco_dome_al_dani"] = {spellID = 1237215, nameKey = "DUNGEON_ECO_DOME_AL_DANI"},    
     ["liberation_undermine"] = {spellID = 1226482, nameKey = "RAID_LIBERATION_OF_UNDERMINE"}
-    --["manaforge_omega"] = {spellID = 1239155, nameKey = "RAID_MANAFORGE_OMEGA"}
+    -- ["manaforge_omega"] = {spellID = 1239155, nameKey = "RAID_MANAFORGE_OMEGA"}
 }
 
--- Modern data manager with intelligent caching system
+-- Advanced data manager with intelligent caching and portal organization
 local DataManager = {
-    -- Cache configuration
+    -- Cache configuration to minimize API calls and improve performance
     _cache = {
         availablePortals = nil,
         lastScan = 0,
-        cacheTimeout = 120 -- Cache timeout in seconds
+        cacheTimeout = 120 -- Cache valid for 2 minutes
     },
     
-    -- Retrieve instance information by key with faction support
-    -- @param instanceKey: string - The unique key for the instance
-    -- @return table|nil - Instance data or nil if not found
+    -- Retrieve complete instance information by key with faction-specific spell support
     GetInstanceInfo = function(self, instanceKey)
         local instanceData = instanceDatabase[instanceKey]
         if not instanceData then
             return nil
         end
 
+        -- Handle toy items (Hearthstones, special items)
         if instanceData.toyID then
             return {
                 toyID = instanceData.toyID,
                 nameKey = instanceData.nameKey or instanceData.toyID
             }
+        -- Handle Hearthstone variants with fallback support
         elseif instanceData.variants then
             return {
                 variants = instanceData.variants,
@@ -168,7 +164,7 @@ local DataManager = {
             }
         end  
         
-        -- Handle faction-specific spells
+        -- Handle faction-specific spells (Alliance/Horde different spell IDs)
         if instanceData.alliance or instanceData.horde then
             local playerFaction = UnitFactionGroup("player")
             local spellID
@@ -178,7 +174,7 @@ local DataManager = {
             elseif playerFaction == "Horde" and instanceData.horde then
                 spellID = instanceData.horde
             else
-                -- Fallback if faction is unknown or not applicable
+                -- Fallback for unknown faction scenarios
                 spellID = instanceData.alliance or instanceData.horde
             end
             
@@ -188,17 +184,15 @@ local DataManager = {
             }
         end
         
-        -- Return instance data
+        -- Return standard spell data
         return instanceData
     end,
     
-    -- Scan for available portals with intelligent caching
-    -- @param forceRefresh: boolean - Force cache invalidation and rescan
-    -- @return table - Array of available portal data
+    -- Scan and cache all available portals based on player knowledge and settings
     GetAvailablePortals = function(self, forceRefresh)
         local now = GetTime()
         
-        -- Return cached data if valid and not forcing refresh
+        -- Return cached data if still valid and not forcing refresh
         if not forceRefresh and self._cache.availablePortals and 
         (now - self._cache.lastScan < self._cache.cacheTimeout) then
             return self._cache.availablePortals
@@ -207,12 +201,12 @@ local DataManager = {
         local portals = {}
         local showUnlearned = addon.QuickTravel.db and addon.QuickTravel.db.showUnlearnedSpells or false
         
-        -- Get custom expansion order (only enabled categories)
+        -- Get user-customized expansion order (only enabled categories)
         local customOrder = self:GetCustomExpansionOrder()
 
-        -- Scan through custom ordered expansions and their instances
+        -- Process each enabled expansion category
         for _, expansion in ipairs(customOrder) do
-            -- Convert localized name back to key to find instances
+            -- Convert localized expansion name back to category key
             local categoryKey = nil
             if addon.ConfigManager then
                 for key, _ in pairs(addon.ConfigManager.CATEGORY_KEYS) do
@@ -230,10 +224,10 @@ local DataManager = {
                     
                     if instanceInfo then
                         local isKnown = false
-                        local displayTexture = 134400
+                        local displayTexture = 134400 -- Default icon
                         local displayName = ""
                         
-                        -- Handle toys and variants
+                        -- Process toy items
                         if instanceInfo.toyID then
                             isKnown = PlayerHasToy(instanceInfo.toyID)
                             displayTexture = C_Item.GetItemIconByID(instanceInfo.toyID) or 134400
@@ -243,11 +237,12 @@ local DataManager = {
                             else
                                 displayName = C_Item.GetItemNameByID(instanceInfo.toyID) or ("Toy " .. instanceInfo.toyID)
                             end
+                        -- Process Hearthstone variants with special naming logic
                         elseif instanceInfo.variants then
                             local useRandom = addon.QuickTravel.db and addon.QuickTravel.db.useRandomHearthstoneVariant
                             local selectedVariant = addon.QuickTravel.db and addon.QuickTravel.db.selectedHearthstoneVariant
                             
-                            -- Check if any variant is owned
+                            -- Check if player owns any Hearthstone variants
                             local hasVariants = false
                             for _, variantID in ipairs(instanceInfo.variants) do
                                 if PlayerHasToy(variantID) then
@@ -258,6 +253,7 @@ local DataManager = {
                             
                             isKnown = hasVariants or GetItemCount(instanceInfo.fallback) > 0
                             
+                            -- Set display name and icon based on variant settings
                             if useRandom then
                                 displayName = L["HEARTHSTONE_RANDOM_VARIANT"]
                                 displayTexture = C_Item.GetItemIconByID(instanceInfo.fallback) or 134400
@@ -268,14 +264,14 @@ local DataManager = {
                                 displayName = C_Item.GetItemNameByID(instanceInfo.fallback) or "Hearthstone"
                                 displayTexture = C_Item.GetItemIconByID(instanceInfo.fallback) or 134400
                             end
-                        -- Handle spells
+                        -- Process teleportation spells
                         elseif instanceInfo.spellID and instanceInfo.spellID > 0 then
                             isKnown = IsSpellKnown(instanceInfo.spellID)
                             displayTexture = C_Spell.GetSpellTexture(instanceInfo.spellID) or 134400
                             displayName = L[instanceInfo.nameKey]
                         end
                         
-                        -- Include if item is known, or if showing unlearned items
+                        -- Include portal if known or if showing unlearned items is enabled
                         if (isKnown or showUnlearned) and (instanceInfo.toyID or instanceInfo.spellID or instanceInfo.variants) then
                             table.insert(portals, {
                                 instanceKey = instanceKey,
@@ -296,25 +292,23 @@ local DataManager = {
             end
         end
         
-        -- Update cache
+        -- Update cache with fresh data
         self._cache.availablePortals = portals
         self._cache.lastScan = now
         return portals
     end,
     
-    -- Organize portals by expansion for UI display
-    -- @param portals: table - Array of portal data
-    -- @return table, table - Organized portals by expansion and custom order
+    -- Organize portal list by expansion for UI display
     OrganizeByExpansion = function(self, portals)
         local organized = {}
         local finalOrder = self:GetCustomExpansionOrder()
         
-        -- Initialize empty tables for each expansion
+        -- Initialize empty tables for each expansion category
         for _, expansion in ipairs(finalOrder) do
             organized[expansion] = {}
         end
         
-        -- Group portals by their expansion
+        -- Sort portals into their respective expansion categories
         for _, portal in ipairs(portals) do
             if organized[portal.expansion] then
                 table.insert(organized[portal.expansion], portal)
@@ -324,27 +318,26 @@ local DataManager = {
         return organized, finalOrder
     end,
 
-    -- Get custom expansion order from options
-    -- @return table - Ordered list of expansions based on user preferences
+    -- Get user-customized expansion display order from addon settings
     GetCustomExpansionOrder = function(self)
         local customOrder = {}
         
-        -- Get custom order from options if available
+        -- Use custom category order from user settings if available
         if addon.QuickTravel and addon.QuickTravel.db and addon.QuickTravel.db.categoryOrder then
             for _, category in ipairs(addon.QuickTravel.db.categoryOrder) do
                 if category.enabled then
-                    -- Convert key to localized name
+                    -- Convert category key to localized display name
                     local localizedName = addon.ConfigManager.GetLocalizedName(category.key)
                     table.insert(customOrder, localizedName)
                 end
             end
             
-            -- If no categories enabled, return empty table
+            -- Return empty table if no categories are enabled
             if #customOrder == 0 then
                 return {}
             end
         else
-            -- Fallback to default order with localized names
+            -- Fallback to default expansion order with localized names
             for _, defaultCategory in ipairs(addon.ConfigManager.DEFAULT_CATEGORY_ORDER) do
                 local localizedName = addon.ConfigManager.GetLocalizedName(defaultCategory.key)
                 table.insert(customOrder, localizedName)
@@ -354,15 +347,14 @@ local DataManager = {
         return customOrder
     end,
     
-    -- Invalidate cache to force fresh data on next request
-    -- Useful when new spells are learned or game state changes
+    -- Clear cached data to force fresh scan on next request
     InvalidateCache = function(self)
         self._cache.availablePortals = nil
         self._cache.lastScan = 0
     end
 }
 
--- Export constants and data manager for use by other addon modules
+-- Export all constants and data manager for use throughout the addon
 local constants = {
     orderedExpansions = orderedExpansions,
     mapCategoryKeysToInstances = mapCategoryKeysToInstances,
