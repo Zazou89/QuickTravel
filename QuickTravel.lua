@@ -813,3 +813,28 @@ end
 
 -- Global reference for external addon access
 _G["QuickTravel"] = QuickTravel
+
+-- Basic LDB support
+if LibStub and LibStub:GetLibrary("LibDataBroker-1.1", true) then
+    local LDB = LibStub:GetLibrary("LibDataBroker-1.1")
+    
+    LDB:NewDataObject("QuickTravel", {
+        type = "launcher",
+        icon = "Interface\\Icons\\inv_spell_arcane_portaldornogal",
+        text = L["QT_TITLE"],
+        
+        OnClick = function(self, button)
+            if button == "LeftButton" then
+                QuickTravel:ToggleFrame()
+            elseif button == "RightButton" then
+                addon.Options:ToggleOptionsFrame()
+            end
+        end,
+        
+        OnTooltipShow = function(tooltip)
+            tooltip:AddLine("|cff00ff00" .. L["QT_TITLE"] .. "|r")
+            tooltip:AddLine("|cffffffffLeft-click:|r " .. L["TOGGLE_QUICKTRAVEL"])
+            tooltip:AddLine("|cffffffffRight-click:|r " .. L["OPTIONS_TAB"])
+        end,
+    })
+end

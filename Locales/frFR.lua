@@ -176,7 +176,7 @@ L["SHOW_CURRENT_SEASON"] = "Afficher la saison actuelle"
 L["SHOW_HEARTHSTONES"] = "Afficher les pierres de foyer"
 L["SHOW_UNLEARNED_SPELLS"] = "Afficher les sorts non appris"
 L["SHOW_SPELL_TOOLTIPS"] = "Afficher les infobulles des sorts"
-L["SHOW_LFG_TAB"] = "Affiche un bouton dans la rech. de groupe"
+L["SHOW_LFG_TAB"] = "Afficher le bouton dans la rech. de groupe"
 
 -- Onglets d'interface
 L["OPTIONS_TAB"] = "Options"
