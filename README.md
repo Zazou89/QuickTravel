@@ -21,7 +21,7 @@ The addon is available in English and French.
 *Community translations welcome.*
 
 ## Quick Start
-- Type `/qt` or `/quickteleport`
+- Type `/qt`, `/qtl` or `/quicktravel`
 - Right-click to add favorites
 - Left-click to teleport!
 

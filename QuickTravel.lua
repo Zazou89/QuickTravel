@@ -635,6 +635,7 @@ end
 -- Register slash commands for opening QuickTravel
 SLASH_QUICKTRAVEL1 = "/quicktravel"
 SLASH_QUICKTRAVEL2 = "/qt"
+SLASH_QUICKTRAVEL3 = "/qtl"
 
 SlashCmdList["QUICKTRAVEL"] = function()
     QuickTravel:ToggleFrame()
