@@ -101,38 +101,123 @@ function QuickTravel:CreateScrollFrame()
     self.mainFrame.contentFrame = contentFrame
 end
 
--- Create QuickTravel tab button in the LFG frame
+-- Create QuickTravel button in the LFG frame
 function QuickTravel:CreateLFGButton()
     if self.lfgButton or not PVEFrame then
         return
     end
-
-    local button = CreateFrame("Button", "QuickTravelLFGTab", PVEFrame, "PanelTabButtonTemplate")
-    button:SetPoint("LEFT", PVEFrame.tab4, "RIGHT", 3, 0)
-    button:SetText(L["LFG_TAB_PORTALS"])
-    button:SetSize(80, 32)
     
-    -- Configure tab appearance and behavior
-    PanelTemplates_TabResize(button, 0)
-    PanelTemplates_DeselectTab(button)
+    local button = CreateFrame("Button", "QuickTravel_LFGButton", PVEFrame)
+    button:SetSize(130, 38)
     
-    -- Tab click opens QuickTravel frame
-    button:SetScript("OnClick", function(self)
-        QuickTravel:ToggleFrame()
+    -- Position in bottom left area
+    button:SetPoint("BOTTOM", PVEFrame, "BOTTOMLEFT", 115, 20)
+    
+    -- Button styling with War Within atlas
+    button:SetNormalAtlas("auctionhouse-nav-button")
+    
+    -- Create hover and pressed textures
+    local highlight = button:CreateTexture(nil, "ARTWORK")
+    highlight:SetSize(124, 24)
+    highlight:SetPoint("CENTER", button, "CENTER", 0, 7)
+    highlight:SetAtlas("auctionhouse-nav-button-highlight")
+    highlight:SetAlpha(0)
+    
+    local pressed = button:CreateTexture(nil, "ARTWORK")
+    pressed:SetSize(124, 24)
+    pressed:SetPoint("CENTER", button, "CENTER", 0, 7)
+    pressed:SetAtlas("auctionhouse-nav-button-select")
+    pressed:SetAlpha(0)
+    
+    -- Track button state for hover effects
+    local isPressed = false
+    
+    -- Hover effects
+    button:SetScript("OnEnter", function(self)
+        if not isPressed then
+            highlight:SetAlpha(0.65)
+        end
     end)
     
-    self.lfgButton = button
-end
-
--- Hook into PVE frame to add LFG tab when appropriate
-local function InitializeLFGHook()
-    if PVEFrame then
-        PVEFrame:HookScript("OnShow", function()
-            if addon.Options.db.showLFGTab then
-                QuickTravel:CreateLFGButton()
+    button:SetScript("OnLeave", function(self)
+        highlight:SetAlpha(0)
+    end)
+    
+    -- Click effects
+    button:SetScript("OnMouseDown", function(self)
+        isPressed = true
+        highlight:SetAlpha(0)
+        pressed:SetAlpha(1)
+    end)
+    
+    button:SetScript("OnMouseUp", function(self)
+        isPressed = false
+        pressed:SetAlpha(0)
+        if self:IsMouseOver() then
+            highlight:SetAlpha(0.65)
+        end
+    end)
+   
+    -- Button text
+    local buttonText = button:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    buttonText:SetPoint("CENTER", button, "CENTER", -2, 7)
+    buttonText:SetText(L["QT_TITLE"])
+    buttonText:SetTextColor(1, 0.82, 0)
+    button.text = buttonText
+    
+    -- Button icon
+    local icon = button:CreateTexture(nil, "OVERLAY")
+    icon:SetSize(37, 37)
+    icon:SetAtlas("Crosshair_innkeeper_48")
+    icon:SetPoint("RIGHT", buttonText, "LEFT", -5, 0)
+   
+    -- Button click handler with toggle functionality
+    button:SetScript("OnClick", function()
+        if QuickTravel.mainFrame and QuickTravel.mainFrame:IsShown() then
+            QuickTravel:HideFrame()
+        else
+            QuickTravel:ShowFrame()
+            if QuickTravel.mainFrame then
+                QuickTravel.mainFrame:ClearAllPoints()
+                QuickTravel.mainFrame:SetPoint("TOPLEFT", PVEFrame, "TOPRIGHT", 10, 0)
             end
-        end)
+        end
+    end)
+   
+    -- Tab visibility management - only show in Dungeons & Raids tab
+    local function UpdateButtonVisibility()
+        local currentTab = PVEFrame.selectedTab or 1
+        if currentTab == 1 then
+            button:Show()
+        else
+            button:Hide()
+        end
     end
+    
+    -- Hook into tab clicks with delay for selectedTab to update
+    for i = 1, 4 do
+        local tab = _G["PVEFrameTab"..i]
+        if tab then
+            tab:HookScript("OnClick", function()
+                C_Timer.After(0.05, UpdateButtonVisibility)
+            end)
+        end
+    end
+    
+    -- Handle initial state when PVE frame opens
+    PVEFrame:HookScript("OnShow", function()
+        C_Timer.After(0.1, UpdateButtonVisibility)
+    end)
+
+    -- Auto-close QuickTravel when LFG window closes
+    PVEFrame:HookScript("OnHide", function()
+        if QuickTravel.mainFrame and QuickTravel.mainFrame:IsShown() then
+            QuickTravel:HideFrame()
+        end
+    end)    
+    
+    button:Show()
+    self.lfgButton = button
 end
 
 -- Populate the main portal list organized by expansion categories
@@ -674,7 +759,15 @@ frame:SetScript("OnEvent", function(self, event, addonName, spellID)
     if event == "ADDON_LOADED" and addonName == ADDON_NAME then
         -- Initialize settings and show login message if enabled
         QuickTravel.db = addon.Options:InitializeSettings()
-        C_Timer.After(1, InitializeLFGHook)
+        C_Timer.After(1, function()
+            if PVEFrame then
+                PVEFrame:HookScript("OnShow", function()
+                    if addon.Options.db.showLFGTab then
+                        QuickTravel:CreateLFGButton()
+                    end
+                end)
+            end
+        end)
 
         if addon.Options.db.showLoginMessage then
             print("|cff00ff00QuickTravel|r " .. L["LOADED"])
