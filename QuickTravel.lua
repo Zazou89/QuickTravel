@@ -508,11 +508,25 @@ function QuickTravel:CreatePortalButton(contentFrame, portal, yOffset)
                 GameTooltip:AddLine(" ")
                 GameTooltip:AddLine("|cff00ff00" .. L["CLICK_TO_USE"] .. "|r")
             elseif portal.isVariant then
-                -- Generic tooltip for random variants to preserve surprise
-                GameTooltip:SetText(portal.displayName, 1, 1, 1)
-                GameTooltip:AddLine("|cff00ff00" .. L["CLICK_TO_USE"] .. "|r")
-                if QuickTravel.db and QuickTravel.db.useRandomHearthstoneVariant then
+                -- Handle Hearthstone variants with random selection
+                local useRandom = QuickTravel.db and QuickTravel.db.useRandomHearthstoneVariant
+                local selectedVariant = QuickTravel.db and QuickTravel.db.selectedHearthstoneVariant
+                
+                if useRandom then
+                    -- Random variant: display tooltip with random selection info
+                    GameTooltip:SetText(portal.displayName, 1, 1, 1)
+                    GameTooltip:AddLine("|cff00ff00" .. L["CLICK_TO_USE"] .. "|r")
                     GameTooltip:AddLine("|cffcccccc" .. L["RANDOM_VARIANT_TOOLTIP"] .. "|r")
+                elseif selectedVariant then
+                    -- Specific variant: display tooltip for selected variant
+                    GameTooltip:SetToyByItemID(selectedVariant)
+                    GameTooltip:AddLine(" ")
+                    GameTooltip:AddLine("|cff00ff00" .. L["CLICK_TO_USE"] .. "|r")
+                else
+                    -- Fallback to basic Hearthstone item
+                    GameTooltip:SetItemByID(portal.fallback or 6948)
+                    GameTooltip:AddLine(" ")
+                    GameTooltip:AddLine("|cff00ff00" .. L["CLICK_TO_USE"] .. "|r")
                 end
             else
                 GameTooltip:SetSpellByID(portal.spellID)
@@ -686,9 +700,9 @@ function QuickTravel:GetEffectiveHearthstoneID(portal)
     if useRandom then
         -- Select random owned variant
         local ownedVariants = {}
-        for _, variantID in ipairs(portal.variants) do
-            if PlayerHasToy(variantID) then
-                table.insert(ownedVariants, variantID)
+        for _, variant in ipairs(portal.variants) do
+            if PlayerHasToy(variant.id) then
+                table.insert(ownedVariants, variant.id)
             end
         end
         

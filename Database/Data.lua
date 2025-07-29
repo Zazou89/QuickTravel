@@ -17,10 +17,35 @@ local orderedExpansions = {
 
 -- Complete list of all available Hearthstone variant toy IDs
 local hearthstoneVariants = {
-    166747, 165802, 165670, 165669, 166746, 163045, 162973, 142542,
-    64488, 54452, 93672, 168907, 172179, 182773, 180290, 184353,
-    183716, 188952, 190237, 193588, 190196, 200630, 206195, 209035,
-    208704, 212337, 228940, 236687, 235016
+    {id = 54452, nameKey = "HEARTHSTONE_VARIANT_54452"},
+    {id = 64488, nameKey = "HEARTHSTONE_VARIANT_64488"},
+    {id = 93672, nameKey = "HEARTHSTONE_VARIANT_93672"},
+    {id = 142542, nameKey = "HEARTHSTONE_VARIANT_142542"},
+    {id = 162973, nameKey = "HEARTHSTONE_VARIANT_162973"},
+    {id = 163045, nameKey = "HEARTHSTONE_VARIANT_163045"},
+    {id = 165669, nameKey = "HEARTHSTONE_VARIANT_165669"},
+    {id = 165670, nameKey = "HEARTHSTONE_VARIANT_165670"},
+    {id = 165802, nameKey = "HEARTHSTONE_VARIANT_165802"},
+    {id = 166746, nameKey = "HEARTHSTONE_VARIANT_166746"},
+    {id = 166747, nameKey = "HEARTHSTONE_VARIANT_166747"},
+    {id = 168907, nameKey = "HEARTHSTONE_VARIANT_168907"},
+    {id = 172179, nameKey = "HEARTHSTONE_VARIANT_172179"},
+    {id = 180290, nameKey = "HEARTHSTONE_VARIANT_180290"},
+    {id = 182773, nameKey = "HEARTHSTONE_VARIANT_182773"},
+    {id = 183716, nameKey = "HEARTHSTONE_VARIANT_183716"},
+    {id = 184353, nameKey = "HEARTHSTONE_VARIANT_184353"},
+    {id = 188952, nameKey = "HEARTHSTONE_VARIANT_188952"},
+    {id = 190196, nameKey = "HEARTHSTONE_VARIANT_190196"},
+    {id = 190237, nameKey = "HEARTHSTONE_VARIANT_190237"},
+    {id = 193588, nameKey = "HEARTHSTONE_VARIANT_193588"},
+    {id = 200630, nameKey = "HEARTHSTONE_VARIANT_200630"},
+    {id = 206195, nameKey = "HEARTHSTONE_VARIANT_206195"},
+    {id = 208704, nameKey = "HEARTHSTONE_VARIANT_208704"},
+    {id = 209035, nameKey = "HEARTHSTONE_VARIANT_209035"},
+    {id = 212337, nameKey = "HEARTHSTONE_VARIANT_212337"},
+    {id = 228940, nameKey = "HEARTHSTONE_VARIANT_228940"},
+    {id = 235016, nameKey = "HEARTHSTONE_VARIANT_235016"},
+    {id = 236687, nameKey = "HEARTHSTONE_VARIANT_236687"}
 }
 
 -- Future season preparation for Patch 11.2 - currently commented out
@@ -244,8 +269,8 @@ local DataManager = {
                             
                             -- Check if player owns any Hearthstone variants
                             local hasVariants = false
-                            for _, variantID in ipairs(instanceInfo.variants) do
-                                if PlayerHasToy(variantID) then
+                            for _, variant in ipairs(instanceInfo.variants) do
+                                if PlayerHasToy(variant.id) then
                                     hasVariants = true
                                     break
                                 end
@@ -257,11 +282,25 @@ local DataManager = {
                             if useRandom then
                                 displayName = L["HEARTHSTONE_RANDOM_VARIANT"]
                                 displayTexture = C_Item.GetItemIconByID(instanceInfo.fallback) or 134400
-                            elseif selectedVariant and PlayerHasToy(selectedVariant) then
-                                displayName = C_Item.GetItemNameByID(selectedVariant) or L["HEARTHSTONE_RANDOM_VARIANT"]
-                                displayTexture = C_Item.GetItemIconByID(selectedVariant) or C_Item.GetItemIconByID(instanceInfo.fallback) or 134400
+                            elseif selectedVariant then
+                                -- Find the selected variant data
+                                local selectedVariantData = nil
+                                for _, variant in ipairs(instanceInfo.variants) do
+                                    if variant.id == selectedVariant and PlayerHasToy(variant.id) then
+                                        selectedVariantData = variant
+                                        break
+                                    end
+                                end
+                                
+                                if selectedVariantData then
+                                    displayName = L[selectedVariantData.nameKey] or C_Item.GetItemNameByID(selectedVariant) or L["HEARTHSTONE_VARIANT_DEFAULT"]
+                                    displayTexture = C_Item.GetItemIconByID(selectedVariant) or C_Item.GetItemIconByID(instanceInfo.fallback) or 134400
+                                else
+                                    displayName = C_Item.GetItemNameByID(instanceInfo.fallback) or L["HEARTHSTONE_VARIANT_DEFAULT"]
+                                    displayTexture = C_Item.GetItemIconByID(instanceInfo.fallback) or 134400
+                                end
                             else
-                                displayName = C_Item.GetItemNameByID(instanceInfo.fallback) or "Hearthstone"
+                                displayName = C_Item.GetItemNameByID(instanceInfo.fallback) or L["HEARTHSTONE_VARIANT_DEFAULT"]
                                 displayTexture = C_Item.GetItemIconByID(instanceInfo.fallback) or 134400
                             end
                         -- Process teleportation spells

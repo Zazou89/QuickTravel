@@ -57,21 +57,19 @@ local variantCache = {
 }
 
 -- Get sorted list of owned Hearthstone variant toys with caching
-local function GetOwnedHearthstoneVariants()
+local function GetOwnedHearthstoneVariants(forceRefresh)
     local now = GetTime()
-    if variantCache.ownedVariants and (now - variantCache.lastScan < variantCache.cacheTimeout) then
+    if not forceRefresh and variantCache.ownedVariants and (now - variantCache.lastScan < variantCache.cacheTimeout) then
         return variantCache.ownedVariants
     end
     
     local owned = {}
     local constants = addon.constants
     if constants and constants.hearthstoneVariants then
-        for _, variantID in ipairs(constants.hearthstoneVariants) do
-            if PlayerHasToy(variantID) then
-                local name = C_Item.GetItemNameByID(variantID)
-                if name then
-                    table.insert(owned, {id = variantID, name = name})
-                end
+        for _, variant in ipairs(constants.hearthstoneVariants) do
+            if PlayerHasToy(variant.id) then
+                local name = L[variant.nameKey] or ("Hearthstone " .. variant.id)
+                table.insert(owned, {id = variant.id, name = name})
             end
         end
         table.sort(owned, function(a, b) return a.name < b.name end)

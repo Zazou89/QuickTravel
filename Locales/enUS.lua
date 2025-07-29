@@ -113,6 +113,38 @@ L["RAID_MANAFORGE_OMEGA"] = "Manaforge Omega" --16178
 L["HEARTHSTONE_DALARAN"] = "Dalaran Hearthstone"
 L["HEARTHSTONE_GARRISON"] = "Garrison Hearthstone"
 
+-- === HEARTHSTONE VARIANTS ===
+L["HEARTHSTONE_VARIANT_DEFAULT"] = "Hearthstone"
+L["HEARTHSTONE_VARIANT_54452"] = "Ethereal Portal"
+L["HEARTHSTONE_VARIANT_64488"] = "The Innkeeper's Daughter"
+L["HEARTHSTONE_VARIANT_93672"] = "Dark Portal"
+L["HEARTHSTONE_VARIANT_142542"] = "Tome of Town Portal"
+L["HEARTHSTONE_VARIANT_162973"] = "Greatfather Winter's Hearthstone"
+L["HEARTHSTONE_VARIANT_163045"] = "Headless Horseman's Hearthstone"
+L["HEARTHSTONE_VARIANT_165669"] = "Lunar Elder's Hearthstone"
+L["HEARTHSTONE_VARIANT_165670"] = "Peddlefeet's Lovely Hearthstone"
+L["HEARTHSTONE_VARIANT_165802"] = "Noble Gardener's Hearthstone"
+L["HEARTHSTONE_VARIANT_166746"] = "Fire Eater's Hearthstone"
+L["HEARTHSTONE_VARIANT_166747"] = "Brewfest Reveler's Hearthstone"
+L["HEARTHSTONE_VARIANT_168907"] = "Holographic Digitalization Hearthstone"
+L["HEARTHSTONE_VARIANT_172179"] = "Eternal Traveler's Hearthstone"
+L["HEARTHSTONE_VARIANT_180290"] = "Night Fae Hearthstone"
+L["HEARTHSTONE_VARIANT_182773"] = "Necrolord Hearthstone"
+L["HEARTHSTONE_VARIANT_183716"] = "Venthyr Sinstone"
+L["HEARTHSTONE_VARIANT_184353"] = "Kyrian Hearthstone"
+L["HEARTHSTONE_VARIANT_188952"] = "Dominated Hearthstone"
+L["HEARTHSTONE_VARIANT_190196"] = "Enlightened Hearthstone"
+L["HEARTHSTONE_VARIANT_190237"] = "Broker Translocation Matrix"
+L["HEARTHSTONE_VARIANT_193588"] = "Timewalker's Hearthstone"
+L["HEARTHSTONE_VARIANT_200630"] = "Ohn'ir Windsage's Hearthstone"
+L["HEARTHSTONE_VARIANT_206195"] = "Path of the Naaru"
+L["HEARTHSTONE_VARIANT_208704"] = "Deepdweller's Earthen Hearthstone"
+L["HEARTHSTONE_VARIANT_209035"] = "Hearthstone of the Flame"
+L["HEARTHSTONE_VARIANT_212337"] = "Stone of the Hearth"
+L["HEARTHSTONE_VARIANT_228940"] = "Notorious Thread's Hearthstone"
+L["HEARTHSTONE_VARIANT_235016"] = "Redeployment Module"
+L["HEARTHSTONE_VARIANT_236687"] = "Explosive Hearthstone"
+
 -- === USER INTERFACE STRINGS ===
 -- Core interface elements and user interaction text
 
