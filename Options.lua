@@ -22,7 +22,9 @@ function Options:InitializeSettings()
         categoryOrder = addon.ConfigManager.DEFAULT_CATEGORY_ORDER,   -- (table, array) User's preferred order and enable state for portal categories
         showLFGTab = true,                                            -- (boolean) Show the QuickTravel button in the Group Finder (LFG)
         showUnlearnedSpells = false,                                  -- (boolean) Show spells/portals the player has not learned yet
-        showSpellTooltips = true                                      -- (boolean) Show tooltips for spells/portals in the UI
+        showSpellTooltips = true,                                     -- (boolean) Show tooltips for spells/portals in the UI
+        frameHeight = 500,                                            -- (number) default height of the main frame
+        lockFrameHeight = false,                                      -- (boolean) Lock frame height to prevent resizing
     }
     
     -- Apply defaults for missing settings
@@ -94,7 +96,7 @@ function Options:CreateOptionsFrame(mainFrame)
     
     -- Main options frame with portrait template
     self.optionsFrame = CreateFrame("Frame", "QuickTravelOptionsFrame", UIParent, "PortraitFrameTemplate")
-    self.optionsFrame:SetSize(290, 430)
+    self.optionsFrame:SetSize(290, 450)
     if mainFrame then
         self.optionsFrame:SetPoint("TOPLEFT", mainFrame, "TOPRIGHT", 10, 0)
     else
@@ -217,9 +219,18 @@ function Options:CreateOptionsFrame(mainFrame)
     autoCloseText:SetText(L["AUTO_CLOSE"])
     autoCloseText:SetTextColor(1, 1, 1)
 
+    -- Lock frame height checkbox
+    local lockHeightCheckbox = CreateFrame("CheckButton", nil, self.optionsFrame.optionsContent, "InterfaceOptionsCheckButtonTemplate")
+    lockHeightCheckbox:SetPoint("TOPLEFT", autoCloseCheckbox, "BOTTOMLEFT", 0, -10)
+    lockHeightCheckbox:SetSize(22, 22)
+    local lockHeightText = self.optionsFrame.optionsContent:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    lockHeightText:SetPoint("LEFT", lockHeightCheckbox, "RIGHT", 8, 0)
+    lockHeightText:SetText(L["LOCK_FRAME_HEIGHT"])
+    lockHeightText:SetTextColor(1, 1, 1)
+
     -- HEARTHSTONE SECTION: Hearthstone variant selection
     local hearthstoneHeader = self.optionsFrame.optionsContent:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
-    hearthstoneHeader:SetPoint("TOPLEFT", autoCloseCheckbox, "BOTTOMLEFT", 0, -25)
+    hearthstoneHeader:SetPoint("TOPLEFT", lockHeightCheckbox, "BOTTOMLEFT", 0, -25)
     hearthstoneHeader:SetText(L["HEARTHSTONE_HEADER"])
     hearthstoneHeader:SetTextColor(1, 0.82, 0)
 
@@ -246,6 +257,7 @@ function Options:CreateOptionsFrame(mainFrame)
     self.optionsFrame.showUnlearnedCheckbox = showUnlearnedCheckbox
     self.optionsFrame.showTooltipsCheckbox = showTooltipsCheckbox
     self.optionsFrame.randomHearthstoneText = randomHearthstoneText
+    self.optionsFrame.lockHeightCheckbox = lockHeightCheckbox
 
     self:LoadOptionsValues()
     self:SetupEventHandlers()
@@ -268,6 +280,14 @@ function Options:SetupEventHandlers()
     self.optionsFrame.autoCloseCheckbox:SetScript("OnClick", function(checkbox)
         self.db.autoClose = checkbox:GetChecked()
     end)
+
+    -- Lock frame height toggle
+    self.optionsFrame.lockHeightCheckbox:SetScript("OnClick", function(checkbox)
+        self.db.lockFrameHeight = checkbox:GetChecked()
+        if QuickTravel then
+            QuickTravel:UpdateResizeState()
+        end
+    end)    
     
     -- Random Hearthstone variant toggle
     self.optionsFrame.randomHearthstoneCheckbox:SetScript("OnClick", function(checkbox)
@@ -326,6 +346,7 @@ function Options:LoadOptionsValues()
     self.optionsFrame.showLFGTabCheckbox:SetChecked(self.db.showLFGTab)
     self.optionsFrame.showUnlearnedCheckbox:SetChecked(self.db.showUnlearnedSpells)
     self.optionsFrame.showTooltipsCheckbox:SetChecked(self.db.showSpellTooltips)
+    self.optionsFrame.lockHeightCheckbox:SetChecked(self.db.lockFrameHeight)
     self:SetupCategoriesList()
 end
 

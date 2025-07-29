@@ -19,7 +19,8 @@ function QuickTravel:CreateMainFrame()
 
     -- Main frame using Blizzard's portrait template for consistency
     self.mainFrame = CreateFrame("Frame", "QuickTravelFrame", UIParent, "PortraitFrameTemplate")
-    self.mainFrame:SetSize(320, 500)
+    local savedHeight = addon.Options.db and addon.Options.db.frameHeight or 500
+    self.mainFrame:SetSize(320, savedHeight)
     self.mainFrame:SetPoint("CENTER")
     self.mainFrame:SetMovable(true)
     self.mainFrame:EnableMouse(true)
@@ -81,6 +82,7 @@ function QuickTravel:CreateMainFrame()
 
     self.mainFrame.optionsButton = optionsButton
     self:CreateScrollFrame()
+    self:SetupFrameResizing()
     self:PopulatePortalList()
     self.mainFrame:Hide()
 
@@ -91,7 +93,7 @@ end
 function QuickTravel:CreateScrollFrame()
     local scrollFrame = CreateFrame("ScrollFrame", nil, self.mainFrame, "UIPanelScrollFrameTemplate")
     scrollFrame:SetPoint("TOPLEFT", self.mainFrame, "TOPLEFT", 12, -85)
-    scrollFrame:SetPoint("BOTTOMRIGHT", self.mainFrame, "BOTTOMRIGHT", -32, 12)
+    scrollFrame:SetPoint("BOTTOMRIGHT", self.mainFrame, "BOTTOMRIGHT", -32, 20)
 
     local contentFrame = CreateFrame("Frame", nil, scrollFrame)
     contentFrame:SetSize(330, 1)
@@ -99,6 +101,89 @@ function QuickTravel:CreateScrollFrame()
 
     self.mainFrame.scrollFrame = scrollFrame
     self.mainFrame.contentFrame = contentFrame
+end
+
+-- Setup frame resizing system with lock support
+function QuickTravel:SetupFrameResizing()
+    -- Enable resizing
+    self.mainFrame:SetResizable(true)
+    
+    -- Create resize handle (bottom-right corner)
+    local resizeButton = CreateFrame("Button", nil, self.mainFrame)
+    resizeButton:SetSize(16, 16)
+    resizeButton:SetPoint("BOTTOMRIGHT", -6, 6)
+    resizeButton:SetNormalTexture("Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Up")
+    resizeButton:SetHighlightTexture("Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Highlight")
+    resizeButton:SetPushedTexture("Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Down")
+    
+    -- Resize cursor on hover
+    resizeButton:SetScript("OnEnter", function()
+        SetCursor("UI_RESIZE_CURSOR")
+    end)
+    
+    resizeButton:SetScript("OnLeave", function()
+        ResetCursor()
+    end)
+    
+    -- Handle resize drag
+    resizeButton:SetScript("OnMouseDown", function(self, button)
+        if button == "LeftButton" then
+            QuickTravel.mainFrame:StartSizing("BOTTOMRIGHT")
+        end
+    end)
+    
+    resizeButton:SetScript("OnMouseUp", function(self, button)
+        if button == "LeftButton" then
+            QuickTravel.mainFrame:StopMovingOrSizing()
+            -- Save new height
+            if addon.Options.db then
+                addon.Options.db.frameHeight = QuickTravel.mainFrame:GetHeight()
+            end
+        end
+    end)
+    
+    -- Constrain width and height limits
+    self.mainFrame:SetScript("OnSizeChanged", function(frame, width, height)
+        local needsUpdate = false
+        
+        -- Keep width constant
+        if width ~= 320 then
+            frame:SetWidth(320)
+            needsUpdate = true
+        end
+        
+        -- Enforce height limits (300-1000px)
+        local minHeight, maxHeight = 300, 1000
+        if height < minHeight then
+            frame:SetHeight(minHeight)
+            needsUpdate = true
+        elseif height > maxHeight then
+            frame:SetHeight(maxHeight)
+            needsUpdate = true
+        end
+        
+        -- Save valid height
+        if not needsUpdate and addon.Options.db then
+            addon.Options.db.frameHeight = height
+        end
+    end)
+    
+    -- Store reference
+    self.mainFrame.resizeButton = resizeButton
+    
+    -- Apply initial lock state
+    self:UpdateResizeState()
+end
+
+-- Toggle resize functionality based on lock setting
+function QuickTravel:UpdateResizeState()
+    if not self.mainFrame or not self.mainFrame.resizeButton then
+        return
+    end
+    
+    local isLocked = addon.Options.db and addon.Options.db.lockFrameHeight or false
+    self.mainFrame:SetResizable(not isLocked)
+    self.mainFrame.resizeButton:SetShown(not isLocked)
 end
 
 -- Create QuickTravel button in the LFG frame

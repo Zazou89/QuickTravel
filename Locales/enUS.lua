@@ -177,6 +177,7 @@ L["SHOW_HEARTHSTONES"] = "Show hearthstones"
 L["SHOW_UNLEARNED_SPELLS"] = "Show unlearned spells"
 L["SHOW_SPELL_TOOLTIPS"] = "Show spell tooltips"
 L["SHOW_LFG_TAB"] = "Show button in Group Finder"
+L["LOCK_FRAME_HEIGHT"] = "Lock frame height"
 
 -- Interface Tabs
 L["OPTIONS_TAB"] = "Options"

@@ -177,6 +177,7 @@ L["SHOW_HEARTHSTONES"] = "Afficher les pierres de foyer"
 L["SHOW_UNLEARNED_SPELLS"] = "Afficher les sorts non appris"
 L["SHOW_SPELL_TOOLTIPS"] = "Afficher les infobulles des sorts"
 L["SHOW_LFG_TAB"] = "Afficher le bouton dans la rech. de groupe"
+L["LOCK_FRAME_HEIGHT"] = "Verrouiller la hauteur de la fenêtre"
 
 -- Onglets d'interface
 L["OPTIONS_TAB"] = "Options"
