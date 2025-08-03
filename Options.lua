@@ -94,26 +94,27 @@ function Options:CreateOptionsFrame(mainFrame)
         return self.optionsFrame
     end
     
-    -- Main options frame with portrait template
-    self.optionsFrame = CreateFrame("Frame", "QuickTravelOptionsFrame", UIParent, "PortraitFrameTemplate")
-    self.optionsFrame:SetSize(290, 450)
+    -- Main options frame
+    self.optionsFrame = CreateFrame("Frame", "QuickTravelOptionsFrame", UIParent, "ButtonFrameTemplate")
+    self.optionsFrame:SetSize(290, 420)
     if mainFrame then
         self.optionsFrame:SetPoint("TOPLEFT", mainFrame, "TOPRIGHT", 10, 0)
     else
         self.optionsFrame:SetPoint("CENTER")
     end
     self.optionsFrame:EnableMouse(true)
-    SetPortraitToTexture(self.optionsFrame.PortraitContainer.portrait, "Interface\\Icons\\inv_10_engineering_manufacturedparts_gear_firey")
-
-    -- Frame title
-    local titleText = self.optionsFrame.TitleContainer:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    titleText:SetPoint("CENTER", self.optionsFrame.TitleContainer, "CENTER", -15, 0)
-    titleText:SetText(OPTIONS)
-    titleText:SetTextColor(1, 0.82, 0)
+    
+    -- hide default elements
+    ButtonFrameTemplate_HidePortrait(self.optionsFrame)
+    ButtonFrameTemplate_HideButtonBar(self.optionsFrame)
+    self.optionsFrame.Inset:Hide()
+    
+    -- Title and tabs
+    self.optionsFrame:SetTitle(OPTIONS)
 
     -- Create tab system for switching between options and categories
     local tab1 = CreateFrame("Button", "QuickTravelOptionsTab1", self.optionsFrame, "PanelTabButtonTemplate")
-    tab1:SetPoint("TOPLEFT", self.optionsFrame, "BOTTOMLEFT", 5, 2)
+    tab1:SetPoint("TOPLEFT", self.optionsFrame, "BOTTOMLEFT", 15, 2)
     tab1:SetText(L["OPTIONS_TAB"])
     PanelTemplates_TabResize(tab1, 0)
 
@@ -128,11 +129,11 @@ function Options:CreateOptionsFrame(mainFrame)
 
     -- Create content frames for each tab
     local optionsContent = CreateFrame("Frame", nil, self.optionsFrame)
-    optionsContent:SetPoint("TOPLEFT", self.optionsFrame, "TOPLEFT", 10, -60)
+    optionsContent:SetPoint("TOPLEFT", self.optionsFrame, "TOPLEFT", 10, -40)
     optionsContent:SetPoint("BOTTOMRIGHT", self.optionsFrame, "BOTTOMRIGHT", -10, 10)
     
     local categoriesContent = CreateFrame("Frame", nil, self.optionsFrame)
-    categoriesContent:SetPoint("TOPLEFT", self.optionsFrame, "TOPLEFT", 10, -60)
+    categoriesContent:SetPoint("TOPLEFT", self.optionsFrame, "TOPLEFT", 10, -40)
     categoriesContent:SetPoint("BOTTOMRIGHT", self.optionsFrame, "BOTTOMRIGHT", -10, 10)
     categoriesContent:Hide()
 
