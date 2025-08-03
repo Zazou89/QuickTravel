@@ -94,7 +94,7 @@ function Options:CreateOptionsFrame(mainFrame)
         return self.optionsFrame
     end
     
-    -- Main options frame
+    -- Main options frame using ButtonFrameTemplate 
     self.optionsFrame = CreateFrame("Frame", "QuickTravelOptionsFrame", UIParent, "ButtonFrameTemplate")
     self.optionsFrame:SetSize(290, 420)
     if mainFrame then
@@ -104,12 +104,12 @@ function Options:CreateOptionsFrame(mainFrame)
     end
     self.optionsFrame:EnableMouse(true)
     
-    -- hide default elements
+    -- Hide unwanted elements from ButtonFrameTemplate
     ButtonFrameTemplate_HidePortrait(self.optionsFrame)
     ButtonFrameTemplate_HideButtonBar(self.optionsFrame)
     self.optionsFrame.Inset:Hide()
     
-    -- Title and tabs
+    -- Set frame title
     self.optionsFrame:SetTitle(OPTIONS)
 
     -- Create tab system for switching between options and categories
@@ -245,9 +245,9 @@ function Options:CreateOptionsFrame(mainFrame)
     randomHearthstoneText:SetTextColor(1, 1, 1)
 
     -- Dropdown for selecting specific Hearthstone variant
-    local hearthstoneDropdown = CreateFrame("Frame", "QuickTravelHearthstoneDropdown", self.optionsFrame.optionsContent, "UIDropDownMenuTemplate")
-    hearthstoneDropdown:SetPoint("TOPLEFT", randomHearthstoneCheckbox, "BOTTOMLEFT", 5, -10)
-    hearthstoneDropdown:SetSize(200, 32)
+    local hearthstoneDropdown = CreateFrame("DropdownButton", "QuickTravelHearthstoneDropdown", self.optionsFrame.optionsContent, "WowStyle1DropdownTemplate")
+    hearthstoneDropdown:SetPoint("TOPLEFT", randomHearthstoneCheckbox, "BOTTOMLEFT", 0, -10)
+    hearthstoneDropdown:SetWidth(250)
 
     -- Store references for event handling
     self.optionsFrame.hideLoginCheckbox = hideLoginCheckbox
@@ -388,39 +388,41 @@ function Options:SetupHearthstoneDropdown()
         self.db.selectedHearthstoneVariant = ownedVariants[1].id
     end
     
-    UIDropDownMenu_SetWidth(dropdown, 180)
-    UIDropDownMenu_Initialize(dropdown, function(self, level)
-        local info = UIDropDownMenu_CreateInfo()
+    -- Callback functions...
+    local function isSelectedCallback(variantID)
+        return self.db.selectedHearthstoneVariant == variantID
+    end
+    
+    local function onSelectionCallback(variantID)
+        self.db.selectedHearthstoneVariant = variantID
+        dropdown:GenerateMenu()
         
+        if addon.constants then
+            addon.constants.DataManager:InvalidateCache()
+        end
+        if addon.QuickTravel then
+            addon.QuickTravel:PopulatePortalList()
+        end
+    end
+    
+    -- Setup dropdown menu (WITHOUT icons)
+    dropdown:SetupMenu(function(dropdown, rootDescription)
         if #ownedVariants == 0 then
-            info.text = L["NO_HEARTHSTONE_VARIANTS"]
-            info.disabled = true
-            info.notCheckable = true
-            UIDropDownMenu_AddButton(info)
+            local disabledButton = rootDescription:CreateButton(L["NO_HEARTHSTONE_VARIANTS"])
+            disabledButton:SetEnabled(false)
         else
             for _, variant in ipairs(ownedVariants) do
-                info = UIDropDownMenu_CreateInfo()
-                info.text = variant.name
-                info.value = variant.id
-                info.checked = (variant.id == Options.db.selectedHearthstoneVariant)
-                info.func = function()
-                    Options.db.selectedHearthstoneVariant = variant.id
-                    UIDropDownMenu_SetSelectedValue(dropdown, variant.id)
-                    if addon.constants then
-                        addon.constants.DataManager:InvalidateCache()
-                    end
-                    if addon.QuickTravel then
-                        addon.QuickTravel:PopulatePortalList()
-                    end
-                end
-                UIDropDownMenu_AddButton(info)
+                rootDescription:CreateRadio(
+                    variant.name,
+                    isSelectedCallback,
+                    onSelectionCallback,
+                    variant.id
+                )
             end
         end
     end)
     
-    if self.db.selectedHearthstoneVariant then
-        UIDropDownMenu_SetSelectedValue(dropdown, self.db.selectedHearthstoneVariant)
-    end
+    dropdown:GenerateMenu()
 end
 
 -- Update Hearthstone control states based on category and variant availability
@@ -464,10 +466,11 @@ function Options:UpdateHearthstoneControls()
     
     -- Enable/disable dropdown based on random setting
     local dropdownEnabled = hearthstonesEnabled and hasVariants and not self.db.useRandomHearthstoneVariant
+    self.optionsFrame.hearthstoneDropdown:SetEnabled(dropdownEnabled)
+    
+    -- Refresh dropdown menu
     if dropdownEnabled then
-        UIDropDownMenu_EnableDropDown(self.optionsFrame.hearthstoneDropdown)
-    else
-        UIDropDownMenu_DisableDropDown(self.optionsFrame.hearthstoneDropdown)
+        self.optionsFrame.hearthstoneDropdown:GenerateMenu()
     end
 end
 
