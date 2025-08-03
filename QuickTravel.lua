@@ -84,6 +84,10 @@ function QuickTravel:CreateMainFrame()
     self:CreateScrollFrame()
     self:SetupFrameResizing()
     self:PopulatePortalList()
+
+    -- Register main frame for ESC key handling
+    table.insert(UISpecialFrames, "QuickTravelFrame")
+    
     self.mainFrame:Hide()
 
     return self.mainFrame

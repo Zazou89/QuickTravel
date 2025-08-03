@@ -112,6 +112,9 @@ function Options:CreateOptionsFrame(mainFrame)
     -- Set frame title
     self.optionsFrame:SetTitle(OPTIONS)
 
+    -- Register frame for ESC key handling
+    table.insert(UISpecialFrames, "QuickTravelOptionsFrame")
+
     -- Create tab system for switching between options and categories
     local tab1 = CreateFrame("Button", "QuickTravelOptionsTab1", self.optionsFrame, "PanelTabButtonTemplate")
     tab1:SetPoint("TOPLEFT", self.optionsFrame, "BOTTOMLEFT", 15, 2)
