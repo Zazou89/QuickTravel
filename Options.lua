@@ -532,6 +532,9 @@ function Options:SetupCategoriesList()
                 end
             end
             
+            -- Update visual feedback for this category
+            self:UpdateCategoryVisualState(categoryFrame, cb:GetChecked())
+            
             -- Update Hearthstone controls if this is the Hearthstones category
             if category.key == addon.ConfigManager.CATEGORY_KEYS.HEARTHSTONES then
                 self:UpdateHearthstoneControls()
@@ -550,7 +553,6 @@ function Options:SetupCategoriesList()
         local nameText = categoryFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
         nameText:SetPoint("LEFT", checkbox, "RIGHT", 8, 0)
         nameText:SetText(category.name)
-        nameText:SetTextColor(1, 1, 1)
         
         -- Move up button
         local upButton = CreateFrame("Button", nil, categoryFrame)
@@ -581,6 +583,15 @@ function Options:SetupCategoriesList()
         if i == #localizedCategories then
             downButton:SetEnabled(false)
         end
+        
+        -- Store references for visual updates
+        categoryFrame.nameText = nameText
+        categoryFrame.upButton = upButton
+        categoryFrame.downButton = downButton
+        categoryFrame.checkbox = checkbox
+        
+        -- Apply initial visual state
+        self:UpdateCategoryVisualState(categoryFrame, category.enabled)
         
         yOffset = yOffset - 30
     end
@@ -630,6 +641,35 @@ function Options:MoveCategoryDown(index)
     if addon.QuickTravel then
         addon.QuickTravel:PopulatePortalList()
     end
+end
+
+-- Update visual state of a category based on enabled/disabled status
+function Options:UpdateCategoryVisualState(categoryFrame, isEnabled)
+    if not categoryFrame then return end
+    
+    local nameText = categoryFrame.nameText
+    local upButton = categoryFrame.upButton
+    local downButton = categoryFrame.downButton
+    
+    -- Helper function to update button appearance
+    local function updateButtonAppearance(button, enabled)
+        if not button then return end
+        
+        local normalTexture = button:GetNormalTexture()
+        if normalTexture then
+            normalTexture:SetDesaturated(not enabled)
+        end
+        button:SetAlpha(enabled and 1.0 or 0.5)
+    end
+    
+    -- Update text color
+    if nameText then
+        nameText:SetTextColor(isEnabled and 1 or 0.4, isEnabled and 1 or 0.4, isEnabled and 1 or 0.4)
+    end
+    
+    -- Update both buttons with the helper function
+    updateButtonAppearance(upButton, isEnabled)
+    updateButtonAppearance(downButton, isEnabled)
 end
 
 return Options
