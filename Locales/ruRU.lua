@@ -1,18 +1,18 @@
-local L = select(2, ...).L('enUS')
+local L = select(2, ...).L('ruRU')
 
 -- === CORE ADDON IDENTITY ===
 L["QT_TITLE"] = "Быстрое путешествие"
 
 -- === EXPANSION CATEGORIES ===
 -- World of Warcraft expansion names for UI organization
-L["Cataclysm"] = "Cataclysm"
-L["Mists of Pandaria"] = "Mists of Pandaria"
-L["Warlords of Draenor"] = "Warlords of Draenor"
-L["Legion"] = "Legion"
-L["Battle for Azeroth"] = "Battle for Azeroth"
-L["Shadowlands"] = "Shadowlands"
-L["Dragonflight"] = "Dragonflight"
-L["The War Within"] = "The War Within"
+L["Cataclysm"] = "Катаклизм"
+L["Mists of Pandaria"] = "Пандария"
+L["Warlords of Draenor"] = "Дренор"
+L["Legion"] = "Легион"
+L["Battle for Azeroth"] = "Битва за Азерот"
+L["Shadowlands"] = "Темные Земли"
+L["Dragonflight"] = "Драконы"
+L["The War Within"] = "Война Внутри"
 L["Current Season"] = "Текущий сезон"
 L["Hearthstones"] = "Камни возвращений"
 L["HEARTHSTONE_RANDOM_VARIANT"] = "Камень возвращения (случайный вариант)"
