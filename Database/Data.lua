@@ -48,12 +48,10 @@ local hearthstoneVariants = {
     {id = 236687, nameKey = "HEARTHSTONE_VARIANT_236687"}
 }
 
--- Future season preparation for Patch 11.2 - currently commented out
--- ["current_season"] = {"ara_kara", "the_dawnbreaker", "operation_floodgate", "priory_sacred_flame", "halls_atonement", "tazavesh", "eco_dome_al_dani", "manaforge_omega"},
-
 -- Category-to-instance mapping: defines which dungeons/raids belong to each expansion category
 local mapCategoryKeysToInstances = {
-    ["current_season"] = {"mechagon", "theatre_pain", "rookery", "darkflame_cleft", "cinderbrew_brewery", "priory_sacred_flame", "siege_boralus", "motherlode", "liberation_undermine"},
+    ["current_season"] = {"ara_kara", "the_dawnbreaker", "operation_floodgate", "priory_sacred_flame", "halls_atonement", "tazavesh", "eco_dome_al_dani", "manaforge_omega"}, --TWW: Season 3
+    --["current_season"] = {"mechagon", "theatre_pain", "rookery", "darkflame_cleft", "cinderbrew_brewery", "priory_sacred_flame", "siege_boralus", "motherlode", "liberation_undermine"}, --TWW: Season 2
     ["hearthstones"] = {"hearthstone_variant", "hearthstone_dalaran", "hearthstone_garrison"},
     ["cataclysm"] = {"vortex_pinnacle", "throne_tides", "grim_batol"},
     ["mists_of_pandaria"] = {"temple_jade_serpent", "siege_niuzao", "scholomance", "scarlet_monastery", "scarlet_halls", "gate_setting_sun", "mogushan_palace", "shado_pan_monastery", "stormstout_brewery"},
@@ -153,9 +151,9 @@ local instanceDatabase = {
     ["cinderbrew_meadery"] = {spellID = 445440, nameKey = "DUNGEON_CINDERBREW_MEADERY"},
     ["priory_sacred_flame"] = {spellID = 445444, nameKey = "DUNGEON_PRIORY_OF_THE_SACRED_FLAME"},
     ["operation_floodgate"] = {spellID = 1216786, nameKey = "DUNGEON_OPERATION_FLOODGATE"},
-    -- ["eco_dome_al_dani"] = {spellID = 1237215, nameKey = "DUNGEON_ECO_DOME_AL_DANI"},    
+    ["eco_dome_al_dani"] = {spellID = 1237215, nameKey = "DUNGEON_ECO_DOME_AL_DANI"},    
     ["liberation_undermine"] = {spellID = 1226482, nameKey = "RAID_LIBERATION_OF_UNDERMINE"}
-    -- ["manaforge_omega"] = {spellID = 1239155, nameKey = "RAID_MANAFORGE_OMEGA"}
+    ["manaforge_omega"] = {spellID = 1239155, nameKey = "RAID_MANAFORGE_OMEGA"}
 }
 
 -- Advanced data manager with intelligent caching and portal organization
