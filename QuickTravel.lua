@@ -7,10 +7,14 @@ local isFrameShown = false
 local ConfigManager = addon.ConfigManager
 
 
- -- Anchor QuickTravel next to Raider.io if visible, otherwise next to the Group Finder.
+-- Anchor to Raider.io, else PGF, else Group Finder (priority: Raider.io > PGF > QuickTravel)
 local function AnchorQuickTravelFrame()
     local raiderioFrame = _G["RaiderIO_ProfileTooltip"]
-    if raiderioFrame and raiderioFrame:IsShown() then
+    local pgfFrame = _G["PremadeGroupsFilterDialog"]
+    if pgfFrame and pgfFrame:IsShown() then
+        QuickTravel.mainFrame:ClearAllPoints()
+        QuickTravel.mainFrame:SetPoint("TOPLEFT", pgfFrame, "TOPRIGHT", 10, 0)
+    elseif raiderioFrame and raiderioFrame:IsShown() then
         QuickTravel.mainFrame:ClearAllPoints()
         QuickTravel.mainFrame:SetPoint("TOPLEFT", raiderioFrame, "TOPRIGHT", 10, 0)
     else
