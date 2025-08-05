@@ -1,3 +1,7 @@
+-- Russian localization for QuickTravel addon by Hollicsh
+-- Complete translation set maintaining consistency with English base
+-- All strings translated to provide native Russian user experience
+
 local L = select(2, ...).L('ruRU')
 
 -- === CORE ADDON IDENTITY ===
