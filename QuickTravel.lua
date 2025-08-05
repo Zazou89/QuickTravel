@@ -6,6 +6,19 @@ local constants = addon.constants
 local isFrameShown = false
 local ConfigManager = addon.ConfigManager
 
+
+ -- Anchor QuickTravel next to Raider.io if visible, otherwise next to the Group Finder.
+local function AnchorQuickTravelFrame()
+    local raiderioFrame = _G["RaiderIO_ProfileTooltip"]
+    if raiderioFrame and raiderioFrame:IsShown() then
+        QuickTravel.mainFrame:ClearAllPoints()
+        QuickTravel.mainFrame:SetPoint("TOPLEFT", raiderioFrame, "TOPRIGHT", 10, 0)
+    else
+        QuickTravel.mainFrame:ClearAllPoints()
+        QuickTravel.mainFrame:SetPoint("TOPLEFT", PVEFrame, "TOPRIGHT", 10, 0)
+    end
+end
+
 -- Addon compartment click handler for minimap/interface icons
 function QuickTravel_OnAddonCompartmentClick(addonName, buttonName)
     QuickTravel:ToggleFrame()
@@ -19,6 +32,7 @@ function QuickTravel:CreateMainFrame()
 
     -- Main frame using Blizzard's portrait template for consistency
     self.mainFrame = CreateFrame("Frame", "QuickTravelFrame", UIParent, "PortraitFrameTemplate")
+    self.mainFrame:HookScript("OnShow", AnchorQuickTravelFrame)
     local savedHeight = addon.Options.db and addon.Options.db.frameHeight or 500
     self.mainFrame:SetSize(320, savedHeight)
     self.mainFrame:SetPoint("CENTER")
@@ -262,15 +276,14 @@ function QuickTravel:CreateLFGButton()
    
     -- Button click handler with toggle functionality
     button:SetScript("OnClick", function()
-        if QuickTravel.mainFrame and QuickTravel.mainFrame:IsShown() then
-            QuickTravel:HideFrame()
-        else
-            QuickTravel:ShowFrame()
-            if QuickTravel.mainFrame then
-                QuickTravel.mainFrame:ClearAllPoints()
-                QuickTravel.mainFrame:SetPoint("TOPLEFT", PVEFrame, "TOPRIGHT", 10, 0)
-            end
+    if QuickTravel.mainFrame and QuickTravel.mainFrame:IsShown() then
+        QuickTravel:HideFrame()
+    else
+        QuickTravel:ShowFrame()
+        if QuickTravel.mainFrame then
+            AnchorQuickTravelFrame()
         end
+    end
     end)
    
     -- Tab visibility management - only show in Dungeons & Raids tab
