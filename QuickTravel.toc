@@ -1,6 +1,7 @@
 ## Interface: 110107, 110200
 ## Title: QuickTravel
 ## Notes: Mythic+ & Raid Portal Hub
+## Notes-ruRU: QuickTravel - аддон, который объединяет все Ваши заклинания телепортации. Больше не нужно ничего искать, телепортируйтесь с удовольствием
 ## Author: Zazou
 ## Version: @project-version@
 ## SavedVariables: QuickTravelDB
@@ -11,6 +12,7 @@
 Locales/locale.lua
 Locales/enUS.lua
 Locales/frFR.lua
+Locales/ruRU.lua
 ConfigManager.lua
 Database/Data.lua
 Options.lua
