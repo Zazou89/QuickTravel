@@ -1,7 +1,7 @@
 local L = select(2, ...).L('ruRU')
 
 -- === CORE ADDON IDENTITY ===
-L["QT_TITLE"] = "Быстрое путешествие"
+L["QT_TITLE"] = "Быстрая телепортация"
 
 -- === EXPANSION CATEGORIES ===
 -- World of Warcraft expansion names for UI organization
