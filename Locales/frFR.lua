@@ -4,11 +4,11 @@
 
 local L = select(2, ...).L('frFR')
 
--- === IDENTITÉ DE BASE DE L'ADDON ===
+-- === CORE ADDON IDENTITY ===
 L["QT_TITLE"] = "Quick Travel"
 
--- === CATÉGORIES D'EXTENSIONS ===
--- Noms des extensions World of Warcraft pour l'organisation de l'interface
+-- === EXPANSION CATEGORIES ===
+-- World of Warcraft expansion names for UI organization
 L["Cataclysm"] = "Cataclysm"
 L["Mists of Pandaria"] = "Mists of Pandaria"
 L["Warlords of Draenor"] = "Warlords of Draenor"
@@ -21,15 +21,15 @@ L["Current Season"] = "Saison Actuelle"
 L["Hearthstones"] = "Pierres de foyer"
 L["HEARTHSTONE_RANDOM_VARIANT"] = "Pierre de foyer (variante aléatoire)"
 
--- === DONJONS ET RAIDS PAR EXTENSION ===
--- Organisés chronologiquement par extension pour faciliter la maintenance
+-- === DUNGEON AND RAID LOCATIONS BY EXPANSION ===
+-- Organized chronologically by expansion for easy maintenance
 
--- Donjons Cataclysm
+-- Cataclysm Dungeons
 L["DUNGEON_VORTEX_PINNACLE"] = "La cime du Vortex"
 L["DUNGEON_THRONE_OF_THE_TIDES"] = "Trône des marées"
 L["DUNGEON_GRIM_BATOL"] = "Grim Batol"
 
--- Donjons Mists of Pandaria
+-- Mists of Pandaria Dungeons
 L["DUNGEON_TEMPLE_OF_THE_JADE_SERPENT"] = "Temple du Serpent de jade"
 L["DUNGEON_SIEGE_OF_NIUZAO"] = "Siège du temple de Niuzao"
 L["DUNGEON_SCHOLOMANCE"] = "Scholomance"
@@ -40,7 +40,7 @@ L["DUNGEON_MOGUSHAN_PALACE"] = "Palais Mogu'shan"
 L["DUNGEON_SHADO_PAN_MONASTERY"] = "Monastère des Pandashan"
 L["DUNGEON_STORMSTOUT_BREWERY"] = "Brasserie Brune d'Orage"
 
--- Donjons Warlords of Draenor
+-- Warlords of Draenor Dungeons
 L["DUNGEON_SHADOWMOON_BURIAL_GROUNDS"] = "Terres sacrées d'Ombrelune"
 L["DUNGEON_EVERBLOOM"] = "La Flore éternelle"
 L["DUNGEON_BLOODMAUL_SLAG_MINES"] = "Mine de la Masse-Sanglante"
@@ -50,7 +50,7 @@ L["DUNGEON_UPPER_BLACKROCK_SPIRE"] = "Sommet du pic Rochenoire"
 L["DUNGEON_GRIMRAIL_DEPOT"] = "Dépôt de Tristerail"
 L["DUNGEON_IRON_DOCKS"] = "Quais de Fer"
 
--- Donjons Legion
+-- Legion Dungeons
 L["DUNGEON_DARKHEART_THICKET"] = "Fourré Sombrecœur"
 L["DUNGEON_BLACK_ROOK_HOLD"] = "Bastion du Freux"
 L["DUNGEON_HALLS_OF_VALOR"] = "Salles des Valeureux"
@@ -58,7 +58,7 @@ L["DUNGEON_NELTHARIONS_LAIR"] = "Repaire de Neltharion"
 L["DUNGEON_COURT_OF_STARS"] = "Cour des Étoiles"
 L["DUNGEON_KARAZHAN"] = "Karazhan"
 
--- Donjons Battle for Azeroth
+-- Battle for Azeroth Dungeons
 L["DUNGEON_ATALDAZAR"] = "Atal'Dazar"
 L["DUNGEON_FREEHOLD"] = "Port-Liberté"
 L["DUNGEON_WAYCREST_MANOR"] = "Manoir Malvoie"
@@ -67,7 +67,7 @@ L["DUNGEON_MECHAGON"] = "Opération Mécagone"
 L["DUNGEON_SIEGE_OF_BORALUS"] = "Siège de Boralus"
 L["DUNGEON_THE_MOTHERLOAD"] = "Le Filon"
 
--- Donjons et Raids Shadowlands
+-- Shadowlands Dungeons and Raids
 L["DUNGEON_THE_NECROTIC_WAKE"] = "Sillage nécrotique"
 L["DUNGEON_PLAGUEFALL"] = "Malepeste"
 L["DUNGEON_MISTS_OF_TIRNA_SCITHE"] = "Brumes de Tirna Scithe"
@@ -81,7 +81,7 @@ L["RAID_CASTLE_NATHRIA"] = "Château Nathria"
 L["RAID_SANCTUM_OF_DOMINATION"] = "Sanctum de Domination"
 L["RAID_SEPULCHER_OF_THE_FIRST_ONES"] = "Sépulcre des Fondateurs"
 
--- Donjons et Raids Dragonflight
+-- Dragonflight Dungeons and Raids
 L["DUNGEON_RUBY_LIFE_POOLS"] = "Bassins de l'Essence rubis"
 L["DUNGEON_NOKHUD_OFFENSIVE"] = "L'offensive nokhud"
 L["DUNGEON_AZURE_VAULT"] = "Caveau d'Azur"
@@ -95,7 +95,7 @@ L["RAID_VAULT_OF_THE_INCARNATES"] = "Chambres des Incarnations"
 L["RAID_ABBERUS_THE_SHADOWED_CRUCIBLE"] = "Aberrus, le Creuset de l'Ombre"
 L["RAID_AMIRDRASSIL_THE_DREAMS_HOPE"] = "Amirdrassil, l'Espoir du Rêve"
 
--- Donjons et Raids The War Within
+-- The War Within Dungeons and Raids
 L["DUNGEON_CITY_OF_THREADS"] = "Cité des Fils"
 L["DUNGEON_ARA_KARA_CITY_OF_ECHOS"] = "Ara-Kara, la cité des Échos"
 L["DUNGEON_STONEVAULT"] = "La Cavepierre"
@@ -109,7 +109,7 @@ L["DUNGEON_ECO_DOME_AL_DANI"] = "Écodôme Al'dani"
 L["RAID_LIBERATION_OF_UNDERMINE"] = "Libération de Terremine"
 L["RAID_MANAFORGE_OMEGA"] = "Manaforge Oméga"
 
--- Objets Pierre de foyer spéciaux
+-- Special Hearthstone Items
 L["HEARTHSTONE_DALARAN"] = "Pierre de foyer de Dalaran"
 L["HEARTHSTONE_GARRISON"] = "Pierre de foyer de fief"
 
@@ -145,10 +145,10 @@ L["HEARTHSTONE_VARIANT_228940"] = "Pierre de foyer de fil notoire"
 L["HEARTHSTONE_VARIANT_235016"] = "Module de redéploiement"
 L["HEARTHSTONE_VARIANT_236687"] = "Pierre de foyer explosive"
 
--- === CHAÎNES D'INTERFACE UTILISATEUR ===
--- Éléments d'interface principaux et texte d'interaction utilisateur
+-- === USER INTERFACE STRINGS ===
+-- Core interface elements and user interaction text
 
--- Éléments d'interface généraux
+-- General UI Elements
 L["SEARCH"] = "Rechercher..."
 L["CLICK_TO_TELEPORT"] = "Cliquez pour vous téléporter"
 L["CLICK_TO_USE"] = "Cliquez pour utiliser"
@@ -163,13 +163,13 @@ L["TOY_NOT_OWNED"] = "Jouet non possédé"
 L["LFG_TAB_PORTAILS"] = "Portails"
 L["RANDOM_VARIANT_TOOLTIP"] = "Utilise une variante aléatoire de la pierre de foyer"
 
--- Système de favoris
+-- Favorites System
 L["FAVORITES"] = "Favoris"
 
--- === OPTIONS DE CONFIGURATION ===
--- Étiquettes de l'interface des paramètres et préférences
+-- === CONFIGURATION OPTIONS ===
+-- Settings and preferences interface labels
 
--- Options d'affichage
+-- Display Options
 L["SHOW_LOGIN_MESSAGE"] = "Afficher le message de connexion"
 L["AUTO_CLOSE"] = "Fermer auto. l'adddon lors du TP"
 L["SHOW_CURRENT_SEASON"] = "Afficher la saison actuelle"
@@ -179,24 +179,24 @@ L["SHOW_SPELL_TOOLTIPS"] = "Afficher les infobulles des sorts"
 L["SHOW_LFG_TAB"] = "Afficher le bouton dans la rech. de groupe"
 L["LOCK_FRAME_HEIGHT"] = "Verrouiller la hauteur de la fenêtre"
 
--- Onglets d'interface
+-- Interface Tabs
 L["OPTIONS_TAB"] = "Options"
 L["CATEGORIES_TAB"] = "Catégories"
 
--- Configuration des pierres de foyer
+-- Hearthstone Configuration
 L["USE_RANDOM_HEARTHSTONE_VARIANT"] = "Utiliser une variante aléatoire"
 L["NO_HEARTHSTONE_VARIANTS"] = "Aucun variant possédé"
 
--- Gestion des catégories
+-- Category Management
 L["REVERSE_EXPANSION_ORDER"] = "Inverser l'ordre des extensions"
 L["CATEGORIES_ORDER_HEADER"] = "Ordre des catégories"
 
--- En-têtes des sections d'options
+-- Options Section Headers
 L["DISPLAY_HEADER"] = "Affichage"
 L["BEHAVIOR_HEADER"] = "Comportement"
 L["HEARTHSTONE_HEADER"] = "Pierre de foyer"
 
--- === MESSAGES DE RETOUR UTILISATEUR ===
--- Notifications système et mises à jour de statut
+-- === USER FEEDBACK MESSAGES ===
+-- System notifications and status updates
 L["MSG_LOGIN_MESSAGE_ENABLED"] = "Message de connexion activé"
 L["MSG_LOGIN_MESSAGE_DISABLED"] = "Message de connexion désactivé"
