@@ -20,6 +20,7 @@ L["The War Within"] = "The War Within"
 L["Current Season"] = "Current Season"
 L["Hearthstones"] = "Hearthstones"
 L["HEARTHSTONE_RANDOM_VARIANT"] = "Hearthstone (random variant)"
+L["Wormhole Generator"] = "Wormhole Generator"
 
 -- === DUNGEON AND RAID LOCATIONS BY EXPANSION ===
 -- Organized chronologically by expansion for easy maintenance
@@ -144,6 +145,16 @@ L["HEARTHSTONE_VARIANT_212337"] = "Stone of the Hearth"
 L["HEARTHSTONE_VARIANT_228940"] = "Notorious Thread's Hearthstone"
 L["HEARTHSTONE_VARIANT_235016"] = "Redeployment Module"
 L["HEARTHSTONE_VARIANT_236687"] = "Explosive Hearthstone"
+
+-- Wormhole Generator
+L["WORMHOLE_GENERATOR_NORTHREND"] = "Northrend"
+L["WORMHOLE_GENERATOR_PANDARIA"] = "Pandaria"
+L["WORMHOLE_GENERATOR_ARGUS"] = "Argus"
+L["WORMHOLE_GENERATOR_ZANDALAR"] = "Zandalar"
+L["WORMHOLE_GENERATOR_KUL_TIRAS"] = "Kul Tiras"
+L["WORMHOLE_GENERATOR_SHADOWLANDS"] = "Shadowlands"
+L["WORMHOLE_GENERATOR_DRAGON_ISLES"] = "Dragon Isles"
+L["WORMHOLE_GENERATOR_KHAZ_ALGAR"] = "Khaz Algar"
 
 -- === USER INTERFACE STRINGS ===
 -- Core interface elements and user interaction text

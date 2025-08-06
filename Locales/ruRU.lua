@@ -20,6 +20,7 @@ L["The War Within"] = "Война Внутри"
 L["Current Season"] = "Текущий сезон"
 L["Hearthstones"] = "Камни возвращений"
 L["HEARTHSTONE_RANDOM_VARIANT"] = "Камень возвращения (случайный вариант)"
+L["Wormhole Generator"] = "Генератор червоточин"
 
 -- === DUNGEON AND RAID LOCATIONS BY EXPANSION ===
 -- Organized chronologically by expansion for easy maintenance
@@ -144,6 +145,16 @@ L["HEARTHSTONE_VARIANT_212337"] = "Возвращающий камень"
 L["HEARTHSTONE_VARIANT_228940"] = "Камень возвращения отъявленных нитей"
 L["HEARTHSTONE_VARIANT_235016"] = "Модуль передислокации"
 L["HEARTHSTONE_VARIANT_236687"] = "Взрывной камень возвращения"
+
+-- Wormhole Generator
+L["WORMHOLE_GENERATOR_NORTHREND"] = "Нордскол"
+L["WORMHOLE_GENERATOR_PANDARIA"] = "Пандария"
+L["WORMHOLE_GENERATOR_ARGUS"] = "Аргус"
+L["WORMHOLE_GENERATOR_ZANDALAR"] = "Зандалар"
+L["WORMHOLE_GENERATOR_KUL_TIRAS"] = "Кул-Тирас"
+L["WORMHOLE_GENERATOR_SHADOWLANDS"] = "Темные Земли"
+L["WORMHOLE_GENERATOR_DRAGON_ISLES"] = "Драконьи острова"
+L["WORMHOLE_GENERATOR_KHAZ_ALGAR"] = "Каз Алгар"
 
 -- === USER INTERFACE STRINGS ===
 -- Core interface elements and user interaction text

@@ -12,7 +12,8 @@ local orderedExpansions = {
     L["Battle for Azeroth"],
     L["Shadowlands"],
     L["Dragonflight"],
-    L["The War Within"]
+    L["The War Within"],
+    L["Wormhole Generator"]
 }
 
 -- Complete list of all available Hearthstone variant toy IDs
@@ -60,7 +61,8 @@ local mapCategoryKeysToInstances = {
     ["battle_for_azeroth"] = {"ataldazar", "freehold", "waycrest_manor", "underrot", "mechagon", "siege_boralus", "motherlode"},
     ["shadowlands"] = {"necrotic_wake", "plaguefall", "mists_tirna_scithe", "halls_atonement", "spires_ascension", "theatre_pain", "de_other_side", "sanguine_depths", "tazavesh", "castle_nathria", "sanctum_domination", "sepulcher_first_ones"},
     ["dragonflight"] = {"ruby_life_pools", "nokhud_offensive", "azure_vault", "algethar_academy", "uldaman", "neltharus", "brackenhide_hollow", "halls_infusion", "dawn_infinite", "vault_incarnates", "aberrus", "amirdrassil"},
-    ["the_war_within"] = {"city_threads", "ara_kara", "stonevault", "dawnbreaker", "rookery", "darkflame_cleft", "cinderbrew_meadery", "priory_sacred_flame", "operation_floodgate", "liberation_undermine"}
+    ["the_war_within"] = {"city_threads", "ara_kara", "stonevault", "dawnbreaker", "rookery", "darkflame_cleft", "cinderbrew_meadery", "priory_sacred_flame", "operation_floodgate", "liberation_undermine"},
+    ["wormhole_generator"] = {"wormhole_generator_northrend", "wormhole_generator_pandaria", "wormhole_generator_argus", "wormhole_generator_zandalar", "wormhole_generator_kul_tiras", "wormhole_generator_shadowlands", "wormhole_generator_dragon_isles", "wormhole_generator_khaz_algar"},
 }
 
 -- Master database: maps instance keys to their teleportation data (spell IDs, toy IDs, localization keys)
@@ -153,7 +155,18 @@ local instanceDatabase = {
     ["operation_floodgate"] = {spellID = 1216786, nameKey = "DUNGEON_OPERATION_FLOODGATE"},
     ["eco_dome_al_dani"] = {spellID = 1237215, nameKey = "DUNGEON_ECO_DOME_AL_DANI"},    
     ["liberation_undermine"] = {spellID = 1226482, nameKey = "RAID_LIBERATION_OF_UNDERMINE"},
-    ["manaforge_omega"] = {spellID = 1239155, nameKey = "RAID_MANAFORGE_OMEGA"}
+    ["manaforge_omega"] = {spellID = 1239155, nameKey = "RAID_MANAFORGE_OMEGA"},
+
+    -- Wormhole Generator
+    ["wormhole_generator_northrend"] = {toyID = 48933, nameKey = "WORMHOLE_GENERATOR_NORTHREND"},
+    ["wormhole_generator_pandaria"] = {toyID = 87215, nameKey = "WORMHOLE_GENERATOR_PANDARIA"},
+    ["wormhole_generator_argus"] = {toyID = 151652, nameKey = "WORMHOLE_GENERATOR_ARGUS"},
+    ["wormhole_generator_zandalar"] = {toyID = 168808, nameKey = "WORMHOLE_GENERATOR_ZANDALAR"},
+    ["wormhole_generator_kul_tiras"] = {toyID = 168807, nameKey = "WORMHOLE_GENERATOR_KUL_TIRAS"},
+    ["wormhole_generator_shadowlands"] = {toyID = 172924, nameKey = "WORMHOLE_GENERATOR_SHADOWLANDS"},
+    ["wormhole_generator_dragon_isles"] = {toyID = 198156, nameKey = "WORMHOLE_GENERATOR_DRAGON_ISLES"},
+    ["wormhole_generator_khaz_algar"] = {toyID = 221966, nameKey = "WORMHOLE_GENERATOR_KHAZ_ALGAR"},
+
 }
 
 -- Advanced data manager with intelligent caching and portal organization

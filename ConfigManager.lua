@@ -15,7 +15,8 @@ local CATEGORY_KEYS = {
     BATTLE_FOR_AZEROTH = "battle_for_azeroth",
     SHADOWLANDS = "shadowlands",
     DRAGONFLIGHT = "dragonflight",
-    THE_WAR_WITHIN = "the_war_within"
+    THE_WAR_WITHIN = "the_war_within",
+    WORMHOLE_GENERATOR = "wormhole_generator"
 }
 
 -- Default category order and enabled states
@@ -29,7 +30,8 @@ local DEFAULT_CATEGORY_ORDER = {
     {key = CATEGORY_KEYS.BATTLE_FOR_AZEROTH, enabled = true, order = 7},
     {key = CATEGORY_KEYS.SHADOWLANDS, enabled = true, order = 8},
     {key = CATEGORY_KEYS.DRAGONFLIGHT, enabled = true, order = 9},
-    {key = CATEGORY_KEYS.THE_WAR_WITHIN, enabled = true, order = 10}
+    {key = CATEGORY_KEYS.THE_WAR_WITHIN, enabled = true, order = 10},
+    {key = CATEGORY_KEYS.WORMHOLE_GENERATOR, enabled = true, order = 11}
 }
 
 -- Convert category keys to localized display names
@@ -44,7 +46,8 @@ local function GetLocalizedName(categoryKey)
         [CATEGORY_KEYS.BATTLE_FOR_AZEROTH] = L["Battle for Azeroth"],
         [CATEGORY_KEYS.SHADOWLANDS] = L["Shadowlands"],
         [CATEGORY_KEYS.DRAGONFLIGHT] = L["Dragonflight"],
-        [CATEGORY_KEYS.THE_WAR_WITHIN] = L["The War Within"]
+        [CATEGORY_KEYS.THE_WAR_WITHIN] = L["The War Within"],
+        [CATEGORY_KEYS.WORMHOLE_GENERATOR] = L["Wormhole Generator"]
     }
     return keyToLocalized[categoryKey] or categoryKey
 end

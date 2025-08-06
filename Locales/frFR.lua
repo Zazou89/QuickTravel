@@ -20,6 +20,7 @@ L["The War Within"] = "The War Within"
 L["Current Season"] = "Saison Actuelle"
 L["Hearthstones"] = "Pierres de foyer"
 L["HEARTHSTONE_RANDOM_VARIANT"] = "Pierre de foyer (variante aléatoire)"
+L["Wormhole Generator"] = "Générateur de tunnel spatiotemporel"
 
 -- === DUNGEON AND RAID LOCATIONS BY EXPANSION ===
 -- Organized chronologically by expansion for easy maintenance
@@ -144,6 +145,16 @@ L["HEARTHSTONE_VARIANT_212337"] = "Pierre du foyer"
 L["HEARTHSTONE_VARIANT_228940"] = "Pierre de foyer de fil notoire"
 L["HEARTHSTONE_VARIANT_235016"] = "Module de redéploiement"
 L["HEARTHSTONE_VARIANT_236687"] = "Pierre de foyer explosive"
+
+-- Wormhole Generator
+L["WORMHOLE_GENERATOR_NORTHREND"] = "Norfendre"
+L["WORMHOLE_GENERATOR_PANDARIA"] = "Pandarie"
+L["WORMHOLE_GENERATOR_ARGUS"] = "Argus"
+L["WORMHOLE_GENERATOR_ZANDALAR"] = "Zandalar"
+L["WORMHOLE_GENERATOR_KUL_TIRAS"] = "Kul Tiras"
+L["WORMHOLE_GENERATOR_SHADOWLANDS"] = "Ombreterre"
+L["WORMHOLE_GENERATOR_DRAGON_ISLES"] = "Îles aux Dragons"
+L["WORMHOLE_GENERATOR_KHAZ_ALGAR"] = "Khaz Algar"
 
 -- === USER INTERFACE STRINGS ===
 -- Core interface elements and user interaction text

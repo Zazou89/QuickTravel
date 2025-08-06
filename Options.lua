@@ -35,6 +35,23 @@ function Options:InitializeSettings()
     end
     
     self.db = QuickTravelDB
+
+    -- Add missing categories to the order list if they don't exist
+    local allCategories = addon.ConfigManager.DEFAULT_CATEGORY_ORDER
+    local foundKeys = {}
+    for _, cat in ipairs(self.db.categoryOrder or {}) do
+        foundKeys[cat.key] = true
+    end
+    for _, defaultCat in ipairs(allCategories) do
+        if not foundKeys[defaultCat.key] then
+            table.insert(self.db.categoryOrder, {
+                key = defaultCat.key,
+                enabled = defaultCat.enabled,
+                order = #self.db.categoryOrder + 1
+            })
+        end
+    end
+
     return QuickTravelDB
 end
 
