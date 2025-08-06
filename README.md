@@ -18,7 +18,7 @@ Tired of hunting through your spellbook and toy collection for teleportation opt
 ![Preview](https://i.imgur.com/kmWICVw.jpeg)
 
 ## Hello, Bonjour, Hola
-The addon is available in English, French and Russian (@Hollicsh).
+The addon is available in English, French, Russian (@Hollicsh) and Traditional Chinese (@BlueNightSky).
 *Community translations welcome.*
 
 ## Quick Start

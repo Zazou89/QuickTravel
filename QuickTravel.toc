@@ -13,6 +13,7 @@ Locales/locale.lua
 Locales/enUS.lua
 Locales/frFR.lua
 Locales/ruRU.lua
+Locales/zhTW.lua
 ConfigManager.lua
 Database/Data.lua
 Options.lua
