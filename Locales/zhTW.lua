@@ -21,8 +21,8 @@ L["Current Season"] = "當前賽季"
 L["Hearthstones"] = "爐石"
 L["HEARTHSTONE_RANDOM_VARIANT"] = "爐石 (隨機變化)"
 L["Wormhole Generator"] = "產生蟲洞"
-L["Mage Teleport"] = "Mage Teleport"
-L["Mage Portal"] = "Mage Portal"
+L["Mage Teleport"] = "法師傳送"
+L["Mage Portal"] = "法師傳送門"
 
 -- === DUNGEON AND RAID LOCATIONS BY EXPANSION ===
 -- Organized chronologically by expansion for easy maintenance
@@ -193,7 +193,7 @@ L["MAGE_TELEPORT_DORNOGAL"] = "多恩諾加" --446540
 L["MAGE_PORTAL_STORMWIND"] = "暴風城" --10059
 L["MAGE_PORTAL_IRONFORGE"] = "鐵爐堡" --11416
 L["MAGE_PORTAL_DARNASSUS"] = "達納蘇斯" --11419
-L["MAGE_PORTAL_EXODAR"] = "Exo艾克索達dar" --32266
+L["MAGE_PORTAL_EXODAR"] = "艾克索達" --32266
 L["MAGE_PORTAL_THERAMORE"] = "塞拉摩" --49360
 
 L["MAGE_PORTAL_ORGRIMMAR"] = "奧格瑪" --11417
