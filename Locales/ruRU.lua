@@ -147,6 +147,8 @@ L["HEARTHSTONE_VARIANT_235016"] = "Модуль передислокации"
 L["HEARTHSTONE_VARIANT_236687"] = "Взрывной камень возвращения"
 
 -- Wormhole Generator
+L["ULTRASAFE_TRANSPORTER_GADGETZAN"] = "Прибамбасск"
+L["ULTRASAFE_TRANSPORTER_TOSHLEYS_STATION"] = "Запределье"
 L["WORMHOLE_GENERATOR_NORTHREND"] = "Нордскол"
 L["WORMHOLE_GENERATOR_PANDARIA"] = "Пандария"
 L["WORMHOLE_GENERATOR_ARGUS"] = "Аргус"

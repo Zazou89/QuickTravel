@@ -147,6 +147,8 @@ L["HEARTHSTONE_VARIANT_235016"] = "Module de redéploiement"
 L["HEARTHSTONE_VARIANT_236687"] = "Pierre de foyer explosive"
 
 -- Wormhole Generator
+L["ULTRASAFE_TRANSPORTER_GADGETZAN"] = "Gadgetzan"
+L["ULTRASAFE_TRANSPORTER_TOSHLEYS_STATION"] = "Outreterre"
 L["WORMHOLE_GENERATOR_NORTHREND"] = "Norfendre"
 L["WORMHOLE_GENERATOR_PANDARIA"] = "Pandarie"
 L["WORMHOLE_GENERATOR_ARGUS"] = "Argus"

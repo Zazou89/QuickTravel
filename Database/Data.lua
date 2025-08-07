@@ -62,7 +62,7 @@ local mapCategoryKeysToInstances = {
     ["shadowlands"] = {"necrotic_wake", "plaguefall", "mists_tirna_scithe", "halls_atonement", "spires_ascension", "theatre_pain", "de_other_side", "sanguine_depths", "tazavesh", "castle_nathria", "sanctum_domination", "sepulcher_first_ones"},
     ["dragonflight"] = {"ruby_life_pools", "nokhud_offensive", "azure_vault", "algethar_academy", "uldaman", "neltharus", "brackenhide_hollow", "halls_infusion", "dawn_infinite", "vault_incarnates", "aberrus", "amirdrassil"},
     ["the_war_within"] = {"city_threads", "ara_kara", "stonevault", "dawnbreaker", "rookery", "darkflame_cleft", "cinderbrew_meadery", "priory_sacred_flame", "operation_floodgate", "liberation_undermine"},
-    ["wormhole_generator"] = {"wormhole_generator_northrend", "wormhole_generator_pandaria", "wormhole_generator_argus", "wormhole_generator_zandalar", "wormhole_generator_kul_tiras", "wormhole_generator_shadowlands", "wormhole_generator_dragon_isles", "wormhole_generator_khaz_algar"},
+    ["wormhole_generator"] = {"ultrasafe_transporter_gadgetzan", "ultrasafe_transporter_toshleys_station", "wormhole_generator_northrend", "wormhole_generator_pandaria", "wormhole_generator_argus", "wormhole_generator_zandalar", "wormhole_generator_kul_tiras", "wormhole_generator_shadowlands", "wormhole_generator_dragon_isles", "wormhole_generator_khaz_algar"},
 }
 
 -- Master database: maps instance keys to their teleportation data (spell IDs, toy IDs, localization keys)
@@ -158,6 +158,8 @@ local instanceDatabase = {
     ["manaforge_omega"] = {spellID = 1239155, nameKey = "RAID_MANAFORGE_OMEGA"},
 
     -- Wormhole Generator
+    ["ultrasafe_transporter_gadgetzan"] = {toyID = 18986, nameKey = "ULTRASAFE_TRANSPORTER_GADGETZAN"},
+    ["ultrasafe_transporter_toshleys_station"] = {toyID = 30544, nameKey = "ULTRASAFE_TRANSPORTER_TOSHLEYS_STATION"},
     ["wormhole_generator_northrend"] = {toyID = 48933, nameKey = "WORMHOLE_GENERATOR_NORTHREND"},
     ["wormhole_generator_pandaria"] = {toyID = 87215, nameKey = "WORMHOLE_GENERATOR_PANDARIA"},
     ["wormhole_generator_argus"] = {toyID = 151652, nameKey = "WORMHOLE_GENERATOR_ARGUS"},
