@@ -21,8 +21,8 @@ L["Current Season"] = "Текущий сезон"
 L["Hearthstones"] = "Камни возвращений"
 L["HEARTHSTONE_RANDOM_VARIANT"] = "Камень возвращения (случайный вариант)"
 L["Wormhole Generator"] = "Генератор червоточин"
-L["Mage Teleport"] = "Mage Teleport"
-L["Mage Portal"] = "Mage Portal"
+L["Mage Teleport"] = "Телепортация магов"
+L["Mage Portal"] = "Портал магов"
 
 -- === DUNGEON AND RAID LOCATIONS BY EXPANSION ===
 -- Organized chronologically by expansion for easy maintenance

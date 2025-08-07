@@ -1,4 +1,4 @@
-## Interface: 110107, 110200
+## Interface: 110200
 ## Title: QuickTravel
 ## Notes: Mythic+ & Raid Portal Hub
 ## Notes-ruRU: QuickTravel - аддон, который объединяет все Ваши заклинания телепортации. Больше не нужно ничего искать, телепортируйтесь с удовольствием
