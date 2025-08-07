@@ -20,7 +20,7 @@ L["The War Within"] = "地心之戰"
 L["Current Season"] = "當前賽季"
 L["Hearthstones"] = "爐石"
 L["HEARTHSTONE_RANDOM_VARIANT"] = "爐石 (隨機變化)"
-L["Wormhole Generator"] = "Wormhole Generator"
+L["Wormhole Generator"] = "產生蟲洞"
 
 -- === DUNGEON AND RAID LOCATIONS BY EXPANSION ===
 -- Organized chronologically by expansion for easy maintenance
@@ -147,14 +147,14 @@ L["HEARTHSTONE_VARIANT_235016"] = "再部署模組"
 L["HEARTHSTONE_VARIANT_236687"] = "爆炸爐石"
 
 -- Wormhole Generator
-L["WORMHOLE_GENERATOR_NORTHREND"] = "Northrend"
-L["WORMHOLE_GENERATOR_PANDARIA"] = "Pandaria"
-L["WORMHOLE_GENERATOR_ARGUS"] = "Argus"
-L["WORMHOLE_GENERATOR_ZANDALAR"] = "Zandalar"
-L["WORMHOLE_GENERATOR_KUL_TIRAS"] = "Kul Tiras"
-L["WORMHOLE_GENERATOR_SHADOWLANDS"] = "Shadowlands"
-L["WORMHOLE_GENERATOR_DRAGON_ISLES"] = "Dragon Isles"
-L["WORMHOLE_GENERATOR_KHAZ_ALGAR"] = "Khaz Algar"
+L["WORMHOLE_GENERATOR_NORTHREND"] = "北裂境"
+L["WORMHOLE_GENERATOR_PANDARIA"] = "潘達利亞"
+L["WORMHOLE_GENERATOR_ARGUS"] = "阿古斯"
+L["WORMHOLE_GENERATOR_ZANDALAR"] = "贊達拉"
+L["WORMHOLE_GENERATOR_KUL_TIRAS"] = "庫爾提拉斯"
+L["WORMHOLE_GENERATOR_SHADOWLANDS"] = "暗影之境"
+L["WORMHOLE_GENERATOR_DRAGON_ISLES"] = "巨龍群島"
+L["WORMHOLE_GENERATOR_KHAZ_ALGAR"] = "卡茲阿爾加"
 
 -- === USER INTERFACE STRINGS ===
 -- Core interface elements and user interaction text

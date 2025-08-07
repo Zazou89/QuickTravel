@@ -19,6 +19,7 @@ Tired of hunting through your spellbook and toy collection for teleportation opt
 
 ## Hello, Bonjour, Hola
 The addon is available in English, French, Russian (@Hollicsh) and Traditional Chinese (@BlueNightSky).
+
 *Community translations welcome.*
 
 ## Quick Start
