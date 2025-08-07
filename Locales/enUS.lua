@@ -21,6 +21,8 @@ L["Current Season"] = "Current Season"
 L["Hearthstones"] = "Hearthstones"
 L["HEARTHSTONE_RANDOM_VARIANT"] = "Hearthstone (random variant)"
 L["Wormhole Generator"] = "Wormhole Generator"
+L["Mage Teleport"] = "Mage Teleport"
+L["Mage Portal"] = "Mage Portal"
 
 -- === DUNGEON AND RAID LOCATIONS BY EXPANSION ===
 -- Organized chronologically by expansion for easy maintenance
@@ -157,6 +159,63 @@ L["WORMHOLE_GENERATOR_KUL_TIRAS"] = "Kul Tiras"
 L["WORMHOLE_GENERATOR_SHADOWLANDS"] = "Shadowlands"
 L["WORMHOLE_GENERATOR_DRAGON_ISLES"] = "Dragon Isles"
 L["WORMHOLE_GENERATOR_KHAZ_ALGAR"] = "Khaz Algar"
+
+-- Mage Teleport
+L["MAGE_TELEPORT_HALL_OF_THE_GUARDIAN"] = "Hall of the Guardian" --193759
+L["MAGE_TELEPORT_STORMWIND"] = "Stormwind" --3651
+L["MAGE_TELEPORT_IRONFORGE"] = "Ironforge" --3562
+L["MAGE_TELEPORT_DARNASSUS"] = "Darnassus" --3565
+L["MAGE_TELEPORT_EXODAR"] = "Exodar" --32271
+L["MAGE_TELEPORT_THERAMORE"] = "Theramore" --49359
+
+L["MAGE_TELEPORT_ORGRIMMAR"] = "Orgrimmar" --3567
+L["MAGE_TELEPORT_UNDERCITY"] = "Undercity" --3563
+L["MAGE_TELEPORT_THUNDER_BLUFF"] = "Thunder Bluff" --3566
+L["MAGE_TELEPORT_SILVERMOON_CITY"] = "Silvermoon" --32272
+L["MAGE_TELEPORT_STONARD"] = "Stonard" --49358
+
+L["MAGE_TELEPORT_SHATTRATH"] = "Shattrath" --33690/35715
+L["MAGE_TELEPORT_DALARAN"] = "Dalaran - Northrend" --53140
+L["MAGE_TELEPORT_TOL_BARAD"] = "Tol Barad" --88342/88344
+L["MAGE_TELEPORT_VALE_OF_ETERNAL_BLOSSOMS"] = "Vale of Eternal Blossoms" --132621/132627
+
+L["MAGE_TELEPORT_STORMSHIELD"] = "Stormshield" --176248
+L["MAGE_TELEPORT_WARSPEAR"] = "Warspear" --176242
+
+L["MAGE_TELEPORT_DALARAN_BROKEN_ISLES"] = "Dalaran - Broken Isles" --224869
+L["MAGE_TELEPORT_BORALUS"] = "Boralus" --281403
+L["MAGE_TELEPORT_DAZAR_ALOR"] = "Dazar'alor" --281404
+L["MAGE_TELEPORT_ORIBOS"] = "Oribos" --344587
+L["MAGE_TELEPORT_VALDRAKKEN"] = "Valdrakken" --395277
+L["MAGE_TELEPORT_DORNOGAL"] = "Dornogal" --446540
+
+-- Mage Portal
+L["MAGE_PORTAL_STORMWIND"] = "Hurlevent" --10059
+L["MAGE_PORTAL_IRONFORGE"] = "Forgefer" --11416
+L["MAGE_PORTAL_DARNASSUS"] = "Darnassus" --11419
+L["MAGE_PORTAL_EXODAR"] = "Exodar" --32266
+L["MAGE_PORTAL_THERAMORE"] = "Theramore" --49360
+
+L["MAGE_PORTAL_ORGRIMMAR"] = "Orgrimmar" --11417
+L["MAGE_PORTAL_UNDERCITY"] = "Fossoyeuse" --11418
+L["MAGE_PORTAL_THUNDER_BLUFF"] = "Pitons-du-Tonnerre" --11420
+L["MAGE_PORTAL_SILVERMOON_CITY"] = "Lune-d'Argent" --32267
+L["MAGE_PORTAL_STONARD"] = "Pierrêche" --49361
+
+L["MAGE_PORTAL_SHATTRATH"] = "Shattrath" -- 33691/35717
+L["MAGE_PORTAL_DALARAN"] = "Dalaran - Norfendre" --53142
+L["MAGE_PORTAL_TOL_BARAD"] = "Tol Barad" -- 88345/88346
+L["MAGE_PORTAL_VALE_OF_ETERNAL_BLOSSOMS"] = "Val de l'Éternel printemps" -- 132620/132626
+
+L["MAGE_PORTAL_STORMSHIELD"] = "Bouclier-des-Tempêtes" --176246
+L["MAGE_PORTAL_WARSPEAR"] = "Fer-de-Lance" --176244
+
+L["MAGE_PORTAL_DALARAN_BROKEN_ISLES"] = "Dalaran - Îles Brisées" --224871
+L["MAGE_PORTAL_BORALUS"] = "Boralus" --281400
+L["MAGE_PORTAL_DAZAR_ALOR"] = "Dazar'alor" --281402
+L["MAGE_PORTAL_ORIBOS"] = "Oribos" --344597
+L["MAGE_PORTAL_VALDRAKKEN"] = "Valdrakken" --395289
+L["MAGE_PORTAL_DORNOGAL"] = "Dornogal" --446534
 
 -- === USER INTERFACE STRINGS ===
 -- Core interface elements and user interaction text

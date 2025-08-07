@@ -13,7 +13,9 @@ local orderedExpansions = {
     L["Shadowlands"],
     L["Dragonflight"],
     L["The War Within"],
-    L["Wormhole Generator"]
+    L["Wormhole Generator"],
+    L["Mage Teleport"],
+    L["Mage Portal"]
 }
 
 -- Complete list of all available Hearthstone variant toy IDs
@@ -63,6 +65,8 @@ local mapCategoryKeysToInstances = {
     ["dragonflight"] = {"ruby_life_pools", "nokhud_offensive", "azure_vault", "algethar_academy", "uldaman", "neltharus", "brackenhide_hollow", "halls_infusion", "dawn_infinite", "vault_incarnates", "aberrus", "amirdrassil"},
     ["the_war_within"] = {"city_threads", "ara_kara", "stonevault", "dawnbreaker", "rookery", "darkflame_cleft", "cinderbrew_meadery", "priory_sacred_flame", "operation_floodgate", "liberation_undermine"},
     ["wormhole_generator"] = {"ultrasafe_transporter_gadgetzan", "ultrasafe_transporter_toshleys_station", "wormhole_generator_northrend", "wormhole_generator_pandaria", "wormhole_generator_argus", "wormhole_generator_zandalar", "wormhole_generator_kul_tiras", "wormhole_generator_shadowlands", "wormhole_generator_dragon_isles", "wormhole_generator_khaz_algar"},
+    ["mage_teleport"] = {"mage_teleport_hall_of_the_guardian","mage_teleport_stormwind","mage_teleport_ironforge","mage_teleport_darnassus","mage_teleport_exodar","mage_teleport_theramore","mage_teleport_orgrimmar","mage_teleport_undercity","mage_teleport_thunder_bluff","mage_teleport_silvermoon_city","mage_teleport_stonard","mage_teleport_shattrath","mage_teleport_dalaran","mage_teleport_tol_barad","mage_teleport_vale_of_eternal_blossoms","mage_teleport_stormshield","mage_teleport_warspear","mage_teleport_dalaran_broken_isles","mage_teleport_boralus","mage_teleport_dazar_alor","mage_teleport_oribos","mage_teleport_valdrakken","mage_teleport_dornogal"},
+    ["mage_portal"] = {"mage_portal_stormwind", "mage_portal_ironforge", "mage_portal_darnassus", "mage_portal_exodar", "mage_portal_theramore", "mage_portal_orgrimmar", "mage_portal_undercity", "mage_portal_thunder_bluff", "mage_portal_silvermoon_city", "mage_portal_stonard", "mage_portal_shattrath", "mage_portal_dalaran", "mage_portal_tol_barad", "mage_portal_vale_of_eternal_blossoms", "mage_portal_stormshield", "mage_portal_warspear", "mage_portal_dalaran_broken_isles", "mage_portal_boralus", "mage_portal_dazar_alor", "mage_portal_oribos", "mage_portal_valdrakken", "mage_portal_dornogal"}
 }
 
 -- Master database: maps instance keys to their teleportation data (spell IDs, toy IDs, localization keys)
@@ -169,6 +173,67 @@ local instanceDatabase = {
     ["wormhole_generator_dragon_isles"] = {toyID = 198156, nameKey = "WORMHOLE_GENERATOR_DRAGON_ISLES"},
     ["wormhole_generator_khaz_algar"] = {toyID = 221966, nameKey = "WORMHOLE_GENERATOR_KHAZ_ALGAR"},
 
+    -- Mage teleport
+    ["mage_teleport_hall_of_the_guardian"] = {spellID = 193759, nameKey = "MAGE_TELEPORT_HALL_OF_THE_GUARDIAN"},
+
+    ["mage_teleport_stormwind"] = {alliance = 3561, nameKey = "MAGE_TELEPORT_STORMWIND"},
+    ["mage_teleport_ironforge"] = {alliance = 3562, nameKey = "MAGE_TELEPORT_IRONFORGE"},
+    ["mage_teleport_darnassus"] = {alliance = 3565, nameKey = "MAGE_TELEPORT_DARNASSUS"},
+    ["mage_teleport_exodar"] = {alliance = 32271, nameKey = "MAGE_TELEPORT_EXODAR"},
+    ["mage_teleport_theramore"] = {alliance = 49359, nameKey = "MAGE_TELEPORT_THERAMORE"},
+
+    ["mage_teleport_orgrimmar"] = {horde = 3567, nameKey = "MAGE_TELEPORT_ORGRIMMAR"},
+    ["mage_teleport_undercity"] = {horde = 3563, nameKey = "MAGE_TELEPORT_UNDERCITY"},
+    ["mage_teleport_thunder_bluff"] = {horde = 3566, nameKey = "MAGE_TELEPORT_THUNDER_BLUFF"},
+    ["mage_teleport_silvermoon_city"] = {horde = 32272, nameKey = "MAGE_TELEPORT_SILVERMOON_CITY"},
+    ["mage_teleport_stonard"] = {horde = 49358, nameKey = "MAGE_TELEPORT_STONARD"},
+
+    ["mage_teleport_shattrath"] = {alliance = 33690, horde = 35715, nameKey = "MAGE_TELEPORT_SHATTRATH"},
+    ["mage_teleport_dalaran"] = {spellID = 53140, nameKey = "MAGE_TELEPORT_DALARAN"},
+    ["mage_teleport_tol_barad"] = {alliance = 88342, horde = 88344, nameKey = "MAGE_TELEPORT_TOL_BARAD"},
+    ["mage_teleport_vale_of_eternal_blossoms"] = {alliance = 132621, horde = 132627, nameKey = "MAGE_TELEPORT_VALE_OF_ETERNAL_BLOSSOMS"},
+
+    ["mage_teleport_stormshield"] = {alliance = 176248, nameKey = "MAGE_TELEPORT_STORMSHIELD"},
+    ["mage_teleport_warspear"] = {horde = 176242, nameKey = "MAGE_TELEPORT_WARSPEAR"},
+
+    ["mage_teleport_dalaran_broken_isles"] = {spellID = 224869, nameKey = "MAGE_TELEPORT_DALARAN_BROKEN_ISLES"},
+
+    ["mage_teleport_boralus"] = {alliance = 281403, nameKey = "MAGE_TELEPORT_BORALUS"},
+    ["mage_teleport_dazar_alor"] = {horde = 281404, nameKey = "MAGE_TELEPORT_DAZAR_ALOR"},
+
+    ["mage_teleport_oribos"] = {spellID = 344587, nameKey = "MAGE_TELEPORT_ORIBOS"},
+    ["mage_teleport_valdrakken"] = {spellID = 395277, nameKey = "MAGE_TELEPORT_VALDRAKKEN"},
+    ["mage_teleport_dornogal"] = {spellID = 446540, nameKey = "MAGE_TELEPORT_DORNOGAL"},
+    
+    -- Mage portal
+    ["mage_portal_stormwind"] = {alliance = 10059, nameKey = "MAGE_PORTAL_STORMWIND"},
+    ["mage_portal_ironforge"] = {alliance = 11416, nameKey = "MAGE_PORTAL_IRONFORGE"},
+    ["mage_portal_darnassus"] = {alliance = 11419, nameKey = "MAGE_PORTAL_DARNASSUS"},
+    ["mage_portal_exodar"] = {alliance = 32266, nameKey = "MAGE_PORTAL_EXODAR"},
+    ["mage_portal_theramore"] = {alliance = 49360, nameKey = "MAGE_PORTAL_THERAMORE"},
+
+    ["mage_portal_orgrimmar"] = {horde = 11417, nameKey = "MAGE_PORTAL_ORGRIMMAR"},
+    ["mage_portal_undercity"] = {horde = 11418, nameKey = "MAGE_PORTAL_UNDERCITY"},
+    ["mage_portal_thunder_bluff"] = {horde = 11420, nameKey = "MAGE_PORTAL_THUNDER_BLUFF"},
+    ["mage_portal_silvermoon_city"] = {horde = 32267, nameKey = "MAGE_PORTAL_SILVERMOON_CITY"},
+    ["mage_portal_stonard"] = {horde = 49361, nameKey = "MAGE_PORTAL_STONARD"},
+
+    ["mage_portal_shattrath"] = {alliance = 33691, horde = 35717, nameKey = "MAGE_PORTAL_SHATTRATH"},
+    ["mage_portal_dalaran"] = {spellID = 53142, nameKey = "MAGE_PORTAL_DALARAN"},
+    ["mage_portal_tol_barad"] = {alliance = 88345, horde = 88346, nameKey = "MAGE_PORTAL_TOL_BARAD"},
+    ["mage_portal_vale_of_eternal_blossoms"] = {alliance = 132620, horde = 132626, nameKey = "MAGE_PORTAL_VALE_OF_ETERNAL_BLOSSOMS"},
+
+    ["mage_portal_stormshield"] = {alliance = 176246, nameKey = "MAGE_PORTAL_STORMSHIELD"},
+    ["mage_portal_warspear"] = {horde = 176244, nameKey = "MAGE_PORTAL_WARSPAR"},
+
+    ["mage_portal_dalaran_broken_isles"] = {spellID = 224871, nameKey = "MAGE_PORTAL_DALARAN_BROKEN_ISLES"},
+
+    ["mage_portal_boralus"] = {alliance = 281400, nameKey = "MAGE_PORTAL_BORALUS"},
+    ["mage_portal_dazar_alor"] = {horde = 281402, nameKey = "MAGE_PORTAL_DAZAR_ALOR"},
+
+    ["mage_portal_oribos"] = {spellID = 344597, nameKey = "MAGE_PORTAL_ORIBOS"},
+    ["mage_portal_valdrakken"] = {spellID = 395289, nameKey = "MAGE_PORTAL_VALDRAKKEN"},
+    ["mage_portal_dornogal"] = {spellID = 446534, nameKey = "MAGE_PORTAL_DORNOGAL"},
 }
 
 -- Advanced data manager with intelligent caching and portal organization
@@ -258,86 +323,99 @@ local DataManager = {
             local instanceKeys = mapCategoryKeysToInstances[categoryKey]
             if instanceKeys then
                 for _, instanceKey in ipairs(instanceKeys) do
-                    local instanceInfo = self:GetInstanceInfo(instanceKey)
-                    
-                    if instanceInfo then
-                        local isKnown = false
-                        local displayTexture = 134400 -- Default icon
-                        local displayName = ""
-                        
-                        -- Process toy items
-                        if instanceInfo.toyID then
-                            isKnown = PlayerHasToy(instanceInfo.toyID)
-                            displayTexture = C_Item.GetItemIconByID(instanceInfo.toyID) or 134400
-                            
-                            if instanceInfo.nameKey and type(instanceInfo.nameKey) == "string" then
-                                displayName = L[instanceInfo.nameKey]
-                            else
-                                displayName = C_Item.GetItemNameByID(instanceInfo.toyID) or ("Toy " .. instanceInfo.toyID)
-                            end
-                        -- Process Hearthstone variants with special naming logic
-                        elseif instanceInfo.variants then
-                            local useRandom = addon.QuickTravel.db and addon.QuickTravel.db.useRandomHearthstoneVariant
-                            local selectedVariant = addon.QuickTravel.db and addon.QuickTravel.db.selectedHearthstoneVariant
-                            
-                            -- Check if player owns any Hearthstone variants
-                            local hasVariants = false
-                            for _, variant in ipairs(instanceInfo.variants) do
-                                if PlayerHasToy(variant.id) then
-                                    hasVariants = true
-                                    break
-                                end
-                            end
-                            
-                            isKnown = hasVariants or GetItemCount(instanceInfo.fallback) > 0
-                            
-                            -- Set display name and icon based on variant settings
-                            if useRandom then
-                                displayName = L["HEARTHSTONE_RANDOM_VARIANT"]
-                                displayTexture = C_Item.GetItemIconByID(instanceInfo.fallback) or 134400
-                            elseif selectedVariant then
-                                -- Find the selected variant data
-                                local selectedVariantData = nil
-                                for _, variant in ipairs(instanceInfo.variants) do
-                                    if variant.id == selectedVariant and PlayerHasToy(variant.id) then
-                                        selectedVariantData = variant
-                                        break
+                    local dbEntry = instanceDatabase[instanceKey]
+                    if dbEntry then
+                        local playerFaction = UnitFactionGroup("player")
+                        local shouldSkip = false
+
+                        if dbEntry.alliance and not dbEntry.horde and playerFaction ~= "Alliance" then
+                            shouldSkip = true -- Alliance-only spell, but player is Horde
+                        elseif dbEntry.horde and not dbEntry.alliance and playerFaction ~= "Horde" then
+                            shouldSkip = true -- Horde-only spell, but player is Alliance
+                        end
+
+                        if not shouldSkip then
+                            local instanceInfo = self:GetInstanceInfo(instanceKey)
+                            if instanceInfo then
+                                local isKnown = false
+                                local displayTexture = 134400 -- Default icon
+                                local displayName = ""
+                                
+                                -- Process toy items
+                                if instanceInfo.toyID then
+                                    isKnown = PlayerHasToy(instanceInfo.toyID)
+                                    displayTexture = C_Item.GetItemIconByID(instanceInfo.toyID) or 134400
+                                    
+                                    if instanceInfo.nameKey and type(instanceInfo.nameKey) == "string" then
+                                        displayName = L[instanceInfo.nameKey]
+                                    else
+                                        displayName = C_Item.GetItemNameByID(instanceInfo.toyID) or ("Toy " .. instanceInfo.toyID)
                                     end
+                                -- Process Hearthstone variants with special naming logic
+                                elseif instanceInfo.variants then
+                                    local useRandom = addon.QuickTravel.db and addon.QuickTravel.db.useRandomHearthstoneVariant
+                                    local selectedVariant = addon.QuickTravel.db and addon.QuickTravel.db.selectedHearthstoneVariant
+                                    
+                                    -- Check if player owns any Hearthstone variants
+                                    local hasVariants = false
+                                    for _, variant in ipairs(instanceInfo.variants) do
+                                        if PlayerHasToy(variant.id) then
+                                            hasVariants = true
+                                            break
+                                        end
+                                    end
+                                    
+                                    isKnown = hasVariants or GetItemCount(instanceInfo.fallback) > 0
+                                    
+                                    -- Set display name and icon based on variant settings
+                                    if useRandom then
+                                        displayName = L["HEARTHSTONE_RANDOM_VARIANT"]
+                                        displayTexture = C_Item.GetItemIconByID(instanceInfo.fallback) or 134400
+                                    elseif selectedVariant then
+                                        -- Find the selected variant data
+                                        local selectedVariantData = nil
+                                        for _, variant in ipairs(instanceInfo.variants) do
+                                            if variant.id == selectedVariant and PlayerHasToy(variant.id) then
+                                                selectedVariantData = variant
+                                                break
+                                            end
+                                        end
+                                        
+                                        if selectedVariantData then
+                                            displayName = L[selectedVariantData.nameKey] or C_Item.GetItemNameByID(selectedVariant) or L["HEARTHSTONE_VARIANT_DEFAULT"]
+                                            displayTexture = C_Item.GetItemIconByID(selectedVariant) or C_Item.GetItemIconByID(instanceInfo.fallback) or 134400
+                                        else
+                                            displayName = C_Item.GetItemNameByID(instanceInfo.fallback) or L["HEARTHSTONE_VARIANT_DEFAULT"]
+                                            displayTexture = C_Item.GetItemIconByID(instanceInfo.fallback) or 134400
+                                        end
+                                    else
+                                        displayName = C_Item.GetItemNameByID(instanceInfo.fallback) or L["HEARTHSTONE_VARIANT_DEFAULT"]
+                                        displayTexture = C_Item.GetItemIconByID(instanceInfo.fallback) or 134400
+                                    end
+                                -- Process teleportation spells
+                                elseif instanceInfo.spellID and instanceInfo.spellID > 0 then
+                                    isKnown = IsSpellKnown(instanceInfo.spellID)
+                                    displayTexture = C_Spell.GetSpellTexture(instanceInfo.spellID) or 134400
+                                    displayName = L[instanceInfo.nameKey]
                                 end
                                 
-                                if selectedVariantData then
-                                    displayName = L[selectedVariantData.nameKey] or C_Item.GetItemNameByID(selectedVariant) or L["HEARTHSTONE_VARIANT_DEFAULT"]
-                                    displayTexture = C_Item.GetItemIconByID(selectedVariant) or C_Item.GetItemIconByID(instanceInfo.fallback) or 134400
-                                else
-                                    displayName = C_Item.GetItemNameByID(instanceInfo.fallback) or L["HEARTHSTONE_VARIANT_DEFAULT"]
-                                    displayTexture = C_Item.GetItemIconByID(instanceInfo.fallback) or 134400
+                                -- Include portal if known or if showing unlearned items is enabled
+                                if (isKnown or showUnlearned) and (instanceInfo.toyID or instanceInfo.spellID or instanceInfo.variants) then
+                                    table.insert(portals, {
+                                        instanceKey = instanceKey,
+                                        spellID = instanceInfo.spellID,
+                                        toyID = instanceInfo.toyID,
+                                        variants = instanceInfo.variants,
+                                        fallback = instanceInfo.fallback,
+                                        displayName = displayName,
+                                        expansion = expansion,
+                                        texture = displayTexture,
+                                        isKnown = isKnown,
+                                        isToy = instanceInfo.toyID ~= nil,
+                                        isVariant = instanceInfo.variants ~= nil
+                                    })
                                 end
-                            else
-                                displayName = C_Item.GetItemNameByID(instanceInfo.fallback) or L["HEARTHSTONE_VARIANT_DEFAULT"]
-                                displayTexture = C_Item.GetItemIconByID(instanceInfo.fallback) or 134400
                             end
-                        -- Process teleportation spells
-                        elseif instanceInfo.spellID and instanceInfo.spellID > 0 then
-                            isKnown = IsSpellKnown(instanceInfo.spellID)
-                            displayTexture = C_Spell.GetSpellTexture(instanceInfo.spellID) or 134400
-                            displayName = L[instanceInfo.nameKey]
-                        end
-                        
-                        -- Include portal if known or if showing unlearned items is enabled
-                        if (isKnown or showUnlearned) and (instanceInfo.toyID or instanceInfo.spellID or instanceInfo.variants) then
-                            table.insert(portals, {
-                                instanceKey = instanceKey,
-                                spellID = instanceInfo.spellID,
-                                toyID = instanceInfo.toyID,
-                                variants = instanceInfo.variants,
-                                fallback = instanceInfo.fallback,
-                                displayName = displayName,
-                                expansion = expansion,
-                                texture = displayTexture,
-                                isKnown = isKnown,
-                                isToy = instanceInfo.toyID ~= nil,
-                                isVariant = instanceInfo.variants ~= nil
-                            })
                         end
                     end
                 end

@@ -21,6 +21,8 @@ L["Current Season"] = "Текущий сезон"
 L["Hearthstones"] = "Камни возвращений"
 L["HEARTHSTONE_RANDOM_VARIANT"] = "Камень возвращения (случайный вариант)"
 L["Wormhole Generator"] = "Генератор червоточин"
+L["Mage Teleport"] = "Mage Teleport"
+L["Mage Portal"] = "Mage Portal"
 
 -- === DUNGEON AND RAID LOCATIONS BY EXPANSION ===
 -- Organized chronologically by expansion for easy maintenance
@@ -157,6 +159,63 @@ L["WORMHOLE_GENERATOR_KUL_TIRAS"] = "Кул-Тирас"
 L["WORMHOLE_GENERATOR_SHADOWLANDS"] = "Темные Земли"
 L["WORMHOLE_GENERATOR_DRAGON_ISLES"] = "Драконьи острова"
 L["WORMHOLE_GENERATOR_KHAZ_ALGAR"] = "Каз Алгар"
+
+-- Mage Teleport
+L["MAGE_TELEPORT_HALL_OF_THE_GUARDIAN"] = "Оплот Хранителя" --193759
+L["MAGE_TELEPORT_STORMWIND"] = "Штормград" --3561
+L["MAGE_TELEPORT_IRONFORGE"] = "Стальгорн" --3562
+L["MAGE_TELEPORT_DARNASSUS"] = "Дарнас" --3565
+L["MAGE_TELEPORT_EXODAR"] = "Экзодар" --32271
+L["MAGE_TELEPORT_THERAMORE"] = "Терамор" --49359
+
+L["MAGE_TELEPORT_ORGRIMMAR"] = "Оргриммар" --3567
+L["MAGE_TELEPORT_UNDERCITY"] = "Подгород" --3563
+L["MAGE_TELEPORT_THUNDER_BLUFF"] = "Громовой Утес" --3566
+L["MAGE_TELEPORT_SILVERMOON_CITY"] = "Луносвет" --32272
+L["MAGE_TELEPORT_STONARD"] = "Каменор" --49358
+
+L["MAGE_TELEPORT_SHATTRATH"] = "Шаттрат" --33690/35715
+L["MAGE_TELEPORT_DALARAN"] = "Даларан (Нордскол)" --53140
+L["MAGE_TELEPORT_TOL_BARAD"] = "Тол Барад" --88342/88344
+L["MAGE_TELEPORT_VALE_OF_ETERNAL_BLOSSOMS"] = "Вечноцветущий дол" --132621/132627
+
+L["MAGE_TELEPORT_STORMSHIELD"] = "Преграда Ветров" --176248
+L["MAGE_TELEPORT_WARSPEAR"] = "Копье Войны" --176242
+
+L["MAGE_TELEPORT_DALARAN_BROKEN_ISLES"] = "Даларан (Расколотые острова)" --224869
+L["MAGE_TELEPORT_BORALUS"] = "Боралус" --281403
+L["MAGE_TELEPORT_DAZAR_ALOR"] = "Дазар'алор" --281404
+L["MAGE_TELEPORT_ORIBOS"] = "Орибос" --344587
+L["MAGE_TELEPORT_VALDRAKKEN"] = "Вальдраккен" --395277
+L["MAGE_TELEPORT_DORNOGAL"] = "Дорногал" --446540
+
+-- Mage Portal
+L["MAGE_PORTAL_STORMWIND"] = "Штормград" --10059
+L["MAGE_PORTAL_IRONFORGE"] = "Стальгорн" --11416
+L["MAGE_PORTAL_DARNASSUS"] = "Дарнас" --11419
+L["MAGE_PORTAL_EXODAR"] = "Экзодар" --32266
+L["MAGE_PORTAL_THERAMORE"] = "Терамор" --49360
+
+L["MAGE_PORTAL_ORGRIMMAR"] = "Оргриммар" --11417
+L["MAGE_PORTAL_UNDERCITY"] = "Подгород" --11418
+L["MAGE_PORTAL_THUNDER_BLUFF"] = "Громовой Утес" --11420
+L["MAGE_PORTAL_SILVERMOON_CITY"] = "Луносвет" --32267
+L["MAGE_PORTAL_STONARD"] = "Каменор" --49361
+
+L["MAGE_PORTAL_SHATTRATH"] = "Шаттрат" -- 33691/35717
+L["MAGE_PORTAL_DALARAN"] = "Даларан (Нордскол)" --53142
+L["MAGE_PORTAL_TOL_BARAD"] = "Тол Барад" -- 88345/88346
+L["MAGE_PORTAL_VALE_OF_ETERNAL_BLOSSOMS"] = "Вечноцветущий дол" -- 132620/132626
+
+L["MAGE_PORTAL_STORMSHIELD"] = "Преграда Ветров" --176246
+L["MAGE_PORTAL_WARSPEAR"] = "Копье Войны" --176244
+
+L["MAGE_PORTAL_DALARAN_BROKEN_ISLES"] = "Даларан (Расколотые острова)" --224871
+L["MAGE_PORTAL_BORALUS"] = "Боралус" --281400
+L["MAGE_PORTAL_DAZAR_ALOR"] = "Дазар'алор" --281402
+L["MAGE_PORTAL_ORIBOS"] = "Орибос" --344597
+L["MAGE_PORTAL_VALDRAKKEN"] = "Вальдраккен" --395289
+L["MAGE_PORTAL_DORNOGAL"] = "Дорногал" --446534
 
 -- === USER INTERFACE STRINGS ===
 -- Core interface elements and user interaction text

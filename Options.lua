@@ -36,6 +36,15 @@ function Options:InitializeSettings()
     
     self.db = QuickTravelDB
 
+    -- Remove any category entry without a 'key' field
+    if self.db.categoryOrder then
+        for i = #self.db.categoryOrder, 1, -1 do
+            if not self.db.categoryOrder[i].key then
+                table.remove(self.db.categoryOrder, i)
+            end
+        end
+    end
+
     -- Add missing categories to the order list if they don't exist
     local allCategories = addon.ConfigManager.DEFAULT_CATEGORY_ORDER
     local foundKeys = {}
@@ -113,7 +122,7 @@ function Options:CreateOptionsFrame(mainFrame)
     
     -- Main options frame using ButtonFrameTemplate 
     self.optionsFrame = CreateFrame("Frame", "QuickTravelOptionsFrame", UIParent, "ButtonFrameTemplate")
-    self.optionsFrame:SetSize(290, 420)
+    self.optionsFrame:SetSize(290, 470)
     if mainFrame then
         self.optionsFrame:SetPoint("TOPLEFT", mainFrame, "TOPRIGHT", 10, 0)
     else
