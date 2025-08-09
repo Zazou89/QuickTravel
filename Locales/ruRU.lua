@@ -250,6 +250,7 @@ L["SHOW_UNLEARNED_SPELLS"] = "Показывать неизученные зак
 L["SHOW_SPELL_TOOLTIPS"] = "Показывать подсказки заклинаний"
 L["SHOW_LFG_TAB"] = "Показывать кнопку в поиске групп"
 L["LOCK_FRAME_HEIGHT"] = "Высота блокировки фрейма"
+L["SHOW_MINIMAP_ICON"] = "Show minimap icon"
 
 -- Interface Tabs
 L["OPTIONS_TAB"] = "Настройки"

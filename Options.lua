@@ -25,6 +25,8 @@ function Options:InitializeSettings()
         showSpellTooltips = true,                                     -- (boolean) Show tooltips for spells/portals in the UI
         frameHeight = 500,                                            -- (number) default height of the main frame
         lockFrameHeight = false,                                      -- (boolean) Lock frame height to prevent resizing
+        showMinimapIcon = true,                                       -- (boolean) show the minimap icon
+        minimap = { angle = 200 },                                    -- (table) persists the icon angle around the minimap
     }
     
     -- Apply defaults for missing settings
@@ -234,9 +236,18 @@ function Options:CreateOptionsFrame(mainFrame)
     showLFGTabText:SetText(L["SHOW_LFG_TAB"])
     showLFGTabText:SetTextColor(1, 1, 1)
 
+    -- Show minimap icon checkbox
+    local showMinimapCheckbox = CreateFrame("CheckButton", nil, self.optionsFrame.optionsContent, "InterfaceOptionsCheckButtonTemplate")
+    showMinimapCheckbox:SetPoint("TOPLEFT", showLFGTabCheckbox, "BOTTOMLEFT", 0, -10)
+    showMinimapCheckbox:SetSize(22, 22)
+    local showMinimapText = self.optionsFrame.optionsContent:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    showMinimapText:SetPoint("LEFT", showMinimapCheckbox, "RIGHT", 8, 0)
+    showMinimapText:SetText(L["SHOW_MINIMAP_ICON"])
+    showMinimapText:SetTextColor(1, 1, 1)
+
     -- BEHAVIOR SECTION: addon behavior settings
     local behaviorHeader = self.optionsFrame.optionsContent:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
-    behaviorHeader:SetPoint("TOPLEFT", showLFGTabCheckbox, "BOTTOMLEFT", 0, -25)
+    behaviorHeader:SetPoint("TOPLEFT", showMinimapCheckbox, "BOTTOMLEFT", 0, -25)
     behaviorHeader:SetText(L["BEHAVIOR_HEADER"])
     behaviorHeader:SetTextColor(1, 0.82, 0)
 
@@ -288,6 +299,7 @@ function Options:CreateOptionsFrame(mainFrame)
     self.optionsFrame.showTooltipsCheckbox = showTooltipsCheckbox
     self.optionsFrame.randomHearthstoneText = randomHearthstoneText
     self.optionsFrame.lockHeightCheckbox = lockHeightCheckbox
+    self.optionsFrame.showMinimapCheckbox = showMinimapCheckbox
 
     self:LoadOptionsValues()
     self:SetupEventHandlers()
@@ -346,6 +358,14 @@ function Options:SetupEventHandlers()
             end
         end
     end)
+
+    -- Minimap icon toggle
+    self.optionsFrame.showMinimapCheckbox:SetScript("OnClick", function(checkbox)
+        self.db.showMinimapIcon = checkbox:GetChecked()
+        if addon.QuickTravel then
+            addon.QuickTravel:ToggleMinimap(self.db.showMinimapIcon)
+        end
+    end)    
     
     -- Unlearned spells visibility toggle
     self.optionsFrame.showUnlearnedCheckbox:SetScript("OnClick", function(checkbox)
@@ -377,6 +397,7 @@ function Options:LoadOptionsValues()
     self.optionsFrame.showUnlearnedCheckbox:SetChecked(self.db.showUnlearnedSpells)
     self.optionsFrame.showTooltipsCheckbox:SetChecked(self.db.showSpellTooltips)
     self.optionsFrame.lockHeightCheckbox:SetChecked(self.db.lockFrameHeight)
+    self.optionsFrame.showMinimapCheckbox:SetChecked(self.db.showMinimapIcon)
     self:SetupCategoriesList()
 end
 

@@ -25,7 +25,11 @@ end
 
 -- Addon compartment click handler for minimap/interface icons
 function QuickTravel_OnAddonCompartmentClick(addonName, buttonName)
-    QuickTravel:ToggleFrame()
+    if buttonName == "RightButton" then
+        addon.Options:ToggleOptionsFrame(QuickTravel.mainFrame)
+    else
+        QuickTravel:ToggleFrame()
+    end
 end
 
 -- Create the main QuickTravel UI frame with portal list
@@ -865,6 +869,7 @@ frame:SetScript("OnEvent", function(self, event, addonName, spellID)
     if event == "ADDON_LOADED" and addonName == ADDON_NAME then
         -- Initialize settings and show login message if enabled
         QuickTravel.db = addon.Options:InitializeSettings()
+        QuickTravel:InitMinimap()
         C_Timer.After(1, function()
             if PVEFrame then
                 PVEFrame:HookScript("OnShow", function()
@@ -943,4 +948,125 @@ if LibStub and LibStub:GetLibrary("LibDataBroker-1.1", true) then
             tooltip:AddLine("|cffffffffRight-click:|r " .. L["OPTIONS_TAB"])
         end,
     })
+end
+
+-- Minimap icon
+-- Holder for minimap-related data
+QuickTravel.minimap = QuickTravel.minimap or {}
+
+-- Convert degrees to radians (for position math)
+local function deg2rad(d) return d * math.pi / 180 end
+
+-- Position the minimap button based on saved angle
+function QuickTravel:UpdateMinimapPosition()
+    local btn = self.minimap.button
+    if not btn or not Minimap then return end
+
+    local angle = (self.db and self.db.minimap and self.db.minimap.angle) or 225
+    local radius = (Minimap:GetWidth() / 2) - 6
+    local x = math.cos(deg2rad(angle)) * radius
+    local y = math.sin(deg2rad(angle)) * radius
+
+    btn:ClearAllPoints()
+    btn:SetPoint("CENTER", Minimap, "CENTER", x, y)
+end
+
+-- Create the minimap button if missing
+function QuickTravel:CreateMinimapButton()
+    if self.minimap.button then
+        self.minimap.button:Show()
+        self:UpdateMinimapPosition()
+        return self.minimap.button
+    end
+
+    local btn = CreateFrame("Button", "QuickTravel_MinimapButton", Minimap)
+    btn:SetSize(32, 32) -- Standard minimap button footprint
+    btn:SetFrameStrata("MEDIUM")
+    btn:RegisterForClicks("LeftButtonUp", "RightButtonUp")
+    btn:RegisterForDrag("LeftButton")
+
+    -- Gold ring border
+    local border = btn:CreateTexture(nil, "OVERLAY")
+    border:SetTexture("Interface\\Minimap\\MiniMap-TrackingBorder")
+    border:SetSize(54, 54)
+    border:SetPoint("TOPLEFT", btn, "TOPLEFT", 0, 0)
+
+    -- Inner icon
+    local icon = btn:CreateTexture(nil, "BACKGROUND")
+    icon:SetTexture("Interface\\Icons\\inv_spell_arcane_portaldornogal")
+    icon:SetSize(18, 18)
+    icon:SetPoint("CENTER", btn, "CENTER", 0, 0)
+    icon:SetTexCoord(0.08, 0.92, 0.08, 0.90)
+    btn.icon = icon
+
+    btn:SetHighlightTexture("Interface\\Minimap\\UI-Minimap-ZoomButton-Highlight", "ADD")
+
+    -- Click handling
+    btn:SetScript("OnClick", function(_, mouseButton)
+        if mouseButton == "RightButton" then
+            -- Always ensure main frame is visible
+            if not QuickTravel.mainFrame or not QuickTravel.mainFrame:IsShown() then
+                QuickTravel:ShowFrame()
+            end
+            -- Toggle only the options frame
+            addon.Options:ToggleOptionsFrame(QuickTravel.mainFrame)
+        else
+            -- Left click toggles main frame normally
+            QuickTravel:ToggleFrame()
+        end
+    end)
+
+    -- Tooltip: title + left/right click icons
+    btn:SetScript("OnEnter", function(self)
+        GameTooltip:SetOwner(self, "ANCHOR_LEFT")
+        GameTooltip:AddLine(L["QT_TITLE"])
+        GameTooltip:AddLine("|A:NPE_LeftClick:16:16|a " .. SHOW, 1, 1, 1)
+        GameTooltip:AddLine("|A:NPE_RightClick:16:16|a " .. OPTIONS, 1, 1, 1)
+        GameTooltip:Show()
+    end)
+    btn:SetScript("OnLeave", function() GameTooltip:Hide() end)
+
+    -- Drag handling
+    local function updateFromCursor()
+        local mx, my = Minimap:GetCenter()
+        local cx, cy = GetCursorPosition()
+        local scale = Minimap:GetEffectiveScale()
+        cx, cy = cx / scale, cy / scale
+
+        local dx, dy = cx - mx, cy - my
+        local angle = math.deg(math.atan2(dy, dx))
+        if angle < 0 then angle = angle + 360 end
+
+        QuickTravel.db.minimap.angle = angle
+        QuickTravel:UpdateMinimapPosition()
+    end
+
+    btn:SetScript("OnDragStart", function(self)
+        self:SetScript("OnUpdate", updateFromCursor)
+    end)
+    btn:SetScript("OnDragStop", function(self)
+        self:SetScript("OnUpdate", nil)
+        updateFromCursor()
+    end)
+
+    self.minimap.button = btn
+    self:UpdateMinimapPosition()
+    return btn
+end
+
+-- Show/hide minimap button
+function QuickTravel:ToggleMinimap(show)
+    if show then
+        self:CreateMinimapButton()
+    elseif self.minimap.button then
+        self.minimap.button:Hide()
+    end
+end
+
+-- Initialize minimap button according to saved settings
+function QuickTravel:InitMinimap()
+    if not self.db then return end
+    if self.db.showMinimapIcon then
+        self:CreateMinimapButton()
+    end
 end

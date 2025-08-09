@@ -250,6 +250,7 @@ L["SHOW_UNLEARNED_SPELLS"] = "Afficher les sorts non appris"
 L["SHOW_SPELL_TOOLTIPS"] = "Afficher les infobulles des sorts"
 L["SHOW_LFG_TAB"] = "Afficher le bouton dans la rech. de groupe"
 L["LOCK_FRAME_HEIGHT"] = "Verrouiller la hauteur de la fenêtre"
+L["SHOW_MINIMAP_ICON"] = "Afficher l'icône sur la minicarte"
 
 -- Interface Tabs
 L["OPTIONS_TAB"] = "Options"
