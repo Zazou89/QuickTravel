@@ -250,7 +250,7 @@ L["SHOW_UNLEARNED_SPELLS"] = "顯示未學得法術"
 L["SHOW_SPELL_TOOLTIPS"] = "顯示法術提示"
 L["SHOW_LFG_TAB"] = "在尋求組隊顯示按鈕"
 L["LOCK_FRAME_HEIGHT"] = "鎖定框架高度"
-L["SHOW_MINIMAP_ICON"] = "Show minimap icon"
+L["SHOW_MINIMAP_ICON"] = "顯示小地圖按鈕"
 
 -- Interface Tabs
 L["OPTIONS_TAB"] = "選項"
