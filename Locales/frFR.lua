@@ -147,6 +147,8 @@ L["HEARTHSTONE_VARIANT_212337"] = "Pierre du foyer"
 L["HEARTHSTONE_VARIANT_228940"] = "Pierre de foyer de fil notoire"
 L["HEARTHSTONE_VARIANT_235016"] = "Module de redéploiement"
 L["HEARTHSTONE_VARIANT_236687"] = "Pierre de foyer explosive"
+L["HEARTHSTONE_VARIANT_245970"] = "Pierre de foyer expresse du maître de P.O.S.T.E."
+L["HEARTHSTONE_VARIANT_246565"] = "Pierre de foyer cosmique"
 
 -- Wormhole Generator
 L["ULTRASAFE_TRANSPORTER_GADGETZAN"] = "Gadgetzan"
