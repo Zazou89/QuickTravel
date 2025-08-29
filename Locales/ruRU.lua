@@ -263,7 +263,7 @@ L["USE_RANDOM_HEARTHSTONE_VARIANT"] = "Использовать случайны
 L["NO_HEARTHSTONE_VARIANTS"] = "Нет собственных вариантов"
 
 -- Category Management
-L["REVERSE_EXPANSION_ORDER"] = "Обратный порядок расширения"
+L["REVERSE_EXPANSION_ORDER"] = "Обратный порядок контента WoW"
 L["CATEGORIES_ORDER_HEADER"] = "Порядок категорий"
 
 -- Options Section Headers
