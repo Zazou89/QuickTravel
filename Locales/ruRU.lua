@@ -149,6 +149,7 @@ L["HEARTHSTONE_VARIANT_235016"] = "Модуль передислокации"
 L["HEARTHSTONE_VARIANT_236687"] = "Взрывной камень возвращения"
 L["HEARTHSTONE_VARIANT_245970"] = "Скорый камень возвращения ПОЧТ-мейстера"
 L["HEARTHSTONE_VARIANT_246565"] = "Космический камень возвращения"
+L["HEARTHSTONE_VARIANT_210455"] = "Дренейский голографоцвет"
 
 -- Wormhole Generator
 L["ULTRASAFE_TRANSPORTER_GADGETZAN"] = "Прибамбасск"

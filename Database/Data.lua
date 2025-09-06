@@ -50,7 +50,8 @@ local hearthstoneVariants = {
     {id = 235016, nameKey = "HEARTHSTONE_VARIANT_235016"},
     {id = 236687, nameKey = "HEARTHSTONE_VARIANT_236687"},
     {id = 245970, nameKey = "HEARTHSTONE_VARIANT_245970"},
-    {id = 246565, nameKey = "HEARTHSTONE_VARIANT_246565"}
+    {id = 246565, nameKey = "HEARTHSTONE_VARIANT_246565"},
+    {id = 210455, nameKey = "HEARTHSTONE_VARIANT_210455"}
 }
 
 -- Category-to-instance mapping: defines which dungeons/raids belong to each expansion category

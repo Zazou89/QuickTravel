@@ -149,6 +149,7 @@ L["HEARTHSTONE_VARIANT_235016"] = "Redeployment Module"
 L["HEARTHSTONE_VARIANT_236687"] = "Explosive Hearthstone"
 L["HEARTHSTONE_VARIANT_245970"] = "P.O.S.T. Master's Express Hearthstone"
 L["HEARTHSTONE_VARIANT_246565"] = "Cosmic Hearthstone"
+L["HEARTHSTONE_VARIANT_210455"] = "Draenic Hologem"
 
 -- Wormhole Generator
 L["ULTRASAFE_TRANSPORTER_GADGETZAN"] = "Gadgetzan"
