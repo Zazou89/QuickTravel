@@ -228,11 +228,11 @@ L["SEARCH"] = "Поиск..."
 L["CLICK_TO_TELEPORT"] = "Нажмите, чтобы телепортироваться"
 L["CLICK_TO_USE"] = "Нажмите, чтобы использовать"
 L["NO_CATEGORIES_SELECTED"] = "Категории не выбраны"
-L["NO_SEARCH_RESULTS"] = "По этому поиску результатов нет."
+L["NO_SEARCH_RESULTS"] = "Ничего не найдено."
 L["LOADED"] = "загружено! Используйте /qt, чтобы открыть."
-L["RIGHT_CLICK_ADD_FAVORITE"] = "ПКМ - добавить в избранное."
+L["RIGHT_CLICK_ADD_FAVORITE"] = "ПКМ - добавить в избранное"
 L["RIGHT_CLICK_REMOVE_FAVORITE"] = "ПКМ - удалить из избранного"
-L["TOGGLE_QUICKTRAVEL"] = "Вкл/выкл QuickTravel"
+L["TOGGLE_QUICKTRAVEL"] = "Вкл./выкл. QuickTravel"
 L["SPELL_NOT_LEARNED"] = "Заклинание не изучено"
 L["TOY_NOT_OWNED"] = "Нет такой игрушки"
 L["LFG_TAB_PORTALS"] = "Порталы"
@@ -246,13 +246,13 @@ L["FAVORITES"] = "Избранное"
 
 -- Display Options
 L["SHOW_LOGIN_MESSAGE"] = "Показывать сообщение при входе"
-L["AUTO_CLOSE"] = "Автоматическое закрытие аддона во время каста"
+L["AUTO_CLOSE"] = "Автоматически закрывать окно аддона\nво время произнесения заклинания"
 L["SHOW_CURRENT_SEASON"] = "Показывать текущий сезон"
 L["SHOW_HEARTHSTONES"] = "Показывать Камни возвращений"
 L["SHOW_UNLEARNED_SPELLS"] = "Показывать неизученные заклинания"
 L["SHOW_SPELL_TOOLTIPS"] = "Показывать подсказки заклинаний"
 L["SHOW_LFG_TAB"] = "Показывать кнопку в поиске групп"
-L["LOCK_FRAME_HEIGHT"] = "Высота блокировки фрейма"
+L["LOCK_FRAME_HEIGHT"] = "Блокировать высоту фрейма"
 L["SHOW_MINIMAP_ICON"] = "Показывать иконку на миникарте"
 
 -- Interface Tabs
@@ -260,11 +260,11 @@ L["OPTIONS_TAB"] = "Настройки"
 L["CATEGORIES_TAB"] = "Категории"
 
 -- Hearthstone Configuration
-L["USE_RANDOM_HEARTHSTONE_VARIANT"] = "Использовать случайный вариант для Камня возвращения"
+L["USE_RANDOM_HEARTHSTONE_VARIANT"] = "Использовать случайный вариант\nКамня возвращения"
 L["NO_HEARTHSTONE_VARIANTS"] = "Нет собственных вариантов"
 
 -- Category Management
-L["REVERSE_EXPANSION_ORDER"] = "Обратный порядок расширения"
+L["REVERSE_EXPANSION_ORDER"] = "Обратный порядок контента WoW"
 L["CATEGORIES_ORDER_HEADER"] = "Порядок категорий"
 
 -- Options Section Headers
