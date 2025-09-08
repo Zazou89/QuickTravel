@@ -154,7 +154,7 @@ local instanceDatabase = {
     ["city_threads"] = {spellID = 445416, nameKey = "DUNGEON_CITY_OF_THREADS"},
     ["ara_kara"] = {spellID = 445417, nameKey = "DUNGEON_ARA_KARA_CITY_OF_ECHOS"},
     ["stonevault"] = {spellID = 445269, nameKey = "DUNGEON_STONEVAULT"},
-    ["dawnbreaker"] = {spellID = 445414, nameKey = "DUNGEON_DAWNBREAKER"},
+    ["the_dawnbreaker"] = {spellID = 445414, nameKey = "DUNGEON_DAWNBREAKER"},
     ["rookery"] = {spellID = 445443, nameKey = "DUNGEON_THE_ROOKERY"},
     ["darkflame_cleft"] = {spellID = 445441, nameKey = "DUNGEON_DARKFLAME_CLEFT"},
     ["cinderbrew_meadery"] = {spellID = 445440, nameKey = "DUNGEON_CINDERBREW_MEADERY"},
