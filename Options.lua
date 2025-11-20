@@ -124,6 +124,7 @@ function Options:CreateOptionsFrame(mainFrame)
     
     -- Main options frame using ButtonFrameTemplate 
     self.optionsFrame = CreateFrame("Frame", "QuickTravelOptionsFrame", UIParent, "ButtonFrameTemplate")
+    self.optionsFrame:SetFrameStrata("DIALOG")
     self.optionsFrame:SetSize(290, 470)
     if mainFrame then
         self.optionsFrame:SetPoint("TOPLEFT", mainFrame, "TOPRIGHT", 10, 0)
