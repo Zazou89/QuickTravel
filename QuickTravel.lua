@@ -40,6 +40,7 @@ function QuickTravel:CreateMainFrame()
 
     -- Main frame using Blizzard's portrait template for consistency
     self.mainFrame = CreateFrame("Frame", "QuickTravelFrame", UIParent, "PortraitFrameTemplate")
+    self.mainFrame:SetFrameStrata("DIALOG")
     self.mainFrame:HookScript("OnShow", AnchorQuickTravelFrame)
     local savedHeight = addon.Options.db and addon.Options.db.frameHeight or 500
     self.mainFrame:SetSize(320, savedHeight)
