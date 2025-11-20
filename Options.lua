@@ -22,7 +22,7 @@ function Options:InitializeSettings()
         categoryOrder = addon.ConfigManager.DEFAULT_CATEGORY_ORDER,   -- (table, array) User's preferred order and enable state for portal categories
         showLFGTab = true,                                            -- (boolean) Show the QuickTravel button in the Group Finder (LFG)
         showUnlearnedSpells = false,                                  -- (boolean) Show spells/portals the player has not learned yet
-        showUnlearnedCurrentSeasonOnlySpells = false,                                  -- (boolean) Show spells/portals the player has not learned yet
+        showUnlearnedCurrentSeasonOnlySpells = false,                 -- (boolean) Show spells/portals the player has not learned yet only for the current season
         showSpellTooltips = true,                                     -- (boolean) Show tooltips for spells/portals in the UI
         frameHeight = 500,                                            -- (number) default height of the main frame
         lockFrameHeight = false,                                      -- (boolean) Lock frame height to prevent resizing
