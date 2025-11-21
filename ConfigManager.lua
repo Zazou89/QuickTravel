@@ -88,6 +88,7 @@ local function CheckAndResetConfig()
             categoryOrder = DEFAULT_CATEGORY_ORDER,
             showLFGTab = true,
             showUnlearnedSpells = false,
+            showUnlearnedCurrentSeasonOnlySpells = false,
             showSpellTooltips = true
         }
         
