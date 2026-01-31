@@ -51,9 +51,9 @@ function QuickTravel:CreateMainFrame()
     self.mainFrame:SetScript("OnDragStart", self.mainFrame.StartMoving)
     self.mainFrame:SetScript("OnDragStop", self.mainFrame.StopMovingOrSizing)
     
-    -- Set portal icon as frame portrait
-    SetPortraitToTexture(self.mainFrame.PortraitContainer.portrait, "Interface\\Icons\\inv_spell_arcane_portaldornogal")
-    self.mainFrame.PortraitContainer.portrait:SetTexCoord(0.12, 0.96, 0.12, 0.92)
+    -- Set portal icon as frame portrait (retail API)
+    self.mainFrame:SetPortraitToAsset("Interface\\Icons\\inv_spell_arcane_portaldornogal")
+    self.mainFrame:SetPortraitTexCoord(0.12, 0.96, 0.12, 0.92)
 
     -- Frame title text
     local titleText = self.mainFrame.TitleContainer:CreateFontString(nil, "OVERLAY", "GameFontNormal")
