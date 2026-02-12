@@ -16,6 +16,7 @@ local CATEGORY_KEYS = {
     SHADOWLANDS = "shadowlands",
     DRAGONFLIGHT = "dragonflight",
     THE_WAR_WITHIN = "the_war_within",
+    MIDNIGHT = "midnight",
     WORMHOLE_GENERATOR = "wormhole_generator",
     MAGE_TELEPORT = "mage_teleport",
     MAGE_PORTAL = "mage_portal"
@@ -33,9 +34,10 @@ local DEFAULT_CATEGORY_ORDER = {
     {key = CATEGORY_KEYS.SHADOWLANDS, enabled = true, order = 8},
     {key = CATEGORY_KEYS.DRAGONFLIGHT, enabled = true, order = 9},
     {key = CATEGORY_KEYS.THE_WAR_WITHIN, enabled = true, order = 10},
-    {key = CATEGORY_KEYS.WORMHOLE_GENERATOR, enabled = true, order = 11},
-    {key = CATEGORY_KEYS.MAGE_TELEPORT, enabled = true, order = 12},
-    {key = CATEGORY_KEYS.MAGE_PORTAL, enabled = true, order = 13}
+    {key = CATEGORY_KEYS.MIDNIGHT, enabled = true, order = 11},
+    {key = CATEGORY_KEYS.WORMHOLE_GENERATOR, enabled = true, order = 12},
+    {key = CATEGORY_KEYS.MAGE_TELEPORT, enabled = true, order = 13},
+    {key = CATEGORY_KEYS.MAGE_PORTAL, enabled = true, order = 14}
 }
 
 -- Convert category keys to localized display names
@@ -51,6 +53,7 @@ local function GetLocalizedName(categoryKey)
         [CATEGORY_KEYS.SHADOWLANDS] = L["Shadowlands"],
         [CATEGORY_KEYS.DRAGONFLIGHT] = L["Dragonflight"],
         [CATEGORY_KEYS.THE_WAR_WITHIN] = L["The War Within"],
+        [CATEGORY_KEYS.MIDNIGHT] = L["Midnight"],
         [CATEGORY_KEYS.WORMHOLE_GENERATOR] = L["Wormhole Generator"],
         [CATEGORY_KEYS.MAGE_TELEPORT] = L["Mage Teleport"],
         [CATEGORY_KEYS.MAGE_PORTAL] = L["Mage Portal"]

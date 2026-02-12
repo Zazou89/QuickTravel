@@ -17,6 +17,7 @@ L["Battle for Azeroth"] = "Battle for Azeroth"
 L["Shadowlands"] = "Shadowlands"
 L["Dragonflight"] = "Dragonflight"
 L["The War Within"] = "The War Within"
+L["Midnight"] = "Midnight"
 L["Current Season"] = "Current Season"
 L["Hearthstones"] = "Hearthstones"
 L["HEARTHSTONE_RANDOM_VARIANT"] = "Hearthstone (random variant)"
@@ -26,6 +27,9 @@ L["Mage Portal"] = "Mage Portal"
 
 -- === DUNGEON AND RAID LOCATIONS BY EXPANSION ===
 -- Organized chronologically by expansion for easy maintenance
+
+-- Wrath of the Lich King Dungeons
+L["DUNGEON_PIT_OF_SARON"] = "Pit of Saron" --4813
 
 -- Cataclysm Dungeons
 L["DUNGEON_VORTEX_PINNACLE"] = "The Vortex Pinnacle" --5035
@@ -60,6 +64,7 @@ L["DUNGEON_HALLS_OF_VALOR"] = "Halls of Valor" --7672
 L["DUNGEON_NELTHARIONS_LAIR"] = "Neltharion's Lair" --7546
 L["DUNGEON_COURT_OF_STARS"] = "Court of Stars" --8079
 L["DUNGEON_KARAZHAN"] = "Return to Karazhan" --8443
+L["DUNGEON_SEAT_OF_THE_TRIUMVIRATE"] = "The Seat of the Triumvirate" --8910
 
 -- Battle for Azeroth Dungeons
 L["DUNGEON_ATALDAZAR"] = "Atal'Dazar" --9028
@@ -111,6 +116,12 @@ L["DUNGEON_OPERATION_FLOODGATE"] = "Operation: Floodgate" --15452
 L["DUNGEON_ECO_DOME_AL_DANI"] = "Eco-Dome Al'dani" --16104
 L["RAID_LIBERATION_OF_UNDERMINE"] = "Liberation of Undermine" --15522
 L["RAID_MANAFORGE_OMEGA"] = "Manaforge Omega" --16178
+
+-- Midnight Dungeons and Raids
+L["DUNGEON_WINDRUNNERS_SPIRE"] = "Windrunner Spire" --15808
+L["DUNGEON_NEXUS_POINT_XENAS"] = "Nexus-Point Xenas" --16573
+L["DUNGEON_MAISARA_CAVERNS"] = "Maisara Caverns" --16395
+L["DUNGEON_MAGISTER_TERRACE"] = "Magisters' Terrace" --15829
 
 -- Special Hearthstone Items
 L["HEARTHSTONE_DALARAN"] = "Dalaran Hearthstone"
