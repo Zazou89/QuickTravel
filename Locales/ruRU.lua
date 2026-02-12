@@ -250,6 +250,7 @@ L["AUTO_CLOSE"] = "Автоматически закрывать окно адд
 L["SHOW_CURRENT_SEASON"] = "Показывать текущий сезон"
 L["SHOW_HEARTHSTONES"] = "Показывать Камни возвращений"
 L["SHOW_UNLEARNED_SPELLS"] = "Показывать неизученные заклинания"
+L["SHOW_UNLEARNED_SPELLS_CURRENT_SEASON_ONLY"] = "Только текущий сезон"
 L["SHOW_SPELL_TOOLTIPS"] = "Показывать подсказки заклинаний"
 L["SHOW_LFG_TAB"] = "Показывать кнопку в поиске групп"
 L["LOCK_FRAME_HEIGHT"] = "Блокировать высоту фрейма"
