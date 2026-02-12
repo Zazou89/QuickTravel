@@ -51,9 +51,9 @@ function QuickTravel:CreateMainFrame()
     self.mainFrame:SetScript("OnDragStart", self.mainFrame.StartMoving)
     self.mainFrame:SetScript("OnDragStop", self.mainFrame.StopMovingOrSizing)
     
-    -- Set portal icon as frame portrait
-    SetPortraitToTexture(self.mainFrame.PortraitContainer.portrait, "Interface\\Icons\\inv_spell_arcane_portaldornogal")
-    self.mainFrame.PortraitContainer.portrait:SetTexCoord(0.12, 0.96, 0.12, 0.92)
+    -- Set portal icon as frame portrait (retail API)
+    self.mainFrame:SetPortraitToAsset("Interface\\Icons\\inv_spell_arcane_portaldornogal")
+    self.mainFrame:SetPortraitTexCoord(0.12, 0.96, 0.12, 0.92)
 
     -- Frame title text
     local titleText = self.mainFrame.TitleContainer:CreateFontString(nil, "OVERLAY", "GameFontNormal")
@@ -864,7 +864,7 @@ BINDING_NAME_QUICKTRAVEL_TOGGLE = L["TOGGLE_QUICKTRAVEL"]
 local frame = CreateFrame("Frame")
 frame:RegisterEvent("ADDON_LOADED")
 frame:RegisterEvent("PLAYER_ENTERING_WORLD")
-frame:RegisterEvent("LEARNED_SPELL_IN_TAB")
+frame:RegisterEvent("SPELLS_CHANGED")
 
 frame:SetScript("OnEvent", function(self, event, addonName, spellID)
     if event == "ADDON_LOADED" and addonName == ADDON_NAME then
@@ -887,8 +887,8 @@ frame:SetScript("OnEvent", function(self, event, addonName, spellID)
     elseif event == "PLAYER_ENTERING_WORLD" then
         -- Ensure main frame is created when entering world
         QuickTravel:CreateMainFrame()
-    elseif event == "LEARNED_SPELL_IN_TAB" then
-        -- Refresh portal list when player learns new teleportation spells
+    elseif event == "SPELLS_CHANGED" then
+        -- Refresh portal list when spellbook updates
         QuickTravel:RefreshPortals()
     end
 end)
