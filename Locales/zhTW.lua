@@ -9,6 +9,7 @@ L["QT_TITLE"] = "快速傳送"
 
 -- === EXPANSION CATEGORIES ===
 -- World of Warcraft expansion names for UI organization
+L["Wrath of the Lich King"] = "巫妖王之怒"
 L["Cataclysm"] = "浩劫與重生"
 L["Mists of Pandaria"] = "潘達利亞之謎"
 L["Warlords of Draenor"] = "德拉諾之霸"
@@ -17,6 +18,7 @@ L["Battle for Azeroth"] = "決戰艾澤拉斯"
 L["Shadowlands"] = "暗影之境"
 L["Dragonflight"] = "巨龍崛起"
 L["The War Within"] = "地心之戰"
+L["Midnight"] = "至暗之夜"
 L["Current Season"] = "當前賽季"
 L["Hearthstones"] = "爐石"
 L["HEARTHSTONE_RANDOM_VARIANT"] = "爐石 (隨機變化)"
@@ -26,6 +28,9 @@ L["Mage Portal"] = "法師傳送門"
 
 -- === DUNGEON AND RAID LOCATIONS BY EXPANSION ===
 -- Organized chronologically by expansion for easy maintenance
+
+-- Wrath of the Lich King Dungeons
+L["DUNGEON_PIT_OF_SARON"] = "薩倫之淵" --4813
 
 -- Cataclysm Dungeons
 L["DUNGEON_VORTEX_PINNACLE"] = "漩渦尖塔" --5035
@@ -60,6 +65,7 @@ L["DUNGEON_HALLS_OF_VALOR"] = "英靈殿" --7672
 L["DUNGEON_NELTHARIONS_LAIR"] = "奈薩里奧巢穴" --7546
 L["DUNGEON_COURT_OF_STARS"] = "眾星之廷" --8079
 L["DUNGEON_KARAZHAN"] = "重返卡拉贊" --8443
+L["DUNGEON_SEAT_OF_THE_TRIUMVIRATE"] = "三傑議會之座" --8910
 
 -- Battle for Azeroth Dungeons
 L["DUNGEON_ATALDAZAR"] = "阿塔達薩" --9028
@@ -111,6 +117,12 @@ L["DUNGEON_OPERATION_FLOODGATE"] = "水閘行動" --15452
 L["DUNGEON_ECO_DOME_AL_DANI"] = "艾達尼秘境" --16104
 L["RAID_LIBERATION_OF_UNDERMINE"] = "解放幽坑城" --15522
 L["RAID_MANAFORGE_OMEGA"] = "法力熔爐歐美加" --16178
+
+-- Midnight Dungeons and Raids
+L["DUNGEON_WINDRUNNERS_SPIRE"] = "風行者塔" --15808
+L["DUNGEON_NEXUS_POINT_XENAS"] = "奧核點瑟納斯" --16573
+L["DUNGEON_MAISARA_CAVERNS"] = "梅薩拉洞穴" --16395
+L["DUNGEON_MAGISTER_TERRACE"] = "博學者殿堂" --15829
 
 -- Special Hearthstone Items
 L["HEARTHSTONE_DALARAN"] = "達拉然爐石"

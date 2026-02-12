@@ -9,6 +9,7 @@ L["QT_TITLE"] = "Быстрая телепортация"
 
 -- === EXPANSION CATEGORIES ===
 -- World of Warcraft expansion names for UI organization
+L["Wrath of the Lich King"] = "Wrath of the Lich King"
 L["Cataclysm"] = "Катаклизм"
 L["Mists of Pandaria"] = "Пандария"
 L["Warlords of Draenor"] = "Дренор"
@@ -17,6 +18,7 @@ L["Battle for Azeroth"] = "Битва за Азерот"
 L["Shadowlands"] = "Темные Земли"
 L["Dragonflight"] = "Драконы"
 L["The War Within"] = "Война Внутри"
+L["Midnight"] = "Midnight"
 L["Current Season"] = "Текущий сезон"
 L["Hearthstones"] = "Камни возвращений"
 L["HEARTHSTONE_RANDOM_VARIANT"] = "Камень возвращения (случайный вариант)"
@@ -26,6 +28,9 @@ L["Mage Portal"] = "Портал магов"
 
 -- === DUNGEON AND RAID LOCATIONS BY EXPANSION ===
 -- Organized chronologically by expansion for easy maintenance
+
+-- Wrath of the Lich King Dungeons
+L["DUNGEON_PIT_OF_SARON"] = "Яма Сарона" --4813
 
 -- Cataclysm Dungeons
 L["DUNGEON_VORTEX_PINNACLE"] = "Вершина Смерча" --5035
@@ -60,6 +65,7 @@ L["DUNGEON_HALLS_OF_VALOR"] = "Чертоги Доблести" --7672
 L["DUNGEON_NELTHARIONS_LAIR"] = "Логово Нелтариона" --7546
 L["DUNGEON_COURT_OF_STARS"] = "Квартал Звезд" --8079
 L["DUNGEON_KARAZHAN"] = "Возвращение в Каражан" --8443
+L["DUNGEON_SEAT_OF_THE_TRIUMVIRATE"] = "Престол Триумвирата" --8910
 
 -- Battle for Azeroth Dungeons
 L["DUNGEON_ATALDAZAR"] = "Атал'Дазар" --9028
@@ -111,6 +117,12 @@ L["DUNGEON_OPERATION_FLOODGATE"] = "Операция: Шлюз" --15452
 L["DUNGEON_ECO_DOME_AL_DANI"] = "Заповедник Аль'дани" --16104
 L["RAID_LIBERATION_OF_UNDERMINE"] = "Освобождение Нижней Шахты" --15522
 L["RAID_MANAFORGE_OMEGA"] = "Манагорн Омега" --16178
+
+-- Midnight Dungeons and Raids
+L["DUNGEON_WINDRUNNERS_SPIRE"] = "Шпили Ветрокрылых" --15808
+L["DUNGEON_NEXUS_POINT_XENAS"] = "Узел Нексуса Зенас" --16573
+L["DUNGEON_MAISARA_CAVERNS"] = "Пещеры Маисара" --16395
+L["DUNGEON_MAGISTER_TERRACE"] = "Терраса Магистров" --15829
 
 -- Special Hearthstone Items
 L["HEARTHSTONE_DALARAN"] = "Камень возвращения в Даларан"

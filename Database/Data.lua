@@ -5,6 +5,7 @@ local L = addon.L
 local orderedExpansions = {
     L["Current Season"],
     L["Hearthstones"],
+    L["Wrath of the Lich King"],
     L["Cataclysm"],
     L["Mists of Pandaria"],
     L["Warlords of Draenor"],
@@ -13,6 +14,7 @@ local orderedExpansions = {
     L["Shadowlands"],
     L["Dragonflight"],
     L["The War Within"],
+    L["Midnight"],
     L["Wormhole Generator"],
     L["Mage Teleport"],
     L["Mage Portal"]
@@ -56,17 +58,20 @@ local hearthstoneVariants = {
 
 -- Category-to-instance mapping: defines which dungeons/raids belong to each expansion category
 local mapCategoryKeysToInstances = {
+    --["current_season"] = {"magister_terrace", "maisara_caverns", "nexus_point_xenas", "windrunner_spire", "algethar_academy", "seat_of_the_triumvirate", "skyreach", "skyreach_midnight", "pit_of_saron"}, --Midnight: Season 1
     ["current_season"] = {"ara_kara", "the_dawnbreaker", "operation_floodgate", "priory_sacred_flame", "halls_atonement", "tazavesh", "eco_dome_al_dani", "manaforge_omega"}, --TWW: Season 3
     --["current_season"] = {"mechagon", "theatre_pain", "rookery", "darkflame_cleft", "cinderbrew_meadery", "priory_sacred_flame", "siege_boralus", "motherlode", "liberation_undermine"}, --TWW: Season 2
     ["hearthstones"] = {"hearthstone_variant", "hearthstone_dalaran", "hearthstone_garrison"},
+    ["wrath_of_the_lich_king"] = {"pit_of_saron"},
     ["cataclysm"] = {"vortex_pinnacle", "throne_tides", "grim_batol"},
     ["mists_of_pandaria"] = {"temple_jade_serpent", "siege_niuzao", "scholomance", "scarlet_monastery", "scarlet_halls", "gate_setting_sun", "mogushan_palace", "shado_pan_monastery", "stormstout_brewery"},
-    ["warlords_of_draenor"] = {"shadowmoon_burial", "everbloom", "bloodmaul_slag", "auchindoun", "skyreach", "upper_blackrock", "grimrail_depot", "iron_docks"},
-    ["legion"] = {"darkheart_thicket", "black_rook_hold", "halls_valor", "neltharions_lair", "court_stars", "karazhan"},
+    ["warlords_of_draenor"] = {"shadowmoon_burial", "everbloom", "bloodmaul_slag", "auchindoun", "skyreach", "skyreach_midnight", "upper_blackrock", "grimrail_depot", "iron_docks"},
+    ["legion"] = {"darkheart_thicket", "black_rook_hold", "halls_valor", "neltharions_lair", "court_stars", "karazhan", "seat_of_the_triumvirate"},
     ["battle_for_azeroth"] = {"ataldazar", "freehold", "waycrest_manor", "underrot", "mechagon", "siege_boralus", "motherlode"},
     ["shadowlands"] = {"necrotic_wake", "plaguefall", "mists_tirna_scithe", "halls_atonement", "spires_ascension", "theatre_pain", "de_other_side", "sanguine_depths", "tazavesh", "castle_nathria", "sanctum_domination", "sepulcher_first_ones"},
     ["dragonflight"] = {"ruby_life_pools", "nokhud_offensive", "azure_vault", "algethar_academy", "uldaman", "neltharus", "brackenhide_hollow", "halls_infusion", "dawn_infinite", "vault_incarnates", "aberrus", "amirdrassil"},
     ["the_war_within"] = {"city_threads", "ara_kara", "stonevault", "dawnbreaker", "rookery", "darkflame_cleft", "cinderbrew_meadery", "priory_sacred_flame", "operation_floodgate", "liberation_undermine"},
+    ["midnight"] = {"windrunner_spire", "nexus_point_xenas", "maisara_caverns", "magister_terrace"},
     ["wormhole_generator"] = {"ultrasafe_transporter_gadgetzan", "ultrasafe_transporter_toshleys_station", "wormhole_generator_northrend", "wormhole_generator_pandaria", "wormhole_generator_argus", "wormhole_generator_zandalar", "wormhole_generator_kul_tiras", "wormhole_generator_shadowlands", "wormhole_generator_dragon_isles", "wormhole_generator_khaz_algar"},
     ["mage_teleport"] = {"mage_teleport_hall_of_the_guardian","mage_teleport_stormwind","mage_teleport_ironforge","mage_teleport_darnassus","mage_teleport_exodar","mage_teleport_theramore","mage_teleport_orgrimmar","mage_teleport_undercity","mage_teleport_thunder_bluff","mage_teleport_silvermoon_city","mage_teleport_stonard","mage_teleport_shattrath","mage_teleport_dalaran","mage_teleport_tol_barad","mage_teleport_vale_of_eternal_blossoms","mage_teleport_stormshield","mage_teleport_warspear","mage_teleport_dalaran_broken_isles","mage_teleport_boralus","mage_teleport_dazar_alor","mage_teleport_oribos","mage_teleport_valdrakken","mage_teleport_dornogal"},
     ["mage_portal"] = {"mage_portal_stormwind", "mage_portal_ironforge", "mage_portal_darnassus", "mage_portal_exodar", "mage_portal_theramore", "mage_portal_orgrimmar", "mage_portal_undercity", "mage_portal_thunder_bluff", "mage_portal_silvermoon_city", "mage_portal_stonard", "mage_portal_shattrath", "mage_portal_dalaran", "mage_portal_tol_barad", "mage_portal_vale_of_eternal_blossoms", "mage_portal_stormshield", "mage_portal_warspear", "mage_portal_dalaran_broken_isles", "mage_portal_boralus", "mage_portal_dazar_alor", "mage_portal_oribos", "mage_portal_valdrakken", "mage_portal_dornogal"}
@@ -78,6 +83,9 @@ local instanceDatabase = {
     ["hearthstone_dalaran"] = {toyID = 140192, nameKey = "HEARTHSTONE_DALARAN"},
     ["hearthstone_garrison"] = {toyID = 110560, nameKey = "HEARTHSTONE_GARRISON"},
     ["hearthstone_variant"] = {variants = hearthstoneVariants, fallback = 6948},
+
+    -- Wrath of the Lich King Dungeons
+    ["pit_of_saron"] = {spellID = 1254555, nameKey = "DUNGEON_PIT_OF_SARON"}, -- Pit of Saron
 
     -- Cataclysm Dungeons
     ["vortex_pinnacle"] = {spellID = 410080, nameKey = "DUNGEON_VORTEX_PINNACLE"},
@@ -101,6 +109,7 @@ local instanceDatabase = {
     ["bloodmaul_slag"] = {spellID = 159895, nameKey = "DUNGEON_BLOODMAUL_SLAG_MINES"},
     ["auchindoun"] = {spellID = 159897, nameKey = "DUNGEON_AUCHINDOUN"},
     ["skyreach"] = {spellID = 159898, nameKey = "DUNGEON_SKYREACH"},
+    ["skyreach_midnight"] = {spellID = 1254557, nameKey = "DUNGEON_SKYREACH"}, -- Skyreach (Midnight)
     ["upper_blackrock"] = {spellID = 159902, nameKey = "DUNGEON_UPPER_BLACKROCK_SPIRE"},
     ["grimrail_depot"] = {spellID = 159900, nameKey = "DUNGEON_GRIMRAIL_DEPOT"},
     ["iron_docks"] = {spellID = 159896, nameKey = "DUNGEON_IRON_DOCKS"},
@@ -112,6 +121,7 @@ local instanceDatabase = {
     ["neltharions_lair"] = {spellID = 410078, nameKey = "DUNGEON_NELTHARIONS_LAIR"},
     ["court_stars"] = {spellID = 393766, nameKey = "DUNGEON_COURT_OF_STARS"},
     ["karazhan"] = {spellID = 373262, nameKey = "DUNGEON_KARAZHAN"},
+    ["seat_of_the_triumvirate"] = {spellID = 1254551, nameKey = "DUNGEON_SEAT_OF_THE_TRIUMVIRATE"}, -- Seat of the Triumvirate
     
     -- Battle for Azeroth Dungeons with faction-specific handling
     ["ataldazar"] = {spellID = 424187, nameKey = "DUNGEON_ATALDAZAR"},
@@ -163,6 +173,12 @@ local instanceDatabase = {
     ["eco_dome_al_dani"] = {spellID = 1237215, nameKey = "DUNGEON_ECO_DOME_AL_DANI"},    
     ["liberation_undermine"] = {spellID = 1226482, nameKey = "RAID_LIBERATION_OF_UNDERMINE"},
     ["manaforge_omega"] = {spellID = 1239155, nameKey = "RAID_MANAFORGE_OMEGA"},
+    
+    -- Midnight Dungeons and Raids
+    ["windrunner_spire"] = {spellID = 1254400, nameKey = "DUNGEON_WINDRUNNERS_SPIRE"}, -- Windrunner Spire
+    ["nexus_point_xenas"] = {spellID = 1254563, nameKey = "DUNGEON_NEXUS_POINT_XENAS"}, -- Nexus-Point Xenas
+    ["maisara_caverns"] = {spellID = 1254559, nameKey = "DUNGEON_MAISARA_CAVERNS"}, -- Maisara Caverns
+    ["magister_terrace"] = {spellID = 1254572, nameKey = "DUNGEON_MAGISTER_TERRACE"}, -- Magisters' Terrace
 
     -- Wormhole Generator
     ["ultrasafe_transporter_gadgetzan"] = {toyID = 18986, nameKey = "ULTRASAFE_TRANSPORTER_GADGETZAN"},

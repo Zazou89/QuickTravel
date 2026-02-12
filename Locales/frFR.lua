@@ -9,6 +9,7 @@ L["QT_TITLE"] = "Quick Travel"
 
 -- === EXPANSION CATEGORIES ===
 -- World of Warcraft expansion names for UI organization
+L["Wrath of the Lich King"] = "Wrath of the Lich King"
 L["Cataclysm"] = "Cataclysm"
 L["Mists of Pandaria"] = "Mists of Pandaria"
 L["Warlords of Draenor"] = "Warlords of Draenor"
@@ -17,6 +18,7 @@ L["Battle for Azeroth"] = "Battle for Azeroth"
 L["Shadowlands"] = "Shadowlands"
 L["Dragonflight"] = "Dragonflight"
 L["The War Within"] = "The War Within"
+L["Midnight"] = "Midnight"
 L["Current Season"] = "Saison Actuelle"
 L["Hearthstones"] = "Pierres de foyer"
 L["HEARTHSTONE_RANDOM_VARIANT"] = "Pierre de foyer (variante aléatoire)"
@@ -26,6 +28,9 @@ L["Mage Portal"] = "Portail de Mage"
 
 -- === DUNGEON AND RAID LOCATIONS BY EXPANSION ===
 -- Organized chronologically by expansion for easy maintenance
+
+-- Wrath of the Lich King Dungeons
+L["DUNGEON_PIT_OF_SARON"] = "Fosse de Saron" --4813
 
 -- Cataclysm Dungeons
 L["DUNGEON_VORTEX_PINNACLE"] = "La cime du Vortex"
@@ -60,6 +65,7 @@ L["DUNGEON_HALLS_OF_VALOR"] = "Salles des Valeureux"
 L["DUNGEON_NELTHARIONS_LAIR"] = "Repaire de Neltharion"
 L["DUNGEON_COURT_OF_STARS"] = "Cour des Étoiles"
 L["DUNGEON_KARAZHAN"] = "Karazhan"
+L["DUNGEON_SEAT_OF_THE_TRIUMVIRATE"] = "Siège du triumvirat" --8910
 
 -- Battle for Azeroth Dungeons
 L["DUNGEON_ATALDAZAR"] = "Atal'Dazar"
@@ -111,6 +117,12 @@ L["DUNGEON_OPERATION_FLOODGATE"] = "Opération Vannes ouvertes"
 L["DUNGEON_ECO_DOME_AL_DANI"] = "Écodôme Al'dani"
 L["RAID_LIBERATION_OF_UNDERMINE"] = "Libération de Terremine"
 L["RAID_MANAFORGE_OMEGA"] = "Manaforge Oméga"
+
+-- Midnight Dungeons and Raids
+L["DUNGEON_WINDRUNNERS_SPIRE"] = "Flèche de Coursevent" --15808
+L["DUNGEON_NEXUS_POINT_XENAS"] = "Point-nexus Xenas" --16573
+L["DUNGEON_MAISARA_CAVERNS"] = "Cavernes de Maisara" --16395
+L["DUNGEON_MAGISTER_TERRACE"] = "Terrasse des Magistères" --15829
 
 -- Special Hearthstone Items
 L["HEARTHSTONE_DALARAN"] = "Pierre de foyer de Dalaran"

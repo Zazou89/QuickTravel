@@ -29,4 +29,4 @@ The addon is available in English, French, Russian (@Hollicsh) and Traditional C
 - Right-click to add favorites
 - Left-click to teleport!
 
-*Note: QuickTravel is designed exclusively for The War Within.*
+*Note: QuickTravel is designed exclusively for Midnight.*

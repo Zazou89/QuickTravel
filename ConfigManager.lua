@@ -8,6 +8,7 @@ local CURRENT_CONFIG_VERSION = 2
 local CATEGORY_KEYS = {
     CURRENT_SEASON = "current_season",
     HEARTHSTONES = "hearthstones", 
+    WRATH_OF_THE_LICH_KING = "wrath_of_the_lich_king",
     CATACLYSM = "cataclysm",
     MISTS_OF_PANDARIA = "mists_of_pandaria",
     WARLORDS_OF_DRAENOR = "warlords_of_draenor",
@@ -16,6 +17,7 @@ local CATEGORY_KEYS = {
     SHADOWLANDS = "shadowlands",
     DRAGONFLIGHT = "dragonflight",
     THE_WAR_WITHIN = "the_war_within",
+    MIDNIGHT = "midnight",
     WORMHOLE_GENERATOR = "wormhole_generator",
     MAGE_TELEPORT = "mage_teleport",
     MAGE_PORTAL = "mage_portal"
@@ -25,17 +27,19 @@ local CATEGORY_KEYS = {
 local DEFAULT_CATEGORY_ORDER = {
     {key = CATEGORY_KEYS.CURRENT_SEASON, enabled = true, order = 1},
     {key = CATEGORY_KEYS.HEARTHSTONES, enabled = true, order = 2},
-    {key = CATEGORY_KEYS.CATACLYSM, enabled = true, order = 3},
-    {key = CATEGORY_KEYS.MISTS_OF_PANDARIA, enabled = true, order = 4},
-    {key = CATEGORY_KEYS.WARLORDS_OF_DRAENOR, enabled = true, order = 5},
-    {key = CATEGORY_KEYS.LEGION, enabled = true, order = 6},
-    {key = CATEGORY_KEYS.BATTLE_FOR_AZEROTH, enabled = true, order = 7},
-    {key = CATEGORY_KEYS.SHADOWLANDS, enabled = true, order = 8},
-    {key = CATEGORY_KEYS.DRAGONFLIGHT, enabled = true, order = 9},
-    {key = CATEGORY_KEYS.THE_WAR_WITHIN, enabled = true, order = 10},
-    {key = CATEGORY_KEYS.WORMHOLE_GENERATOR, enabled = true, order = 11},
-    {key = CATEGORY_KEYS.MAGE_TELEPORT, enabled = true, order = 12},
-    {key = CATEGORY_KEYS.MAGE_PORTAL, enabled = true, order = 13}
+    {key = CATEGORY_KEYS.WRATH_OF_THE_LICH_KING, enabled = true, order = 3},
+    {key = CATEGORY_KEYS.CATACLYSM, enabled = true, order = 4},
+    {key = CATEGORY_KEYS.MISTS_OF_PANDARIA, enabled = true, order = 5},
+    {key = CATEGORY_KEYS.WARLORDS_OF_DRAENOR, enabled = true, order = 6},
+    {key = CATEGORY_KEYS.LEGION, enabled = true, order = 7},
+    {key = CATEGORY_KEYS.BATTLE_FOR_AZEROTH, enabled = true, order = 8},
+    {key = CATEGORY_KEYS.SHADOWLANDS, enabled = true, order = 9},
+    {key = CATEGORY_KEYS.DRAGONFLIGHT, enabled = true, order = 10},
+    {key = CATEGORY_KEYS.THE_WAR_WITHIN, enabled = true, order = 11},
+    {key = CATEGORY_KEYS.MIDNIGHT, enabled = true, order = 12},
+    {key = CATEGORY_KEYS.WORMHOLE_GENERATOR, enabled = true, order = 13},
+    {key = CATEGORY_KEYS.MAGE_TELEPORT, enabled = true, order = 14},
+    {key = CATEGORY_KEYS.MAGE_PORTAL, enabled = true, order = 15}
 }
 
 -- Convert category keys to localized display names
@@ -43,6 +47,7 @@ local function GetLocalizedName(categoryKey)
     local keyToLocalized = {
         [CATEGORY_KEYS.CURRENT_SEASON] = L["Current Season"],
         [CATEGORY_KEYS.HEARTHSTONES] = L["Hearthstones"],
+        [CATEGORY_KEYS.WRATH_OF_THE_LICH_KING] = L["Wrath of the Lich King"],
         [CATEGORY_KEYS.CATACLYSM] = L["Cataclysm"],
         [CATEGORY_KEYS.MISTS_OF_PANDARIA] = L["Mists of Pandaria"],
         [CATEGORY_KEYS.WARLORDS_OF_DRAENOR] = L["Warlords of Draenor"],
@@ -51,6 +56,7 @@ local function GetLocalizedName(categoryKey)
         [CATEGORY_KEYS.SHADOWLANDS] = L["Shadowlands"],
         [CATEGORY_KEYS.DRAGONFLIGHT] = L["Dragonflight"],
         [CATEGORY_KEYS.THE_WAR_WITHIN] = L["The War Within"],
+        [CATEGORY_KEYS.MIDNIGHT] = L["Midnight"],
         [CATEGORY_KEYS.WORMHOLE_GENERATOR] = L["Wormhole Generator"],
         [CATEGORY_KEYS.MAGE_TELEPORT] = L["Mage Teleport"],
         [CATEGORY_KEYS.MAGE_PORTAL] = L["Mage Portal"]
