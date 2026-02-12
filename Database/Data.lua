@@ -58,7 +58,7 @@ local hearthstoneVariants = {
 
 -- Category-to-instance mapping: defines which dungeons/raids belong to each expansion category
 local mapCategoryKeysToInstances = {
-    --["current_season"] = {"magister_terrace", "maisara_caverns", "nexus_point_xenas", "windrunner_spire", "algethar_academy", "seat_of_the_triumvirate", "skyreach_midnight", "pit_of_saron"}, --Midnight: Season 1
+    --["current_season"] = {"magister_terrace", "maisara_caverns", "nexus_point_xenas", "windrunner_spire", "algethar_academy", "seat_of_the_triumvirate", "skyreach", "skyreach_midnight", "pit_of_saron"}, --Midnight: Season 1
     ["current_season"] = {"ara_kara", "the_dawnbreaker", "operation_floodgate", "priory_sacred_flame", "halls_atonement", "tazavesh", "eco_dome_al_dani", "manaforge_omega"}, --TWW: Season 3
     --["current_season"] = {"mechagon", "theatre_pain", "rookery", "darkflame_cleft", "cinderbrew_meadery", "priory_sacred_flame", "siege_boralus", "motherlode", "liberation_undermine"}, --TWW: Season 2
     ["hearthstones"] = {"hearthstone_variant", "hearthstone_dalaran", "hearthstone_garrison"},
