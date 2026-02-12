@@ -1,7 +1,7 @@
 ## QuickTravel
 Tired of hunting through your spellbook and toy collection for teleportation options? QuickTravel organizes all your portals (including Mage spells), Hearthstone variants, and teleportation toys in one place. Search, favorite, and travel with ease, no more hunting, just go!
 
-- **🆕 NEW** - Mage teleports and portals integration
+- **🆕 Coming soon** - Midnight Season 1
 
 ## Features
 - Organized by expansion - All portals grouped and sorted for easy browsing
@@ -29,4 +29,7 @@ The addon is available in English, French, Russian (@Hollicsh) and Traditional C
 - Right-click to add favorites
 - Left-click to teleport!
 
-*Note: QuickTravel is designed exclusively for The War Within.*
+*Note: QuickTravel is designed exclusively for Retail.*
+
+-
+Thanks to everyone who helps with the development of the addon: @Hollicsh, @BlueNightSky, @PeluxGit, @Oylex
