@@ -9,6 +9,7 @@ L["QT_TITLE"] = "快速傳送"
 
 -- === EXPANSION CATEGORIES ===
 -- World of Warcraft expansion names for UI organization
+L["Wrath of the Lich King"] = "巫妖王之怒"
 L["Cataclysm"] = "浩劫與重生"
 L["Mists of Pandaria"] = "潘達利亞之謎"
 L["Warlords of Draenor"] = "德拉諾之霸"

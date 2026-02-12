@@ -9,6 +9,7 @@ L["QT_TITLE"] = "Быстрая телепортация"
 
 -- === EXPANSION CATEGORIES ===
 -- World of Warcraft expansion names for UI organization
+L["Wrath of the Lich King"] = "Wrath of the Lich King"
 L["Cataclysm"] = "Катаклизм"
 L["Mists of Pandaria"] = "Пандария"
 L["Warlords of Draenor"] = "Дренор"

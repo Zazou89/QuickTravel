@@ -9,6 +9,7 @@ L["QT_TITLE"] = "Quick Travel"
 
 -- === EXPANSION CATEGORIES ===
 -- World of Warcraft expansion names for UI organization
+L["Wrath of the Lich King"] = "Wrath of the Lich King"
 L["Cataclysm"] = "Cataclysm"
 L["Mists of Pandaria"] = "Mists of Pandaria"
 L["Warlords of Draenor"] = "Warlords of Draenor"
