@@ -5,6 +5,7 @@ local L = addon.L
 local orderedExpansions = {
     L["Current Season"],
     L["Hearthstones"],
+    L["Wrath of the Lich King"],
     L["Cataclysm"],
     L["Mists of Pandaria"],
     L["Warlords of Draenor"],
