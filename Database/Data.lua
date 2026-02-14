@@ -57,7 +57,6 @@ local hearthstoneVariants = {
 -- Category-to-instance mapping: defines which dungeons/raids belong to each expansion category
 local mapCategoryKeysToInstances = {
     ["current_season"] = {"ara_kara", "the_dawnbreaker", "operation_floodgate", "priory_sacred_flame", "halls_atonement", "tazavesh", "eco_dome_al_dani", "manaforge_omega"}, --TWW: Season 3
-    --["current_season"] = {"mechagon", "theatre_pain", "rookery", "darkflame_cleft", "cinderbrew_meadery", "priory_sacred_flame", "siege_boralus", "motherlode", "liberation_undermine"}, --TWW: Season 2
     ["hearthstones"] = {"hearthstone_variant", "hearthstone_dalaran", "hearthstone_garrison"},
     ["cataclysm"] = {"vortex_pinnacle", "throne_tides", "grim_batol"},
     ["mists_of_pandaria"] = {"temple_jade_serpent", "siege_niuzao", "scholomance", "scarlet_monastery", "scarlet_halls", "gate_setting_sun", "mogushan_palace", "shado_pan_monastery", "stormstout_brewery"},
@@ -66,7 +65,7 @@ local mapCategoryKeysToInstances = {
     ["battle_for_azeroth"] = {"ataldazar", "freehold", "waycrest_manor", "underrot", "mechagon", "siege_boralus", "motherlode"},
     ["shadowlands"] = {"necrotic_wake", "plaguefall", "mists_tirna_scithe", "halls_atonement", "spires_ascension", "theatre_pain", "de_other_side", "sanguine_depths", "tazavesh", "castle_nathria", "sanctum_domination", "sepulcher_first_ones"},
     ["dragonflight"] = {"ruby_life_pools", "nokhud_offensive", "azure_vault", "algethar_academy", "uldaman", "neltharus", "brackenhide_hollow", "halls_infusion", "dawn_infinite", "vault_incarnates", "aberrus", "amirdrassil"},
-    ["the_war_within"] = {"city_threads", "ara_kara", "stonevault", "dawnbreaker", "rookery", "darkflame_cleft", "cinderbrew_meadery", "priory_sacred_flame", "operation_floodgate", "liberation_undermine"},
+    ["the_war_within"] = {"city_threads", "ara_kara", "stonevault", "the_dawnbreaker", "rookery", "darkflame_cleft", "cinderbrew_meadery", "priory_sacred_flame", "operation_floodgate", "liberation_undermine"},
     ["wormhole_generator"] = {"ultrasafe_transporter_gadgetzan", "ultrasafe_transporter_toshleys_station", "wormhole_generator_northrend", "wormhole_generator_pandaria", "wormhole_generator_argus", "wormhole_generator_zandalar", "wormhole_generator_kul_tiras", "wormhole_generator_shadowlands", "wormhole_generator_dragon_isles", "wormhole_generator_khaz_algar"},
     ["mage_teleport"] = {"mage_teleport_hall_of_the_guardian","mage_teleport_stormwind","mage_teleport_ironforge","mage_teleport_darnassus","mage_teleport_exodar","mage_teleport_theramore","mage_teleport_orgrimmar","mage_teleport_undercity","mage_teleport_thunder_bluff","mage_teleport_silvermoon_city","mage_teleport_stonard","mage_teleport_shattrath","mage_teleport_dalaran","mage_teleport_tol_barad","mage_teleport_vale_of_eternal_blossoms","mage_teleport_stormshield","mage_teleport_warspear","mage_teleport_dalaran_broken_isles","mage_teleport_boralus","mage_teleport_dazar_alor","mage_teleport_oribos","mage_teleport_valdrakken","mage_teleport_dornogal"},
     ["mage_portal"] = {"mage_portal_stormwind", "mage_portal_ironforge", "mage_portal_darnassus", "mage_portal_exodar", "mage_portal_theramore", "mage_portal_orgrimmar", "mage_portal_undercity", "mage_portal_thunder_bluff", "mage_portal_silvermoon_city", "mage_portal_stonard", "mage_portal_shattrath", "mage_portal_dalaran", "mage_portal_tol_barad", "mage_portal_vale_of_eternal_blossoms", "mage_portal_stormshield", "mage_portal_warspear", "mage_portal_dalaran_broken_isles", "mage_portal_boralus", "mage_portal_dazar_alor", "mage_portal_oribos", "mage_portal_valdrakken", "mage_portal_dornogal"}
@@ -227,7 +226,7 @@ local instanceDatabase = {
     ["mage_portal_vale_of_eternal_blossoms"] = {alliance = 132620, horde = 132626, nameKey = "MAGE_PORTAL_VALE_OF_ETERNAL_BLOSSOMS"},
 
     ["mage_portal_stormshield"] = {alliance = 176246, nameKey = "MAGE_PORTAL_STORMSHIELD"},
-    ["mage_portal_warspear"] = {horde = 176244, nameKey = "MAGE_PORTAL_WARSPAR"},
+    ["mage_portal_warspear"] = {horde = 176244, nameKey = "MAGE_PORTAL_WARSPEAR"},
 
     ["mage_portal_dalaran_broken_isles"] = {spellID = 224871, nameKey = "MAGE_PORTAL_DALARAN_BROKEN_ISLES"},
 
