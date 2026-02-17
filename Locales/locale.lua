@@ -23,18 +23,37 @@ setmetatable(addon.L, {
 	-- @param newLocale: string - Target locale code (e.g., 'frFR', 'deDE', 'esES')
 	-- @return table - The localization table for the specified locale
 	__call = function(_, newLocale)
-		localizations[newLocale] = {}
-		return localizations[newLocale]
+		local localeTable = rawget(localizations, newLocale)
+		if localeTable == nil then
+			localeTable = {}
+			rawset(localizations, newLocale, localeTable)
+		end
+		return localeTable
 	end,
 	
 	-- __index metamethod: Automatic translation lookup with intelligent fallback
-	-- Searches current locale first, then returns key as string for missing translations
+	-- Searches current locale first, then enUS, then returns key as string
 	-- This prevents nil access errors and aids in identifying untranslated strings
 	-- @param self: table - The addon.L table (unused but required by Lua)
 	-- @param key: string - The localization key to retrieve
-	-- @return string - Localized text for current locale or the key itself if not found
+	-- @return string - Localized text from current locale/enUS or the key itself if not found
 	__index = function(_, key)
-		local localeTable = localizations[locale]
-		return localeTable and localeTable[key] or tostring(key)
+		local localeTable = rawget(localizations, locale)
+		if localeTable then
+			local translatedValue = rawget(localeTable, key)
+			if translatedValue ~= nil then
+				return translatedValue
+			end
+		end
+
+		local defaultLocaleTable = rawget(localizations, 'enUS')
+		if defaultLocaleTable then
+			local fallbackValue = rawget(defaultLocaleTable, key)
+			if fallbackValue ~= nil then
+				return fallbackValue
+			end
+		end
+
+		return tostring(key)
 	end
 })
