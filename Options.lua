@@ -22,6 +22,7 @@ function Options:InitializeSettings()
         categoryOrder = addon.ConfigManager.DEFAULT_CATEGORY_ORDER,   -- (table, array) User's preferred order and enable state for portal categories
         showLFGTab = true,                                            -- (boolean) Show the QuickTravel button in the Group Finder (LFG)
         showUnlearnedSpells = false,                                  -- (boolean) Show spells/portals the player has not learned yet
+        showUnlearnedCurrentSeasonOnlySpells = false,                 -- (boolean) Show spells/portals the player has not learned yet only for the current season
         showSpellTooltips = true,                                     -- (boolean) Show tooltips for spells/portals in the UI
         frameHeight = 500,                                            -- (number) default height of the main frame
         lockFrameHeight = false,                                      -- (boolean) Lock frame height to prevent resizing
@@ -228,9 +229,18 @@ function Options:CreateOptionsFrame(mainFrame)
     showUnlearnedText:SetText(L["SHOW_UNLEARNED_SPELLS"])
     showUnlearnedText:SetTextColor(1, 1, 1)
 
+    -- Show unlearned spells (Current Season Only) checkbox
+    local showUnlearnedCurrentSeasonOnlyCheckbox = CreateFrame("CheckButton", nil, self.optionsFrame.optionsContent, "InterfaceOptionsCheckButtonTemplate")
+    showUnlearnedCurrentSeasonOnlyCheckbox:SetPoint("TOPLEFT", showUnlearnedCheckbox, "BOTTOMLEFT", 22, -10)
+    showUnlearnedCurrentSeasonOnlyCheckbox:SetSize(22, 22)
+    local showUnlearnedCurrentSeasonOnlyText = self.optionsFrame.optionsContent:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    showUnlearnedCurrentSeasonOnlyText:SetPoint("LEFT", showUnlearnedCurrentSeasonOnlyCheckbox, "RIGHT", 8, 0)
+    showUnlearnedCurrentSeasonOnlyText:SetText(L["SHOW_UNLEARNED_SPELLS_CURRENT_SEASON_ONLY"])
+    showUnlearnedCurrentSeasonOnlyText:SetTextColor(1, 1, 1)
+
     -- Show LFG tab checkbox
     local showLFGTabCheckbox = CreateFrame("CheckButton", nil, self.optionsFrame.optionsContent, "InterfaceOptionsCheckButtonTemplate")
-    showLFGTabCheckbox:SetPoint("TOPLEFT", showUnlearnedCheckbox, "BOTTOMLEFT", 0, -10)
+    showLFGTabCheckbox:SetPoint("TOPLEFT", showUnlearnedCurrentSeasonOnlyCheckbox, "BOTTOMLEFT", -22, -10)
     showLFGTabCheckbox:SetSize(22, 22)
     local showLFGTabText = self.optionsFrame.optionsContent:CreateFontString(nil, "OVERLAY", "GameFontNormal")
     showLFGTabText:SetPoint("LEFT", showLFGTabCheckbox, "RIGHT", 8, 0)
@@ -297,6 +307,8 @@ function Options:CreateOptionsFrame(mainFrame)
     self.optionsFrame.hearthstoneDropdown = hearthstoneDropdown
     self.optionsFrame.showLFGTabCheckbox = showLFGTabCheckbox
     self.optionsFrame.showUnlearnedCheckbox = showUnlearnedCheckbox
+    self.optionsFrame.showUnlearnedCurrentSeasonOnlyCheckbox = showUnlearnedCurrentSeasonOnlyCheckbox
+    self.optionsFrame.showUnlearnedCurrentSeasonOnlyText = showUnlearnedCurrentSeasonOnlyText
     self.optionsFrame.showTooltipsCheckbox = showTooltipsCheckbox
     self.optionsFrame.randomHearthstoneText = randomHearthstoneText
     self.optionsFrame.lockHeightCheckbox = lockHeightCheckbox
@@ -377,6 +389,30 @@ function Options:SetupEventHandlers()
         if QuickTravel then
             QuickTravel:PopulatePortalList()
         end
+
+        -- Enable/disable current season only option
+        local currentSeasonOnlyEnabled = checkbox:GetChecked()
+        self.optionsFrame.showUnlearnedCurrentSeasonOnlyCheckbox:SetEnabled(currentSeasonOnlyEnabled)
+        if currentSeasonOnlyEnabled then
+            if self.optionsFrame.showUnlearnedCurrentSeasonOnlyText then
+                self.optionsFrame.showUnlearnedCurrentSeasonOnlyText:SetTextColor(1, 1, 1)
+            end
+        else
+            if self.optionsFrame.showUnlearnedCurrentSeasonOnlyText then
+                self.optionsFrame.showUnlearnedCurrentSeasonOnlyText:SetTextColor(0.5, 0.5, 0.5)
+            end
+        end
+    end)
+
+    -- Unlearned season only spells visibility toggle
+    self.optionsFrame.showUnlearnedCurrentSeasonOnlyCheckbox:SetScript("OnClick", function(checkbox)
+        self.db.showUnlearnedCurrentSeasonOnlySpells = checkbox:GetChecked()
+        if constants then
+            constants.DataManager:InvalidateCache()
+        end
+        if QuickTravel then
+            QuickTravel:PopulatePortalList()
+        end
     end)
     
     -- Spell tooltips toggle
@@ -396,6 +432,7 @@ function Options:LoadOptionsValues()
     self:UpdateHearthstoneControls()
     self.optionsFrame.showLFGTabCheckbox:SetChecked(self.db.showLFGTab)
     self.optionsFrame.showUnlearnedCheckbox:SetChecked(self.db.showUnlearnedSpells)
+    self.optionsFrame.showUnlearnedCurrentSeasonOnlyCheckbox:SetChecked(self.db.showUnlearnedCurrentSeasonOnlySpells)
     self.optionsFrame.showTooltipsCheckbox:SetChecked(self.db.showSpellTooltips)
     self.optionsFrame.lockHeightCheckbox:SetChecked(self.db.lockFrameHeight)
     self.optionsFrame.showMinimapCheckbox:SetChecked(self.db.showMinimapIcon)

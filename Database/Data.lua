@@ -305,6 +305,7 @@ local DataManager = {
         
         local portals = {}
         local showUnlearned = addon.QuickTravel.db and addon.QuickTravel.db.showUnlearnedSpells or false
+        local showUnlearnedCurrentSeasonOnly = addon.QuickTravel.db and addon.QuickTravel.db.showUnlearnedCurrentSeasonOnlySpells or false
         
         -- Get user-customized expansion order (only enabled categories)
         local customOrder = self:GetCustomExpansionOrder()
@@ -402,7 +403,7 @@ local DataManager = {
                                 end
                                 
                                 -- Include portal if known or if showing unlearned items is enabled
-                                if (isKnown or showUnlearned) and (instanceInfo.toyID or instanceInfo.spellID or instanceInfo.variants) then
+                                if (isKnown or (showUnlearned and (not showUnlearnedCurrentSeasonOnly or addon.ConfigManager.CATEGORY_KEYS.CURRENT_SEASON == categoryKey))) and (instanceInfo.toyID or instanceInfo.spellID or instanceInfo.variants) then
                                     table.insert(portals, {
                                         instanceKey = instanceKey,
                                         spellID = instanceInfo.spellID,
